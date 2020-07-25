@@ -21,6 +21,7 @@
 
     .navbar-link {
       height: 100%;
+      width: 150px;
       color: #1d2521;
       font-weight: 600;
       cursor: pointer;
@@ -28,10 +29,11 @@
       flex-direction: column;
       align-content: center;
       justify-content: center;
+      text-align: center;
 
       &:hover {
-        color: orange;
-        border-bottom: 1px solid orange;
+        color: orangered;
+        border-bottom: 1px solid orangered;
       }
     }
   }
