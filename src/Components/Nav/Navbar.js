@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 export default () => {
   return (
@@ -8,11 +9,11 @@ export default () => {
       </div>
 
       <div className="navbar-links-wrapper">
-        <div className="navbar-link">New Arrivals</div>
-        <div className="navbar-link">Best Sellers</div>
-        <div className="navbar-link">All Apparel</div>
-        <div className="navbar-link">Account</div>
-        <div className="navbar-link">Cart</div>
+        <NavLink to="/" className="navbar-link">New Arrivals</NavLink>
+        <NavLink to="/best-sellers" className="navbar-link">Best Sellers</NavLink>
+        <NavLink to="/all-apparel" className="navbar-link">All Apparel</NavLink>
+        <NavLink to="/account" className="navbar-link">Account</NavLink>
+        <NavLink to="/cart" className="navbar-link">Cart</NavLink>
       </div>
     </div>
   )
