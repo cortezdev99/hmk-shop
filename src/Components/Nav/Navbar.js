@@ -9,7 +9,7 @@ export default () => {
       </div>
 
       <div className="navbar-links-wrapper">
-        <NavLink to="/" className="navbar-link">New Arrivals</NavLink>
+        <NavLink exact to="/" className="navbar-link">New Arrivals</NavLink>
         <NavLink to="/best-sellers" className="navbar-link">Best Sellers</NavLink>
         <NavLink to="/all-apparel" className="navbar-link">All Apparel</NavLink>
         <NavLink to="/account" className="navbar-link">Account</NavLink>
