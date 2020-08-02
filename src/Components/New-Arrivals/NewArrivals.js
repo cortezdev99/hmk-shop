@@ -50,12 +50,12 @@ export default () => {
   }
   
   return (
-    <div style={{ height: "calc(100% - 120px)", width: "100%", position: "absolute" }}>
-      <div style={{ width: "100%", height: "40%", position: "relative" }}>
+    <div className="new-arrivals-container">
+      <div className="new-arrivals-image-wrapper">
         <img
+          className="new-arrivals-image"
           src="https://via.placeholder.com/250x250"
           alt="placeholder"
-          style={{ position: "absolute", width: "100%", height: "100%" }}
         />
       </div>
 

@@ -1,0 +1,17 @@
+.new-arrivals-container {
+  height: calc(100% - 120px);
+  width: 100%;
+  position: absolute;
+}
+
+.new-arrivals-image-wrapper {
+  width: 100%;
+  height: 40%;
+  position: relative;
+}
+
+.new-arrivals-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
