@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Products from '../Products/Products'
+import FilterProducts from '../Utilities/FilterProducts'
 
 export default () => {
   const data = [
@@ -59,23 +60,7 @@ export default () => {
         />
       </div>
 
-      <div style={{ height: "80px", display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
-        <div style={{ width: "60px" }} onClick={() => handleFilterClick('all')}>
-          All
-        </div>
-
-        <div style={{ width: "60px" }} onClick={() => handleFilterClick('hoodies')}>
-          Hoodies
-        </div>
-
-        <div style={{ width: "60px" }} onClick={() => handleFilterClick('sweats')}>
-          Sweats
-        </div>
-
-        <div style={{ width: "60px" }} onClick={() => handleFilterClick('hats')}>
-          Hats
-        </div>
-      </div>
+      <FilterProducts handleFilterClick={(product) => handleFilterClick(product)} />
 
       <div>
         <Products products={products} />
