@@ -3,7 +3,7 @@ import React from 'react'
 export default (props) => {
   console.log(props.product.image)
   return (
-    <div>
+    <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
       <div>
         <img
           src={props.product.image}

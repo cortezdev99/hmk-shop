@@ -1,4 +1,7 @@
 @import './navbar.scss';
+@import './new-arrivals.scss';
+@import './products.scss';
+@import './product.scss';
 
 *, *::before, *::after {
   margin: 0;
@@ -26,3 +29,5 @@ html {
 .app-container {
   margin-top: 120px;
 }
+
+// 1180

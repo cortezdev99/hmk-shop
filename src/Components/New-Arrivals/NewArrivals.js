@@ -14,6 +14,21 @@ export default () => {
       categorie: "hats"
     },
     {
+      title: 'Top Hat',
+      image: 'https://via.placeholder.com/250x250',
+      categorie: "hats"
+    },
+    {
+      title: 'Black Hoodie',
+      image: 'https://via.placeholder.com/250x250',
+      categorie: "hoodies"
+    },
+    {
+      title: 'Gray Sweat Pants',
+      image: 'https://via.placeholder.com/250x250',
+      categorie: "sweats"
+    },
+    {
       title: 'Sweats',
       image: 'https://via.placeholder.com/250x250',
       categorie: "sweats"
@@ -23,10 +38,14 @@ export default () => {
   const [products, setProducts] = useState(data)
 
   const handleFilterClick = (categorie) => {
+    if (categorie === 'all') {
+      return setProducts(data)
+    }
+
     const filteredProducts = data.filter(
       (product) => product.categorie === categorie
     )
-    
+
     setProducts(filteredProducts)
   }
   
@@ -41,6 +60,10 @@ export default () => {
       </div>
 
       <div style={{ height: "80px", display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+        <div style={{ width: "60px" }} onClick={() => handleFilterClick('all')}>
+          All
+        </div>
+
         <div style={{ width: "60px" }} onClick={() => handleFilterClick('hoodies')}>
           Hoodies
         </div>
