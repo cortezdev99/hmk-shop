@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import GallerySlider from '../Utilities/GallerySlider'
 
 export default (props) => {
   const [image, setImage] = useState(Object.values(props.product.colorImages[0]))
@@ -23,43 +24,13 @@ export default (props) => {
           alt="placeholder"
         />
       </div>
-      
-      <div style={{ display: "flex" }}>
-        {
-          props.product.colorImages.length > 3 ? (
-            <div style={{ width: "35px", cursor: "pointer" }} onClick={() => handleTranslatingImages('Left')}>
-              L
-            </div>
-          ) : null
-        }
 
-        <div style={{ display: "flex", maxWidth: "180px", overflow: "hidden" }}>
-          {
-            props.product.colorImages.map((color, idx) => {
-              const images = Object.values(color)
-              return images.map((image) => {
-                return (
-                  <img
-                    style={{ transform: `translate3d(${translatePxls}px, 0px, 0px)` }}
-                    className="product-gallary-image"
-                    key={idx}
-                    src={image}
-                    onClick={() => setImage(Object.values(props.product.colorImages[idx]))}
-                  />
-                )
-              })
-            })
-          }
-        </div>
-
-        {
-          props.product.colorImages.length > 3 ? (
-            <div style={{ width: "35px", cursor: "pointer" }}  onClick={() => handleTranslatingImages('Right')}>
-              R
-            </div>
-          ) : null
-        }
-      </div>
+      <GallerySlider
+        product={props.product}
+        handleTranslatingImages={(direction) => handleTranslatingImages(direction)}
+        translatePxls={translatePxls}
+        setImage={(image) => setImage(image)}
+      />
 
       <div>
         {props.product.title}
