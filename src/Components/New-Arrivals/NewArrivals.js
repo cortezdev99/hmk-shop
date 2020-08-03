@@ -62,7 +62,7 @@ export default () => {
 
       <FilterProducts handleFilterClick={(product) => handleFilterClick(product)} />
 
-      <div>
+      <div className="new-arrivals-products-container">
         <Products products={products} />
       </div>
     </div>
