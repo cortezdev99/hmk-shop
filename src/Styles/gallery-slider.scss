@@ -1,0 +1,39 @@
+.gallery-container {
+  display: flex;
+  padding-top: 5px;
+}
+
+.gallery-toggle {
+  width: 35px;
+  cursor: pointer;
+  padding-right: 5px;
+  font-size: 35px;
+  display: flex;
+  align-items: center;
+  color: #7f7f7f;
+}
+
+.gallery-images-container {
+  display: flex;
+  max-width: 180px;
+  overflow: hidden;
+}
+
+.gallery-right-toggle {
+  justify-content: flex-end;
+}
+
+.gallary-images-image {
+  width: 50px;
+  height: 50px;
+  margin: 0 5px;
+  position: relative;
+  top: 0;
+  left: 0;
+  transition: 0.45s ease-in;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid #1d1d1d;
+  }
+}
