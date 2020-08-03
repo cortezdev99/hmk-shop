@@ -8,6 +8,7 @@ import AllApparel from './All-Apparel/AllApparel'
 import Cart from './Cart/Cart';
 import Account from './Account/Account';
 import Icons from './Utilities/Icons';
+import ProductDetails from './Products/ProductDetails';
 
 function App() {
   Icons()
@@ -22,6 +23,7 @@ function App() {
             <Route exact path='/all-apparel' component={AllApparel} />
             <Route exact path='/account' component={Account} />
             <Route exact path='/cart' component={Cart} />
+            <Route exact path='/products/:slug' component={ProductDetails} />
           </Switch>
         </div>
       </Router>

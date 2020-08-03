@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { Link } from 'react-router-dom'
 import GallerySlider from '../Utilities/GallerySlider'
 
 export default (props) => {
@@ -6,21 +7,36 @@ export default (props) => {
 
   return (
     <div className="product-container">
-      <div className="product-image-wrapper">
+      <Link
+        className="product-image-wrapper"
+        to={{
+          pathname: `/products/${props.product.id}`,
+          productDetailsProps: {
+            product: props.product
+          } 
+        }}
+      >
         <img
           src={image}
           alt="placeholder"
         />
-      </div>
+      </Link>
 
       <GallerySlider
         product={props.product}
         setImage={(image) => setImage(image)}
       />
 
-      <div>
+      <Link
+        to={{
+          pathname: `/products/${props.product.id}`,
+          productDetailsProps: {
+            product: props.product
+          } 
+        }}
+      >
         {props.product.title}
-      </div>
+      </Link>
     </div>
   )
 }
