@@ -7,32 +7,107 @@ export default () => {
     {
       title: 'Hoodie',
       image: 'https://via.placeholder.com/250x250',
-      categorie: "hoodies"
+      categorie: "hoodies",
+      colorImages: [
+        {
+          black: "https://via.placeholder.com/250x250",
+        },
+        {
+          blue: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        }
+      ]
     },
     {
       title: 'Hat',
       image: 'https://via.placeholder.com/250x250',
-      categorie: "hats"
+      categorie: "hats",
+      colorImages: [
+        {
+          black: "https://via.placeholder.com/250x250",
+        },
+        {
+          blue: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        }
+      ]
     },
     {
       title: 'Top Hat',
       image: 'https://via.placeholder.com/250x250',
-      categorie: "hats"
+      categorie: "hats",
+      colorImages: [
+        {
+          black: "https://via.placeholder.com/250x250",
+        },
+        {
+          blue: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        }
+      ]
     },
     {
       title: 'Black Hoodie',
       image: 'https://via.placeholder.com/250x250',
-      categorie: "hoodies"
+      categorie: "hoodies",
+      colorImages: [
+        {
+          black: "https://via.placeholder.com/250x250",
+        },
+        {
+          blue: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        }
+      ]
     },
     {
       title: 'Gray Sweat Pants',
       image: 'https://via.placeholder.com/250x250',
-      categorie: "sweats"
+      categorie: "sweats",
+      colorImages: [
+        {
+          black: "https://via.placeholder.com/250x250",
+        },
+        {
+          blue: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        }
+      ]
     },
     {
       title: 'Sweats',
       image: 'https://via.placeholder.com/250x250',
-      categorie: "sweats"
+      categorie: "sweats",
+      colorImages: [
+        {
+          black: "https://via.placeholder.com/250x250",
+        },
+        {
+          blue: "https://via.placeholder.com/250x250"
+        },
+        {
+          orange: "https://via.placeholder.com/250x250"
+        }
+      ]
     }
   ]
 
