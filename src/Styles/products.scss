@@ -1,5 +1,6 @@
 .products-container {
   display: grid;
+  grid-row-gap: 75px;
   padding: 0 20px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }

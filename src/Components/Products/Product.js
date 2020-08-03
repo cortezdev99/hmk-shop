@@ -34,6 +34,7 @@ export default (props) => {
             product: props.product
           } 
         }}
+        style={{ paddingTop: "5px", paddingBottom: "5px" }}
       >
         {props.product.title}
       </Link>

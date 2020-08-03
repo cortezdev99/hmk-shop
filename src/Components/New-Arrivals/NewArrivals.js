@@ -28,7 +28,8 @@ export default () => {
         {
           orange: "https://via.placeholder.com/250x250"
         }
-      ]
+      ],
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis tincidunt id aliquet risus feugiat in ante."
     },
     {
       id: 1,
@@ -42,7 +43,8 @@ export default () => {
         {
           blue: "https://via.placeholder.com/250x250"
         }
-      ]
+      ],
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis tincidunt id aliquet risus feugiat in ante."
     },
     {
       id: 2,
@@ -53,7 +55,8 @@ export default () => {
         {
           black: "https://via.placeholder.com/250x250",
         }
-      ]
+      ],
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis tincidunt id aliquet risus feugiat in ante."
     },
     {
       id: 3,
@@ -70,7 +73,8 @@ export default () => {
         {
           orange: "https://via.placeholder.com/250x250"
         }
-      ]
+      ],
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis tincidunt id aliquet risus feugiat in ante."
     },
     {
       id: 4,
@@ -87,7 +91,8 @@ export default () => {
         {
           orange: "https://via.placeholder.com/250x250"
         }
-      ]
+      ],
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis tincidunt id aliquet risus feugiat in ante."
     },
     {
       id: 5,
@@ -104,7 +109,8 @@ export default () => {
         {
           orange: "https://via.placeholder.com/250x250"
         }
-      ]
+      ],
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis tincidunt id aliquet risus feugiat in ante."
     }
   ]
 
