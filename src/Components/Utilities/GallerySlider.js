@@ -1,14 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default (props) => {
+  const [translatePxls, setTranslatePxls] = useState(0)
+  const [activeGalloryIdx, setActiveGalloryIdx] = useState(2)
+
+  const handleTranslatingImages = (direction) => {
+    if (direction === 'Left' && activeGalloryIdx !== 2) {
+      setActiveGalloryIdx(activeGalloryIdx - 1)
+      return setTranslatePxls(translatePxls + 60)
+    } else if (direction === 'Right' && activeGalloryIdx < props.product.colorImages.length - 1) {
+      setActiveGalloryIdx(activeGalloryIdx + 1)
+      setTranslatePxls(translatePxls - 60)
+    }
+  }
+
   return (
     <div className="gallery-container">
       {
         props.product.colorImages.length > 3 ? (
           <div
             className="gallery-left-toggle gallery-toggle"
-            onClick={() => props.handleTranslatingImages('Left')}
+            onClick={() => handleTranslatingImages('Left')}
           >
             <FontAwesomeIcon icon="angle-left" />
           </div>
@@ -22,7 +35,7 @@ export default (props) => {
             return images.map((image) => {
               return (
                 <img
-                  style={{ transform: `translate3d(${props.translatePxls}px, 0px, 0px)` }}
+                  style={{ transform: `translate3d(${translatePxls}px, 0px, 0px)` }}
                   className="gallary-images-image"
                   key={idx}
                   alt="gallory"
@@ -39,7 +52,7 @@ export default (props) => {
         props.product.colorImages.length > 3 ? (
           <div
             className="gallery-right-toggle gallery-toggle"
-            onClick={() => props.handleTranslatingImages('Right')}
+            onClick={() => handleTranslatingImages('Right')}
           >
             <FontAwesomeIcon icon="angle-right" />
           </div>
