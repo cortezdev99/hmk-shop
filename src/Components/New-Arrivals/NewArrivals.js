@@ -39,9 +39,6 @@ export default () => {
         },
         {
           blue: "https://via.placeholder.com/250x250"
-        },
-        {
-          orange: "https://via.placeholder.com/250x250"
         }
       ]
     },
@@ -52,12 +49,6 @@ export default () => {
       colorImages: [
         {
           black: "https://via.placeholder.com/250x250",
-        },
-        {
-          blue: "https://via.placeholder.com/250x250"
-        },
-        {
-          orange: "https://via.placeholder.com/250x250"
         }
       ]
     },

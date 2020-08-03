@@ -7,8 +7,10 @@ import BestSellers from './Best-Sellers/BestSellers';
 import AllApparel from './All-Apparel/AllApparel'
 import Cart from './Cart/Cart';
 import Account from './Account/Account';
+import Icons from './Utilities/Icons';
 
 function App() {
+  Icons()
   return (
     <div className="App">
       <Router>
