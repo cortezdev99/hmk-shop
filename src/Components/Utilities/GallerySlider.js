@@ -9,7 +9,7 @@ export default (props) => {
     if (direction === 'Left' && activeGalloryIdx !== 2) {
       setActiveGalloryIdx(activeGalloryIdx - 1)
       return setTranslatePxls(translatePxls + 60)
-    } else if (direction === 'Right' && activeGalloryIdx < props.product.colorImages.length - 1) {
+    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length - 1) {
       setActiveGalloryIdx(activeGalloryIdx + 1)
       setTranslatePxls(translatePxls - 60)
     }
@@ -18,7 +18,7 @@ export default (props) => {
   return (
     <div className="gallery-container">
       {
-        props.product.colorImages.length > 3 ? (
+        props.product.images.length > 3 ? (
           <div
             className="gallery-left-toggle gallery-toggle"
             onClick={() => handleTranslatingImages('Left')}
@@ -30,7 +30,7 @@ export default (props) => {
 
       <div className="gallery-images-container">
         {
-          props.product.colorImages.map((color, idx) => {
+          props.product.images.map((color, idx) => {
             const images = Object.values(color)
             return images.map((image) => {
               return (
@@ -39,8 +39,8 @@ export default (props) => {
                   className="gallary-images-image"
                   key={idx}
                   alt="gallory"
-                  src={image}
-                  onClick={() => props.setImage(Object.values(props.product.colorImages[idx]))}
+                  src={Object.values(image[0])[0]}
+                  onClick={() => props.setImage(Object.values(Object.values(props.product.images[idx])[0][0])[0])}
                 />
               )
             })
@@ -49,7 +49,7 @@ export default (props) => {
       </div>
 
       {
-        props.product.colorImages.length > 3 ? (
+        props.product.images.length > 3 ? (
           <div
             className="gallery-right-toggle gallery-toggle"
             onClick={() => handleTranslatingImages('Right')}

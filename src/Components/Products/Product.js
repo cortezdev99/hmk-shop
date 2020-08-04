@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import GallerySlider from '../Utilities/GallerySlider'
 
 export default (props) => {
-  const [image, setImage] = useState(Object.values(props.product.colorImages[0]))
+  console.log()
+  const [image, setImage] = useState(Object.values(Object.values(props.product.images[0])[0][0])[0])
 
   return (
     <div className="product-container">
