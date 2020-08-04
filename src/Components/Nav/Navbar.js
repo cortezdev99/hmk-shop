@@ -1,9 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 
 export default () => {
+  
+  useEffect(() => {
+    const permElmnt = document.getElementById('navbar-wrapper-id')
+    const injectedElmnt = document.getElementsByClassName('box-shadow')
+
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 0 && injectedElmnt.length === 0) {
+        permElmnt.classList.toggle('box-shadow')
+      } else if (window.pageYOffset === 0 && injectedElmnt.length !== 0) {
+        permElmnt.classList.toggle('box-shadow')
+      }
+    }, false);
+  }, [])
+    
   return (
-    <div className="navbar-wrapper">
+    <div className="navbar-wrapper" id="navbar-wrapper-id">
       <div className="navbar-logo-wrapper">
         HMK Shop
       </div>
