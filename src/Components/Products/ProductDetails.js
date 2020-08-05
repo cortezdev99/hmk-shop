@@ -75,25 +75,3 @@ export default (props) => {
     )
   }
 }
-
-
-// {
-//   Object.values(images[activeImageSet]).map((imageSet, imgSetIdx) => {
-//     return (
-//       <div key={imgSetIdx}  style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-//         {
-//           imageSet.map((image, imgIdx) => {
-//             return (
-//               <img
-//                 alt="imageSet"
-//                 style={{ width: "500px", height: "500px", paddingTop: "40px", paddingBottom: "40px" }}
-//                 key={imgIdx}
-//                 src={Object.values(image)[0]}
-//               />
-//             )
-//           })
-//         }
-//       </div>
-//     )
-//   })
-// }
