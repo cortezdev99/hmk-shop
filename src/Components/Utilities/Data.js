@@ -15,6 +15,9 @@
           },
           {
             imageThree: 'https://via.placeholder.com/250x250'
+          },
+          {
+            imageFour: 'https://via.placeholder.com/250x250'
           }
         ],
       },
