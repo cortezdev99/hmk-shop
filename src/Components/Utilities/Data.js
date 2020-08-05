@@ -1,9 +1,28 @@
+ // Hoodie Sizes
+ // S M L XL XXL XXXL XXXXL 5XL
+ // T-Shirt Sizes
+ // S M L XL XXL
+ // Sweats Sizes
+ // S M L XL XXL XXXL
+ // Jacket Sizes
+ // S M L XL XXL XXXL
+ 
  const data = [
   {
     id: 0,
     title: 'Hoodie',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hoodies",
+    sizes: [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "XXXL",
+      "XXXXL",
+      "5XL"
+    ],
     images: [
       {
         black: [
@@ -94,6 +113,16 @@
     title: 'Hat',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hats",
+    sizes: [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "XXXL",
+      "XXXXL",
+      "5XL"
+    ],
     images: [
       {
         black: [
@@ -129,6 +158,16 @@
     title: 'Top Hat',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hats",
+    sizes: [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "XXXL",
+      "XXXXL",
+      "5XL"
+    ],
     images: [
       {
         black: [
@@ -151,6 +190,16 @@
     title: 'Black Hoodie',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hoodies",
+    sizes: [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "XXXL",
+      "XXXXL",
+      "5XL"
+    ],
     images: [
       {
         black: [
@@ -199,6 +248,16 @@
     title: 'Gray Sweat Pants',
     image: 'https://via.placeholder.com/250x250',
     categorie: "sweats",
+    sizes: [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "XXXL",
+      "XXXXL",
+      "5XL"
+    ],
     images: [
       {
         black: [
@@ -247,6 +306,16 @@
     title: 'Sweats',
     image: 'https://via.placeholder.com/250x250',
     categorie: "sweats",
+    sizes: [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL",
+      "XXXL",
+      "XXXXL",
+      "5XL"
+    ],
     images: [
       {
         black: [
