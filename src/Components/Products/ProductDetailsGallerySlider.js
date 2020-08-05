@@ -22,11 +22,11 @@ export default (props) => {
   }
 
   return (
-    <div style={{ paddingTop: "20px", height: "120px", display: "flex", width: "500px" }}>
+    <div className="product-details-gallery-container">
       {
         Object.values(images[activeImageSet])[0].length > 3 ? (
           <div
-            style={{ width: "70px", paddingRight: "10px", cursor: "pointer", color: "#7f7f7f", fontSize: "50px", display: "flex", alignItems: "center" }}
+            className="product-details-gallery-toggle"
             onClick={() => handleImageTransition('Left')}
           >
             <FontAwesomeIcon icon="angle-left" />
@@ -34,13 +34,14 @@ export default (props) => {
         ) : null
       }
 
-      <div style={{ width: "360px", overflow: "hidden", display: "flex" }}>
+      <div className="product-details-gallery-images-wrapper">
         {
           Object.values(images[activeImageSet])[0].map((imageSet, imageSetIdx) => {
             return (
               <img
+                className="product-details-gallery-image"
                 onClick={() => handleGalleryImageClick(imageSetIdx)}
-                style={{ width: "100px", height: "100px", margin: "0 10px", cursor: "pointer", position: "relative", transform: `translate3d(${translatePxls}px, 0px, 0px)`, transition: "0.45s ease-in" }}
+                style={{ transform: `translate3d(${translatePxls}px, 0px, 0px)`}}
                 key={imageSetIdx}
                 alt="galloryImage"
                 src={Object.values(imageSet)[0]}
@@ -53,7 +54,7 @@ export default (props) => {
       {
         Object.values(images[activeImageSet])[0].length > 3 ? (
           <div
-            style={{ width: "70px", paddingLeft: "10px", cursor: "pointer", color: "#7f7f7f", fontSize: "50px", display: "flex", alignItems: "center", justifyContent: "flex-end" }}
+            className="product-details-gallery-toggle toggle-right"
             onClick={() => handleImageTransition('Right')}
           >
             <FontAwesomeIcon icon="angle-right" />

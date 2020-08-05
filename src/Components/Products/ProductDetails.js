@@ -40,7 +40,7 @@ export default (props) => {
         </div>
   
         <div style={{ width: "50%", paddingTop: "80px", paddingRight: "40px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ textAlign: "center", height: "80px", width: "100%", borderBottom: "1px solid #CCC", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ textAlign: "center", paddingBottom: "40px", width: "100%", borderBottom: "1px solid #CCC", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {title}
           </div>
 

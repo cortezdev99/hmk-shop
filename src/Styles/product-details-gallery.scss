@@ -1,0 +1,40 @@
+.product-details-gallery-container {
+  width: 500px;
+  height: 120px;
+  padding-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.product-details-gallery-toggle {
+  width: 70px;
+  padding-right: 10px;
+  cursor: pointer;
+  color: #7f7f7f;
+  font-size: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.product-details-gallery-images-wrapper {
+  width: 360px;
+  overflow: hidden;
+  display: flex;
+}
+
+.product-details-gallery-image {
+  width: 100px;
+  height: 100px;
+  margin: 0 10px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.45s ease-in;
+
+  &:hover {
+    border: 1px solid #1d1d1d;
+  }
+}
+
+.toggle-right {
+  justify-content: flex-end;
+}
