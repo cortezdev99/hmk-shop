@@ -11,7 +11,8 @@ export default (props) => {
     const {
       title,
       images,
-      sizes
+      sizes,
+      details
     } = props.location.productDetailsProps.product
     
     const handleImageSetChange = (imageSetIdx) => {
@@ -72,7 +73,7 @@ export default (props) => {
             </div>
           </div>
 
-          <div style={{ paddingTop: "80px" }}>
+          <div style={{ paddingTop: "60px" }}>
             <div style={{ marginBottom: "20px" }}>
               Sizes
             </div>
@@ -84,6 +85,24 @@ export default (props) => {
                     <div key={sizeIdx} style={{ marginRight: "20px", marginBottom: "20px", width: "100px", height: "100px", display: "flex", alignItems: "center", justifyContent: "center", background: "#c2c2c2" }}>
                       {size}
                     </div>
+                  )
+                })
+              }
+            </div>
+          </div>
+
+          <div style={{ paddingTop: "60px", width: "100%" }}>
+            <div style={{ marginBottom: "20px" }}>
+              Details
+            </div>
+
+            <div>
+              {
+                details.map((detail, detailIdx) => {
+                  return (
+                    <li key={detailIdx}>
+                      {detail}
+                    </li>
                   )
                 })
               }

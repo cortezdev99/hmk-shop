@@ -23,6 +23,11 @@
       "XXXXL",
       "5XL"
     ],
+    details: [
+      "Embrodiery on chest",
+      "wolven tag",
+      "100% cotten"
+    ],
     images: [
       {
         black: [
@@ -123,6 +128,11 @@
       "XXXXL",
       "5XL"
     ],
+    details: [
+      "Embrodiery on chest",
+      "wolven tag",
+      "100% cotten"
+    ],
     images: [
       {
         black: [
@@ -167,6 +177,11 @@
       "XXXL",
       "XXXXL",
       "5XL"
+    ],
+    details: [
+      "Embrodiery on chest",
+      "wolven tag",
+      "100% cotten"
     ],
     images: [
       {
@@ -258,6 +273,11 @@
       "XXXXL",
       "5XL"
     ],
+    details: [
+      "Embrodiery on chest",
+      "wolven tag",
+      "100% cotten"
+    ],
     images: [
       {
         black: [
@@ -315,6 +335,11 @@
       "XXXL",
       "XXXXL",
       "5XL"
+    ],
+    details: [
+      "Embrodiery on chest",
+      "wolven tag",
+      "100% cotten"
     ],
     images: [
       {
