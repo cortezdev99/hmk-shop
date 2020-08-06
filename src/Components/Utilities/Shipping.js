@@ -14,9 +14,9 @@ export default () => {
   }
 
   return (
-    <div className="shipping-container" onClick={handleShippingToggle}>
+    <div className="shipping-container">
       <div id="shipping-wrapper" className="shipping-wrapper">
-        <div className="shipping-toggle-wrapper">
+        <div className="shipping-toggle-wrapper" onClick={handleShippingToggle}>
           <div className="shipping-toggle-header">
             Shipping and Returns
           </div>

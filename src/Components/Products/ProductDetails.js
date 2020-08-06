@@ -26,45 +26,44 @@ export default (props) => {
     }
 
     return (
-      <div style={{ display: "flex", paddingBottom: "80px" }}>
-        <div style={{ width: "50%", paddingTop: "80px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start" }}>
+      <div className="product-details-container">
+        <div className="product-details-left-column-wrapper">
           <img
             alt="activeImage"
             src={Object.values(Object.values(images[activeImageSet])[0][activeImage])[0]}
-            style={{ width: "500px", height: "500px" }}
+            className="product-details-left-column-image"
           />
 
           <ProductDetailsGallerySlider
             images={images}
             handleGalleryImageClick={(imageSetIdx) => handleGalleryImageClick(imageSetIdx)}
             activeImageSet={activeImageSet}
-
           />
         </div>
   
-        <div style={{ width: "50%", paddingTop: "80px", paddingRight: "40px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ textAlign: "center", paddingBottom: "40px", width: "100%", borderBottom: "1px solid #CCC", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div className="product-details-right-column-wrapper">
+          <div className="product-details-product-title-wrapper">
             {title}
           </div>
 
-          <div style={{ paddingTop: "80px" }}>
-            <div style={{ marginBottom: "20px" }}>
+          <div className="product-details-product-colors-container">
+            <div className="product-details-product-header">
               Colors
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <div className="product-details-product-colors-wrapper">
               {
                 images.map((imageSet, imageSetIdx) => {
                   return (
-                    <div key={imageSetIdx} style={{ paddingRight: "20px", width: "120px", paddingBottom: "20px" }}>
+                    <div className="product-details-product-color-wrapper" key={imageSetIdx}>
                       <img
                         onClick={() => handleImageSetChange(imageSetIdx)}
-                        style={{ width: "100px", height: "100px", cursor: "pointer" }}
                         alt="imageSet"
+                        className="product-details-product-color-image"
                         src={Object.values(Object.values(imageSet)[0][0])[0]}
                       />
 
-                      <div style={{ paddingTop: "2px", textAlign: "center" }}>
+                      <div className="product-details-product-color-title">
                         {Object.keys(imageSet)[0]}
                       </div>
                     </div>
@@ -74,16 +73,16 @@ export default (props) => {
             </div>
           </div>
 
-          <div style={{ paddingTop: "60px" }}>
-            <div style={{ marginBottom: "20px" }}>
+          <div className="product-details-product-sizes-container">
+            <div className="product-details-product-header">
               Sizes
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <div className="product-details-product-sizes-wrapper">
               {
                 sizes.map((size, sizeIdx) => {
                   return (
-                    <div key={sizeIdx} style={{ marginRight: "20px", marginBottom: "20px", width: "100px", height: "100px", display: "flex", alignItems: "center", justifyContent: "center", background: "#c2c2c2" }}>
+                    <div className="product-details-product-size-wrapper" key={sizeIdx}>
                       {size}
                     </div>
                   )
@@ -92,16 +91,16 @@ export default (props) => {
             </div>
           </div>         
 
-          <div style={{ paddingTop: "80px", width: "100%" }}>
-            <div style={{ marginBottom: "20px" }}>
+          <div className="product-details-product-details-container">
+            <div className="product-details-product-header">
               Details
             </div>
 
-            <div>
+            <div className="product-details-product-details-wrapper">
               {
                 details.map((detail, detailIdx) => {
                   return (
-                    <li key={detailIdx}>
+                    <li className="product-details-product-detail-wrapper" key={detailIdx}>
                       {detail}
                     </li>
                   )
@@ -110,8 +109,8 @@ export default (props) => {
             </div>
           </div>
 
-          <div style={{ paddingTop: "80px", width: "100%" }}>
-            <button style={{ width: "100%", padding: "1rem", borderRadius: "5px", border: "1px solid transparent", background: "#45b3e0" }}>
+          <div className="product-details-product-cart-btn-container">
+            <button className="product-details-product-cart-btn">
               Add to Cart
             </button>
           </div>
