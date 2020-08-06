@@ -2,13 +2,13 @@ import React from 'react'
 
 export default () => {
   const handleShippingToggle = () => {
-    const elmnt = document.getElementById('shipping-wrapper')
-    const elmnt2 = document.getElementById('rotated-elmnt')
-    const elmnt3 = document.getElementById('rotated-elmnt-2')
+    const shippingWrapperElmnt = document.getElementById('shipping-wrapper')
+    const rotatingElmnt1 = document.getElementById('rotating-plus-minus-1')
+    const rotatingElmnt2 = document.getElementById('rotating-plus-minus-2')
 
-    elmnt.classList.toggle('shipping-wrapper-inner-content-visible')
-    elmnt2.classList.toggle('rotated-elmnt--collapsed')
-    elmnt3.classList.toggle('rotated-elmnt--collapsed')
+    shippingWrapperElmnt.classList.toggle('shipping-wrapper-content-visible')
+    rotatingElmnt1.classList.toggle('rotating-plus-minus-rotated')
+    rotatingElmnt2.classList.toggle('rotating-plus-minus-rotated')
   }
 
   return (
@@ -20,11 +20,11 @@ export default () => {
           </div>
 
           <div style={{ position: "relative" }}>
-            <div id="rotated-elmnt-2" className="rotated-elmnt2" style={{ transition: "0.7s", position: "absolute", bottom: "1px", left: "1px", transform: "rotate(90deg)" }}>
+            <div id="rotating-plus-minus-1" className="rotating-plus-minus-1" style={{ transition: "0.7s", position: "absolute", bottom: "1px", left: "1px", transform: "rotate(90deg)" }}>
               |
             </div>
 
-            <div className="rotated-elmnt" id="rotated-elmnt" style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
+            <div className="rotating-plus-minus-2" id="rotating-plus-minus-2" style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
               |
             </div>
           </div>
