@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ProductDetailsGallerySlider from './ProductDetailsGallerySlider'
+import Shipping from '../Utilities/Shipping'
 
 export default (props) => {
   //TODO MAKE CALL TO DATABASE IF PROPS NOT PASSED TO ROUTE
@@ -92,6 +93,12 @@ export default (props) => {
           </div>
 
           <div style={{ paddingTop: "60px", width: "100%" }}>
+            <button style={{ width: "100%", padding: "1rem", borderRadius: "5px", border: "1px solid transparent", background: "#45b3e0" }}>
+              Add to Cart
+            </button>
+          </div>
+
+          <div style={{ paddingTop: "80px", width: "100%" }}>
             <div style={{ marginBottom: "20px" }}>
               Details
             </div>
@@ -108,6 +115,8 @@ export default (props) => {
               }
             </div>
           </div>
+
+          <Shipping />
         </div>
       </div>
     )
@@ -119,3 +128,16 @@ export default (props) => {
     )
   }
 }
+
+// <div className="accordion">
+//               <button type="button" className="accordion__button">
+//                 Expand Content
+//               </button>
+
+//               <div className="accordion__content">
+//                 <p>
+//                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit ex nemo provident, debitis excepturi doloribus qui nulla odit dolorem neque recusandae amet praesentium iusto explicabo repellendus, ducimus molestiae saepe. Deleniti!Consectetur nesciunt magnam ab voluptatem dolore nobis, ratione, explicabo labore enim deserunt similique illo, doloremque sapiente alias fugit velit ipsum dolorem ea! Aperiam similique delectus nihil nulla aut, nisi quaerat.
+//                 </p>
+//               </div>
+//           </div>
+
