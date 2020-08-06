@@ -110,7 +110,7 @@ export default (props) => {
             </div>
           </div>
 
-          <div style={{ paddingTop: "60px", width: "100%" }}>
+          <div style={{ paddingTop: "80px", width: "100%" }}>
             <button style={{ width: "100%", padding: "1rem", borderRadius: "5px", border: "1px solid transparent", background: "#45b3e0" }}>
               Add to Cart
             </button>
