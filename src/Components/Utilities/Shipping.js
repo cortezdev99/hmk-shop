@@ -1,6 +1,8 @@
 import React from 'react'
 
 export default () => {
+  // TODO - make span tag in returns section link to the returns page
+  
   const handleShippingToggle = () => {
     const shippingWrapperElmnt = document.getElementById('shipping-wrapper')
     const rotatingElmnt1 = document.getElementById('rotating-plus-minus-1')

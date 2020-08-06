@@ -128,16 +128,3 @@ export default (props) => {
     )
   }
 }
-
-// <div className="accordion">
-//               <button type="button" className="accordion__button">
-//                 Expand Content
-//               </button>
-
-//               <div className="accordion__content">
-//                 <p>
-//                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit ex nemo provident, debitis excepturi doloribus qui nulla odit dolorem neque recusandae amet praesentium iusto explicabo repellendus, ducimus molestiae saepe. Deleniti!Consectetur nesciunt magnam ab voluptatem dolore nobis, ratione, explicabo labore enim deserunt similique illo, doloremque sapiente alias fugit velit ipsum dolorem ea! Aperiam similique delectus nihil nulla aut, nisi quaerat.
-//                 </p>
-//               </div>
-//           </div>
-
