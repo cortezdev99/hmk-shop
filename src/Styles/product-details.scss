@@ -59,6 +59,10 @@
   width: 100px;
   height: 100px;
   cursor: pointer;
+
+  &:hover {
+    border: 1px solid #1d1d1d;
+  }
 }
 
 .product-details-product-color-title {
@@ -102,4 +106,15 @@
   border-radius: 5px;
   border: 1px solid transparent;
   background: #45b3e0;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.95)
+  }
+
+  &:focus {
+    outline: none;
+    text-decoration: none;
+    border: none;
+  }
 }
