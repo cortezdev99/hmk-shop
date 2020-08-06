@@ -32,41 +32,47 @@ export default () => {
 
         <div style={{ paddingBottom: "20px" }}>
           <div>
-            <div style={{ padding: "1rem" }}>
-              Processing
+            <div style={{ padding: "1rem", fontSize: '18px', fontWeight: "600" }}>
+              Shipping
             </div>
 
-            <li style={{ padding: "1rem 2rem" }}>
-              1-3 Days
-            </li>
+            <div>
+              <div style={{ padding: "1rem" }}>
+                Processing
+              </div>
+
+              <li style={{ padding: "1rem 2rem" }}>
+                1-3 Days
+              </li>
+            </div>
+
+            <div>
+              <div style={{ padding: "1rem" }}>
+                US Shipping
+              </div>
+
+              <li style={{ padding: "1rem 2rem" }}>
+                2 - 5 Days
+              </li>
+            </div>
+
+            <div>
+              <div style={{ padding: "1rem" }}>
+                International Shipping
+              </div>
+
+              <li style={{ padding: "1rem 2rem" }}>
+                1 - 2 Weeks
+              </li>
+            </div>
           </div>
 
           <div>
-            <div style={{ padding: "1rem" }}>
-              US Shipping
-            </div>
-
-            <li style={{ padding: "1rem 2rem" }}>
-              2 - 5 Days
-            </li>
-          </div>
-
-          <div>
-            <div style={{ padding: "1rem" }}>
-              International Shipping
-            </div>
-
-            <li style={{ padding: "1rem 2rem" }}>
-              1 - 2 Weeks
-            </li>
-          </div>
-
-          <div>
-            <div style={{ padding: "1rem" }}>
+            <div style={{ padding: "1rem", fontSize: '18px', fontWeight: "600" }}>
               Returns
             </div>
 
-            <li style={{ padding: "1rem 2rem" }}>
+            <li style={{ padding: "1rem 2rem", paddingBottom: "0px" }}>
               For information on returns please click <span>here</span>
             </li>
           </div>
