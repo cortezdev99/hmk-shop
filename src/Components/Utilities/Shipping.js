@@ -3,7 +3,12 @@ import React from 'react'
 export default () => {
   const handleShippingToggle = () => {
     const elmnt = document.getElementById('shipping-wrapper')
+    const elmnt2 = document.getElementById('rotated-elmnt')
+    const elmnt3 = document.getElementById('rotated-elmnt-2')
+
     elmnt.classList.toggle('shipping-wrapper-inner-content-visible')
+    elmnt2.classList.toggle('rotated-elmnt--collapsed')
+    elmnt3.classList.toggle('rotated-elmnt--collapsed')
   }
 
   return (
@@ -14,8 +19,14 @@ export default () => {
             Shipping and Returns
           </div>
 
-          <div>
-            -
+          <div style={{ position: "relative" }}>
+            <div id="rotated-elmnt-2" className="rotated-elmnt2" style={{ transition: "0.7s", position: "absolute", bottom: "1px", left: "1px", transform: "rotate(90deg)" }}>
+              |
+            </div>
+
+            <div className="rotated-elmnt" id="rotated-elmnt" style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
+              |
+            </div>
           </div>
         </div>
 
