@@ -9,24 +9,27 @@ import Cart from './Cart/Cart';
 import Account from './Account/Account';
 import Icons from './Utilities/Icons';
 import ProductDetails from './Products/ProductDetails';
+import CartProvider from '../Providers/CartProvider';
 
 function App() {
   Icons()
   return (
     <div className="App">
-      <Router>
-        <Navbar />
-        <div className="app-container">
-          <Switch>
-            <Route exact path='/' component={NewArrivals} />
-            <Route exact path='/best-sellers' component={BestSellers} />
-            <Route exact path='/all-apparel' component={AllApparel} />
-            <Route exact path='/account' component={Account} />
-            <Route exact path='/cart' component={Cart} />
-            <Route exact path='/products/:slug' component={ProductDetails} />
-          </Switch>
-        </div>
-      </Router>
+      <CartProvider>
+        <Router>
+          <Navbar />
+          <div className="app-container">
+            <Switch>
+              <Route exact path='/' component={NewArrivals} />
+              <Route exact path='/best-sellers' component={BestSellers} />
+              <Route exact path='/all-apparel' component={AllApparel} />
+              <Route exact path='/account' component={Account} />
+              <Route exact path='/cart' component={Cart} />
+              <Route exact path='/products/:slug' component={ProductDetails} />
+            </Switch>
+          </div>
+        </Router>
+      </CartProvider>
     </div>
   );
 }

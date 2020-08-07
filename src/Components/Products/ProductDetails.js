@@ -1,28 +1,46 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import ProductDetailsGallerySlider from './ProductDetailsGallerySlider'
 import Shipping from '../Utilities/Shipping'
+import CartContext from '../../Contexts/CartContext'
 
 export default (props) => {
+  const {
+    isCartOpen,
+    setCartIsOpen
+  } = useContext(CartContext)
+
   //TODO MAKE CALL TO DATABASE IF PROPS NOT PASSED TO ROUTE
  
   if (props.location.productDetailsProps) {
-    const [activeImageSet, setActiveImageSet] = useState(0)
-    const [activeImage, setActiveImage] = useState(0)
-
     const {
       title,
       images,
       sizes,
       details
     } = props.location.productDetailsProps.product
+
+    const [activeImageSet, setActiveImageSet] = useState(0)
+    const [activeImage, setActiveImage] = useState(0)
+    const [activeSize, setActiveSize] = useState(0)
+    const [size, setSize] = useState(Object.values(sizes[0])[0])
+
     
     const handleImageSetChange = (imageSetIdx) => {
       setActiveImage(0)
-      setActiveImageSet(imageSetIdx)
+      return setActiveImageSet(imageSetIdx)
     }
 
     const handleGalleryImageClick = (imageIdx) => {
-      setActiveImage(imageIdx)
+      return setActiveImage(imageIdx)
+    }
+
+    const handleSizeClick = (size) => {
+      setActiveSize(size)
+      return setSize(Object.values(sizes[size])[0])
+    }
+
+    const handleAddToCart = () => {
+      console.log(isCartOpen)
     }
 
     return (
@@ -81,8 +99,14 @@ export default (props) => {
             <div className="product-details-product-sizes-wrapper">
               {
                 sizes.map((size, sizeIdx) => {
+                  const styles = sizeIdx === activeSize ? { border: "1px solid #1d1d1d" } : {}
                   return (
-                    <div className="product-details-product-size-wrapper" key={sizeIdx}>
+                    <div
+                      style={styles}
+                      onClick={() => handleSizeClick(sizeIdx)}
+                      className="product-details-product-size-wrapper"
+                      key={sizeIdx}
+                    >
                       {size}
                     </div>
                   )
@@ -110,7 +134,7 @@ export default (props) => {
           </div>
 
           <div className="product-details-product-cart-btn-container">
-            <button className="product-details-product-cart-btn">
+            <button type="button" onClick={handleAddToCart} className="product-details-product-cart-btn">
               Add to Cart
             </button>
           </div>
