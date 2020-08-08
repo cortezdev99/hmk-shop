@@ -5,17 +5,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default () => {
   const {
     isCartOpen,
+    setIsCartOpen,
     products
   } = useContext(CartContext)
+  
+  const handleCloseModal = () => {
+    setIsCartOpen(false)
+  }
 
   if (isCartOpen !== true) {
     return <></>
   }
 
   return (
-    <div style={{ position: "fixed", backgroundColor: "rgba(29, 29, 29, 0.7", zIndex: 100000, height: "100%", width: "100%", display: "flex", justifyContent: "flex-end" }}>
-      <div style={{ height: "calc(100vh - 120px)", background: "#fff", width: "40%", padding: "40px", maxWidth: "570px" }}>
-        <div>
+    <div style={{ position: "fixed", backgroundColor: "rgba(29, 29, 29, 0.7", zIndex: 1000, top: "0", bottom: "0", height: "calc(100% + 120px)", width: "100%", display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ height: "100%", minHeight: "100vh", background: "#fff", width: "80%", maxWidth: "570px", display: "flex", flexDirection: "column" }}>
+        <div style={{ fontSize: "20px", height: "80px", paddingLeft: "40px", paddingRight: "40px", borderBottom: "1px solid #CCC", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            Cart
+          </div>
+
+          <div onClick={handleCloseModal} style={{ fontSize: "24px", color: "#1d1d1d", cursor: "pointer" }}>
+            <FontAwesomeIcon icon="times" />
+          </div>
+        </div>
+
+        <div style={{ padding: "40px", display: "flex", flexDirection: "column", gap: "40px" }}>
           {
             products.map((product, productIdx) => {
               return (
