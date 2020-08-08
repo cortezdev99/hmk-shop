@@ -5,8 +5,9 @@ import CartContext from '../../Contexts/CartContext'
 
 export default (props) => {
   const {
-    isCartOpen,
-    setCartIsOpen
+    products,
+    setProducts,
+    setIsCartOpen
   } = useContext(CartContext)
 
   //TODO MAKE CALL TO DATABASE IF PROPS NOT PASSED TO ROUTE
@@ -19,14 +20,17 @@ export default (props) => {
       details
     } = props.location.productDetailsProps.product
 
-    const [activeImageSet, setActiveImageSet] = useState(0)
-    const [activeImage, setActiveImage] = useState(0)
-    const [activeSize, setActiveSize] = useState(0)
-    const [size, setSize] = useState(Object.values(sizes[0])[0])
-
+    const [ activeColor, setActiveColor ] = useState(0)
+    const [ color, setColor ] = useState(Object.keys(images[0])[0])
+    const [ activeImageSet, setActiveImageSet ] = useState(0)
+    const [ activeImage, setActiveImage ] = useState(0)
+    const [ activeSize, setActiveSize ] = useState(0)
+    const [ size, setSize ] = useState(Object.values(sizes[0])[0])
     
     const handleImageSetChange = (imageSetIdx) => {
       setActiveImage(0)
+      setActiveColor(imageSetIdx)
+      setColor(Object.keys(images[imageSetIdx])[0])
       return setActiveImageSet(imageSetIdx)
     }
 
@@ -36,11 +40,15 @@ export default (props) => {
 
     const handleSizeClick = (size) => {
       setActiveSize(size)
-      return setSize(Object.values(sizes[size])[0])
+      console.log()
+      return setSize(Object.values(sizes[size]).join(''))
     }
 
     const handleAddToCart = () => {
-      console.log(isCartOpen)
+      const state = [...products]
+      state.push([ { product: props.location.productDetailsProps.product }, { size: size }, { color: color }, { image: Object.values(Object.values(images[activeColor])[0][0])[0] } ])
+      setProducts(state)
+      setIsCartOpen(true)
     }
 
     return (
@@ -72,6 +80,7 @@ export default (props) => {
             <div className="product-details-product-colors-wrapper">
               {
                 images.map((imageSet, imageSetIdx) => {
+                  const styles = imageSetIdx === activeColor ? { border: "1px solid #1d1d1d" } : {}
                   return (
                     <div className="product-details-product-color-wrapper" key={imageSetIdx}>
                       <img
@@ -79,6 +88,7 @@ export default (props) => {
                         alt="imageSet"
                         className="product-details-product-color-image"
                         src={Object.values(Object.values(imageSet)[0][0])[0]}
+                        style={styles}
                       />
 
                       <div className="product-details-product-color-title">

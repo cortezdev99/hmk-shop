@@ -30,7 +30,7 @@
     ],
     images: [
       {
-        black: [
+        "Black": [
           {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -46,7 +46,7 @@
         ],
       },
       {
-        blue: [
+        "blue": [
           {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -59,7 +59,7 @@
         ],
       },
       {
-        orange: [
+        "orange": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -72,7 +72,7 @@
         ],
       },
       {
-        orange: [
+        "orange": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -85,7 +85,7 @@
         ],
       },
       {
-        orange: [
+        "orange": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -98,7 +98,7 @@
         ],
       },
       {
-        orange: [
+        "orange": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -135,7 +135,7 @@
     ],
     images: [
       {
-        black: [
+        "black": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -148,7 +148,7 @@
         ],
       },
       {
-        blue: [
+        "blue": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -185,7 +185,7 @@
     ],
     images: [
       {
-        black: [
+        "black": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -202,7 +202,7 @@
   },
   {
     id: 3,
-    title: 'Black Hoodie',
+    title: '"Black" Hoodie',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hoodies",
     sizes: [
@@ -217,7 +217,7 @@
     ],
     images: [
       {
-        black: [
+        "black": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -230,7 +230,7 @@
         ],
       },
       {
-        blue: [
+        "blue": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -243,7 +243,7 @@
         ],
       },
       {
-        orange: [
+        "orange": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -280,7 +280,7 @@
     ],
     images: [
       {
-        black: [
+        "black": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -293,7 +293,7 @@
         ],
       },
       {
-        blue: [
+        "blue": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -306,7 +306,7 @@
         ],
       },
       {
-        orange: [
+        "orange": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -343,7 +343,7 @@
     ],
     images: [
       {
-        black: [
+        "black": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -356,7 +356,7 @@
         ],
       },
       {
-        blue: [
+        "blue": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },
@@ -369,7 +369,7 @@
         ],
       },
       {
-        orange: [
+        "orange": [
            {
             imageOne: 'https://via.placeholder.com/250x250'
           },

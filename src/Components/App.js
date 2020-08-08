@@ -18,6 +18,7 @@ function App() {
       <CartProvider>
         <Router>
           <Navbar />
+          <Cart />
           <div className="app-container">
             <Switch>
               <Route exact path='/' component={NewArrivals} />
