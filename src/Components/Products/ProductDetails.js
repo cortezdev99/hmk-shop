@@ -40,21 +40,35 @@ export default (props) => {
 
     const handleSizeClick = (size) => {
       setActiveSize(size)
-      console.log()
       return setSize(Object.values(sizes[size]).join(''))
     }
 
     const handleAddToCart = () => {
-      const state = [...products]
-      state.push([
-        { product: props.location.productDetailsProps.product },
-        { size: size },
-        { color: color },
-        { image: Object.values(Object.values(images[activeColor])[0][0])[0] },
-        { quantity: 1 }
-      ])
+      let duplicate = products.filter((product, idx, _) => {
+        let currentQuantity = product[4].quantity
+        if (product[0].product.title === title) {
+          if (product[1].size === size && product[2].color === color) {
+            products[idx].pop()
+            currentQuantity += 1
+            return products[idx].push({ quantity: currentQuantity })
+          }
+        }
+
+        return null
+      })
       
-      setProducts(state)
+      if (duplicate.length < 1) {
+        const state = [...products]
+        state.push([
+          { product: props.location.productDetailsProps.product },
+          { size: size },
+          { color: color },
+          { image: Object.values(Object.values(images[activeColor])[0][0])[0] },
+          { quantity: 1 }
+        ])
+        setProducts(state)
+      }
+
       setIsCartOpen(true)
     }
 
@@ -81,7 +95,7 @@ export default (props) => {
 
           <div className="product-details-product-colors-container">
             <div className="product-details-product-header">
-              Colors
+              Color
             </div>
 
             <div className="product-details-product-colors-wrapper">
@@ -110,7 +124,7 @@ export default (props) => {
 
           <div className="product-details-product-sizes-container">
             <div className="product-details-product-header">
-              Sizes
+              Size
             </div>
 
             <div className="product-details-product-sizes-wrapper">
