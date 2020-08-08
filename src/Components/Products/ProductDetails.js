@@ -46,7 +46,14 @@ export default (props) => {
 
     const handleAddToCart = () => {
       const state = [...products]
-      state.push([ { product: props.location.productDetailsProps.product }, { size: size }, { color: color }, { image: Object.values(Object.values(images[activeColor])[0][0])[0] } ])
+      state.push([
+        { product: props.location.productDetailsProps.product },
+        { size: size },
+        { color: color },
+        { image: Object.values(Object.values(images[activeColor])[0][0])[0] },
+        { quantity: 1 }
+      ])
+      
       setProducts(state)
       setIsCartOpen(true)
     }

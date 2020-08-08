@@ -23,6 +23,7 @@
       "XXXXL",
       "5XL"
     ],
+    price: 85,
     details: [
       "Embrodiery on chest",
       "wolven tag",
@@ -118,6 +119,7 @@
     title: 'Hat',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hats",
+    price: 85,
     sizes: [
       "S",
       "M",
@@ -168,6 +170,7 @@
     title: 'Top Hat',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hats",
+    price: 85,
     sizes: [
       "S",
       "M",
@@ -205,6 +208,7 @@
     title: '"Black" Hoodie',
     image: 'https://via.placeholder.com/250x250',
     categorie: "hoodies",
+    price: 85,
     sizes: [
       "S",
       "M",
@@ -273,6 +277,7 @@
       "XXXXL",
       "5XL"
     ],
+    price: 85,
     details: [
       "Embrodiery on chest",
       "wolven tag",
@@ -326,6 +331,7 @@
     title: 'Sweats',
     image: 'https://via.placeholder.com/250x250',
     categorie: "sweats",
+    price: 85,
     sizes: [
       "S",
       "M",

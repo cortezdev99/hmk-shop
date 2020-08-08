@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import CartContext from '../../Contexts/CartContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -8,9 +8,24 @@ export default () => {
     setIsCartOpen,
     products
   } = useContext(CartContext)
+
+  const [triggerReRender, setTriggerReRender] = useState(false)
   
   const handleCloseModal = () => {
     setIsCartOpen(false)
+  }
+
+  const handleQuantityButtonClick = (action, productIdx) => {
+    let currentQuantity = products[productIdx][4].quantity
+    if (action === 'plus') {
+      currentQuantity += 1
+    } else if (action === 'minus' && currentQuantity !== 1) {
+      currentQuantity -= 1
+    }
+
+    products[productIdx].pop()
+    products[productIdx].push({ quantity: currentQuantity })
+    setTriggerReRender(!triggerReRender)
   }
 
   if (isCartOpen !== true) {
@@ -47,7 +62,7 @@ export default () => {
                     </div>
 
                     <div style={{ height: "calc(100% / 4)" }}>
-                      $80
+                      ${product[0].product.price}
                     </div>
 
                     <div style={{ display: "flex", height: "calc(100% / 4)" }}>
@@ -58,15 +73,23 @@ export default () => {
 
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", height: "calc(100% / 4)"}}>
                       <div style={{ display: "flex", backgroundColor: "#f6f6f6", border: "1px solid #CCC", borderRadius: "5px" }}>
-                        <button style={{ width: "calc(100% / 3)", border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", color: "#7f7f7f" }}>
+                        <button
+                          style={{ width: "calc(100% / 3)", border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", color: "#7f7f7f" }}
+                          type="button"
+                          onClick={() => handleQuantityButtonClick('minus', productIdx)}
+                        >
                         <FontAwesomeIcon icon="minus" />
                         </button>
 
                         <div style={{ width: "calc(100% / 3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          1
+                          {product[4].quantity}
                         </div>
 
-                        <button style={{ width: "calc(100% / 3)", border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", color: "#7f7f7f" }}>
+                        <button
+                          style={{ width: "calc(100% / 3)", border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", color: "#7f7f7f" }}
+                          type="button"
+                          onClick={() => handleQuantityButtonClick('plus', productIdx)}
+                        >
                         <FontAwesomeIcon icon="plus" />
                         </button>
                       </div>
