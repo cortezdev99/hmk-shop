@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import CartContext from '../../Contexts/CartContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -13,8 +13,13 @@ export default () => {
   
   const handleCloseModal = () => {
     const el = document.getElementById('html')
-    el.classList.toggle('overflow-hidden')
-    setIsCartOpen(false)
+    const el2 = document.getElementById('cart-wrapper')
+    el2.classList.toggle('cart-slide')
+
+    setTimeout(() => {
+      el.classList.toggle('overflow-hidden')
+      setIsCartOpen(false)
+    }, 700)
   }
 
   const handleQuantityButtonClick = (action, productIdx) => {
@@ -30,13 +35,20 @@ export default () => {
     setTriggerReRender(!triggerReRender)
   }
 
+  useEffect(() => {
+    if (isCartOpen) {
+      const el = document.getElementById('cart-wrapper')
+      el.classList.toggle('cart-slide')
+    }
+  })
+
   if (isCartOpen !== true) {
     return <></>
   }
 
   return (
     <div style={{ position: "fixed", backgroundColor: "rgba(29, 29, 29, 0.7", zIndex: 1000, top: "0", bottom: "0", minHeight: "100vh", height: "100%", width: "100%", display: "flex", justifyContent: "flex-end" }}>
-      <div style={{ height: "100%", minHeight: "100vh", background: "#fff", width: "80%", maxWidth: "570px", display: "flex", flexDirection: "column" }}>
+      <div className="cart-wrapper" id="cart-wrapper" style={{ height: "100%", minHeight: "100vh", background: "#fff", width: "80%", maxWidth: "570px", display: "flex", flexDirection: "column", transform: "translateX(570px)", transition: "0.5s" }}>
         <div style={{ fontSize: "20px", height: "80px", paddingLeft: "40px", paddingRight: "40px", borderBottom: "1px solid #CCC", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
             Cart
