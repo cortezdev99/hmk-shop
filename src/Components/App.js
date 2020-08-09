@@ -13,6 +13,7 @@ import CartProvider from '../Providers/CartProvider';
 
 function App() {
   Icons()
+
   return (
     <div className="App">
       <CartProvider>

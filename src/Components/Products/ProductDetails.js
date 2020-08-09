@@ -68,7 +68,9 @@ export default (props) => {
         ])
         setProducts(state)
       }
-
+    
+      const el = document.getElementById('html')
+      el.classList.toggle('overflow-hidden')
       setIsCartOpen(true)
     }
 
