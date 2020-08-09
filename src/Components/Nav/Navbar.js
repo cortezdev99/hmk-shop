@@ -1,7 +1,26 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import CartContext from '../../Contexts/CartContext'
 
 export default () => {
+  const {
+    setIsCartOpen,
+    products
+  } = useContext(CartContext)
+
+  const handleCartToggle = () => {
+    const el = document.getElementById('html')
+    el.classList.toggle('overflow-hidden')
+    setIsCartOpen(true)
+  }
+
+  const handleGettingProductAmount = () => {
+    const itemsTotal = products.reduce((accum, currentVal) => {
+      return accum += currentVal[4].quantity
+    }, 0)
+
+    return `${itemsTotal}`
+  }
   
   useEffect(() => {
     const permElmnt = document.getElementById('navbar-wrapper-id')
@@ -27,7 +46,12 @@ export default () => {
         <NavLink to="/best-sellers" className="navbar-link">Best Sellers</NavLink>
         <NavLink to="/all-apparel" className="navbar-link">All Apparel</NavLink>
         <NavLink to="/account" className="navbar-link">Account</NavLink>
-        <NavLink to="/cart" className="navbar-link">Cart</NavLink>
+        <div
+          className="navbar-link"
+          onClick={handleCartToggle}
+        >
+          Cart ({handleGettingProductAmount()})
+        </div>
       </div>
     </div>
   )

@@ -26,7 +26,6 @@ function App() {
               <Route exact path='/best-sellers' component={BestSellers} />
               <Route exact path='/all-apparel' component={AllApparel} />
               <Route exact path='/account' component={Account} />
-              <Route exact path='/cart' component={Cart} />
               <Route exact path='/products/:slug' component={ProductDetails} />
             </Switch>
           </div>
