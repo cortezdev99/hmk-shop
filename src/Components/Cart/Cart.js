@@ -40,6 +40,10 @@ export default () => {
     setTriggerReRender(!triggerReRender)
   }
 
+  const handleCheckoutClick = () => {
+    console.log('Checking out')
+  }
+
   useEffect(() => {
     const el = document.getElementById('cart-wrapper')
     const el2 = document.getElementsByClassName('cart-slide')
@@ -129,6 +133,15 @@ export default () => {
               )
             })
           }
+        </div>
+
+        <div style={{ position: "relative", padding: "0 40px", paddingBottom: "40px" }}>
+          <button
+            onClick={handleCheckoutClick}
+            style={{ padding: "1rem", width: "100%", cursor: "pointer", borderRadius: "5px", background: "#45b3e0",  border: "1px solid transparent" }}
+          >
+            Checkout
+          </button>
         </div>
       </div>
     </div>
