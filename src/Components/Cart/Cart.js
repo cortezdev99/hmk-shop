@@ -35,9 +35,15 @@ export default () => {
     setTriggerReRender(!triggerReRender)
   }
 
+  const handleRemoveProduct = (id) => {
+    products.splice(id, 1)
+    setTriggerReRender(!triggerReRender)
+  }
+
   useEffect(() => {
-    if (isCartOpen) {
-      const el = document.getElementById('cart-wrapper')
+    const el = document.getElementById('cart-wrapper')
+    const el2 = document.getElementsByClassName('cart-slide')
+    if (isCartOpen && el2.length === 0) {
       el.classList.toggle('cart-slide')
     }
   })
@@ -110,7 +116,12 @@ export default () => {
                       </div>
                         
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <button style={{ border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", textDecorationLine: "underline" }}>Remove</button>
+                        <button
+                          style={{ border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", textDecorationLine: "underline" }}
+                          onClick={() => handleRemoveProduct(productIdx)}
+                        >
+                          Remove
+                        </button>
                       </div>
                     </div>
                   </div>
