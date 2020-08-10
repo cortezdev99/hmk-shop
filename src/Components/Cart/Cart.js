@@ -37,28 +37,13 @@ export default () => {
 
   const handleRemoveProduct = (id) => {
       const cartProductWrapper = document.getElementById(`cart-product-wrapper-${id}`)
-      cartProductWrapper.classList.toggle('test')
-      cartProductWrapper.classList.toggle('test2')
+      cartProductWrapper.classList.toggle('cart-product-remove-product-anim')
 
       setTimeout(() => {
-        cartProductWrapper.classList.toggle('test')
-        cartProductWrapper.classList.toggle('test2')
+        cartProductWrapper.classList.toggle('cart-product-remove-product-anim')
         products.splice(id, 1)
         setTriggerReRender(!triggerReRender)
       }, 700)
-
-    // if (id < 2) {
-    //   cartProductWrapper.classList.toggle('removed-product-anim')
-  
-    //   setTimeout(() => {
-    //     cartProductWrapper.classList.toggle('removed-product-anim')
-    //     products.splice(id, 1)
-    //     setTriggerReRender(!triggerReRender)
-    //   }, 700)
-    // } else {
-    //   products.splice(id, 1)
-    //   setTriggerReRender(!triggerReRender)
-    // }
   }
 
   const handleCheckoutClick = () => {
