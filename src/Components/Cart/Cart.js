@@ -12,12 +12,12 @@ export default () => {
   } = useContext(CartContext)
 
   const handleCloseModal = () => {
-    const el = document.getElementById('html')
-    const el2 = document.getElementById('cart-wrapper')
-    el2.classList.toggle('cart-slide')
+    const htmlElement = document.getElementById('html')
+    const cartWrapperElement = document.getElementById('cart-wrapper')
+    cartWrapperElement.classList.toggle('cart-slide')
 
     setTimeout(() => {
-      el.classList.toggle('overflow-hidden')
+      htmlElement.classList.toggle('html-overflow-hidden')
       setIsCartOpen(false)
     }, 700)
   }
@@ -37,11 +37,11 @@ export default () => {
 
   const handleRemoveProduct = (id) => {
     if (id < 2) {
-      const el = document.getElementById(`cart-product-wrapper-${id}`)
-      el.classList.toggle('removed-product-anim')
+      const cartProductWrapper = document.getElementById(`cart-product-wrapper-${id}`)
+      cartProductWrapper.classList.toggle('removed-product-anim')
   
       setTimeout(() => {
-        el.classList.toggle('removed-product-anim')
+        cartProductWrapper.classList.toggle('removed-product-anim')
         products.splice(id, 1)
         setTriggerReRender(!triggerReRender)
       }, 700)
@@ -56,10 +56,10 @@ export default () => {
   }
 
   useEffect(() => {
-    const el = document.getElementById('cart-wrapper')
-    const el2 = document.getElementsByClassName('cart-slide')
-    if (isCartOpen && el2.length === 0) {
-      el.classList.toggle('cart-slide')
+    const cartWrapperElement = document.getElementById('cart-wrapper')
+    const cartSlideAnimElement = document.getElementsByClassName('cart-slide')
+    if (isCartOpen && cartSlideAnimElement.length === 0) {
+      cartWrapperElement.classList.toggle('cart-slide')
     }
   })
 
