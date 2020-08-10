@@ -36,19 +36,29 @@ export default () => {
   }
 
   const handleRemoveProduct = (id) => {
-    if (id < 2) {
       const cartProductWrapper = document.getElementById(`cart-product-wrapper-${id}`)
-      cartProductWrapper.classList.toggle('removed-product-anim')
-  
+      cartProductWrapper.classList.toggle('test')
+      cartProductWrapper.classList.toggle('test2')
+
       setTimeout(() => {
-        cartProductWrapper.classList.toggle('removed-product-anim')
+        cartProductWrapper.classList.toggle('test')
+        cartProductWrapper.classList.toggle('test2')
         products.splice(id, 1)
         setTriggerReRender(!triggerReRender)
       }, 700)
-    } else {
-      products.splice(id, 1)
-      setTriggerReRender(!triggerReRender)
-    }
+
+    // if (id < 2) {
+    //   cartProductWrapper.classList.toggle('removed-product-anim')
+  
+    //   setTimeout(() => {
+    //     cartProductWrapper.classList.toggle('removed-product-anim')
+    //     products.splice(id, 1)
+    //     setTriggerReRender(!triggerReRender)
+    //   }, 700)
+    // } else {
+    //   products.splice(id, 1)
+    //   setTriggerReRender(!triggerReRender)
+    // }
   }
 
   const handleCheckoutClick = () => {
@@ -92,6 +102,7 @@ export default () => {
                     <div
                       className={`cart-product-wrapper cart-product-wrapper-${productIdx}`}
                       id={`cart-product-wrapper-${productIdx}`}
+                      style={{ position: "relative" }}
                       key={productIdx}
                     >
                       <div className="cart-product-left-column-wrapper">
