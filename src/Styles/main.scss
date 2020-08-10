@@ -7,6 +7,7 @@
 @import './product-details.scss';
 @import './product-details-gallery.scss';
 @import './shipping.scss';
+@import './cart.scss';
 
 *, *::before, *::after {
   margin: 0;
@@ -32,21 +33,4 @@ code {
 
 .overflow-hidden {
   overflow: hidden;
-}
-
-.cart-slide {
-  transform: translateX(0px) !important;
-}
-
-.removed-product-anim {
-  max-height: 0px !important;
-  overflow: hidden;
-}
-
-.removed-product-anim-slide-down {
-  // transform: translateX(570px);
-  transform: scaleY(0) !important;
-  transition: 0.5s !important;
-  overflow: hidden;
-
 }

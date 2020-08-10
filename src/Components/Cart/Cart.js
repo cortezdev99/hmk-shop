@@ -3,14 +3,14 @@ import CartContext from '../../Contexts/CartContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default () => {
+  const [triggerReRender, setTriggerReRender] = useState(false)
+
   const {
     isCartOpen,
     setIsCartOpen,
     products
   } = useContext(CartContext)
 
-  const [triggerReRender, setTriggerReRender] = useState(false)
-  
   const handleCloseModal = () => {
     const el = document.getElementById('html')
     const el2 = document.getElementById('cart-wrapper')
@@ -68,74 +68,81 @@ export default () => {
   }
 
   return (
-    <div style={{ position: "fixed", backgroundColor: "rgba(29, 29, 29, 0.7", zIndex: 1000, top: "0", bottom: "0", minHeight: "100vh", height: "100%", width: "100%", display: "flex", justifyContent: "flex-end" }}>
-      <div className="cart-wrapper" id="cart-wrapper" style={{ height: "100%", minHeight: "100vh", background: "#fff", width: "80%", maxWidth: "570px", display: "flex", flexDirection: "column", transform: "translateX(570px)", transition: "height 0.5s, transform 0.5s" }}>
-        <div style={{ fontSize: "20px", height: "80px", paddingLeft: "40px", paddingRight: "40px", borderBottom: "1px solid #CCC", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div>
+    <div className="cart-container">
+      <div className="cart-wrapper" id="cart-wrapper">
+        <div className="cart-heading-wrapper">
+          <div className="cart-heading">
             Cart
           </div>
 
-          <div onClick={handleCloseModal} style={{ fontSize: "24px", color: "#1d1d1d", cursor: "pointer" }}>
+          <div
+            className="cart-heading-close-btn"
+            onClick={handleCloseModal}
+          >
             <FontAwesomeIcon icon="times" />
           </div>
         </div>
 
         {
           products.length > 0 ? (
-            <div style={{ overflowY: "auto", padding: "40px", display: "flex", flexDirection: "column", gap: "40px", height: "100%", transition: "max-height 0.5s linear" }}>
+            <div className="cart-products-container">
               {
                 products.map((product, productIdx) => {
                   return (
-                    <div className={`cart-product-wrapper-${productIdx}`} id={`cart-product-wrapper-${productIdx}`} key={productIdx} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: "40px", rowGap: "40px", transition: " max-height 0.5s", maxHeight: "254px" }}>
-                      <div style={{ height: "250px", width: "250px" }}>
+                    <div
+                      className={`cart-product-wrapper cart-product-wrapper-${productIdx}`}
+                      id={`cart-product-wrapper-${productIdx}`}
+                      key={productIdx}
+                    >
+                      <div className="cart-product-left-column-wrapper">
                         <img
                           alt="cartImage"
                           src={Object.values(product[3])[0]}
-                          style={{ width: "100%", height: "100%" }}
+                          className="cart-product-img"
                         />
                       </div>
 
-                      <div>
-                        <div style={{ height: "calc(100% / 4)" }}>
+                      <div className="cart-product-right-column-wrapper">
+                        <div className="cart-product-title">
                           {product[0].product.title}
                         </div>
 
-                        <div style={{ height: "calc(100% / 4)" }}>
+                        <div className="cart-product-price">
                           ${product[0].product.price}
                         </div>
 
-                        <div style={{ display: "flex", height: "calc(100% / 4)" }}>
-                          <div style={{ width: "100%" }}>
+                        <div className="cart-product-color-and-size-wrapper">
+                          <div className="cart-product-color-and-size">
                             {Object.values(product[2])[0]} / {Object.values(product[1])[0]}
                           </div>
                         </div>
 
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", height: "calc(100% / 4)"}}>
-                          <div style={{ display: "flex", backgroundColor: "#f6f6f6", border: "1px solid #CCC", borderRadius: "5px" }}>
+                        <div className="cart-product-quantity-container">
+                          <div className="cart-product-quantity-left-column-wrapper">
                             <button
-                              style={{ width: "calc(100% / 3)", border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", color: "#7f7f7f" }}
                               type="button"
+                              className="cart-product-quantity-toggle"
                               onClick={() => handleQuantityButtonClick('minus', productIdx)}
                             >
-                            <FontAwesomeIcon icon="minus" />
+                              <FontAwesomeIcon icon="minus" />
                             </button>
 
-                            <div style={{ width: "calc(100% / 3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <div className="cart-product-quantity">
                               {product[4].quantity}
                             </div>
 
                             <button
-                              style={{ width: "calc(100% / 3)", border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", color: "#7f7f7f" }}
                               type="button"
+                              className="cart-product-quantity-toggle"
                               onClick={() => handleQuantityButtonClick('plus', productIdx)}
                             >
-                            <FontAwesomeIcon icon="plus" />
+                              <FontAwesomeIcon icon="plus" />
                             </button>
                           </div>
                             
-                          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <div className="cart-product-quantity-right-column-wrapper">
                             <button
-                              style={{ border: "1px solid transparent", backgroundColor: "transparent", cursor: "pointer", textDecorationLine: "underline" }}
+                              className="cart-product-remove-product-btn"
                               onClick={() => handleRemoveProduct(productIdx)}
                             >
                               Remove
@@ -149,8 +156,8 @@ export default () => {
               }
             </div>
           ) : (
-            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ fontSize: "18px", letterSpacing: "1px" }}>
+            <div className="cart-product-no-products-wrapper">
+              <div className="cart-product-no-products-heading">
                 YOUR CART IS EMPTY.
               </div>
             </div>
@@ -159,10 +166,10 @@ export default () => {
 
         {
           products.length > 0 ? (
-            <div style={{ position: "relative", padding: "0 40px", paddingBottom: "40px" }}>
+            <div className="cart-product-checkout-wrapper">
               <button
                 onClick={handleCheckoutClick}
-                style={{ padding: "1rem", width: "100%", cursor: "pointer", borderRadius: "5px", background: "#45b3e0",  border: "1px solid transparent" }}
+                className="cart-product-checkout-btn"
               >
                 Checkout
               </button>
