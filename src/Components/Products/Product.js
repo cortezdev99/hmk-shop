@@ -35,10 +35,15 @@ export default (props) => {
             product: props.product
           } 
         }}
-        style={{ paddingTop: "5px", paddingBottom: "5px" }}
+        className="product-title-wrapper"
+        style={{ paddingTop: "5px", paddingBottom: "5px", textAlign:  "center" }}
       >
         {props.product.title}
       </Link>
+
+      <div style={{ paddingTop: "5px", paddingBottom: "5pxs" }}>
+        ${props.product.price}
+      </div>
     </div>
   )
 }
