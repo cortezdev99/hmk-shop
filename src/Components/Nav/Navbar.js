@@ -45,7 +45,7 @@ export default () => {
         <NavLink exact to="/" className="navbar-link">New Arrivals</NavLink>
         <NavLink to="/best-sellers" className="navbar-link">Best Sellers</NavLink>
         <NavLink to="/all-apparel" className="navbar-link">All Apparel</NavLink>
-        <NavLink to="/account" className="navbar-link">Account</NavLink>
+        <NavLink to="/sale" className="navbar-link">Sale</NavLink>
         <div
           className="navbar-link"
           onClick={handleCartToggle}

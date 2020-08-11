@@ -6,7 +6,7 @@ import NewArrivals from './New-Arrivals/NewArrivals';
 import BestSellers from './Best-Sellers/BestSellers';
 import AllApparel from './All-Apparel/AllApparel'
 import Cart from './Cart/Cart';
-import Account from './Account/Account';
+import Sale from './Sale/Sale';
 import Icons from './Utilities/Icons';
 import ProductDetails from './Products/ProductDetails';
 import CartProvider from '../Providers/CartProvider';
@@ -25,7 +25,7 @@ function App() {
               <Route exact path='/' component={NewArrivals} />
               <Route exact path='/best-sellers' component={BestSellers} />
               <Route exact path='/all-apparel' component={AllApparel} />
-              <Route exact path='/account' component={Account} />
+              <Route exact path='/sale' component={Sale} />
               <Route exact path='/products/:slug' component={ProductDetails} />
             </Switch>
           </div>
