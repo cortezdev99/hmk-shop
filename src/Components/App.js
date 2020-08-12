@@ -10,6 +10,7 @@ import Sale from './Sale/Sale';
 import Icons from './Utilities/Icons';
 import ProductDetails from './Products/ProductDetails';
 import CartProvider from '../Providers/CartProvider';
+import Checkout from './Checkout/Checkout'
 
 function App() {
   Icons()
@@ -27,6 +28,7 @@ function App() {
               <Route exact path='/all-apparel' component={AllApparel} />
               <Route exact path='/sale' component={Sale} />
               <Route exact path='/products/:slug' component={ProductDetails} />
+              <Route exact path='/checkout' component={Checkout} />
             </Switch>
           </div>
         </Router>

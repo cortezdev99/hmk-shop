@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import CartContext from '../../Contexts/CartContext'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default () => {
@@ -163,12 +164,18 @@ export default () => {
         {
           products.length > 0 ? (
             <div className="cart-product-checkout-wrapper">
-              <button
-                onClick={handleCheckoutClick}
-                className="cart-product-checkout-btn"
+              <Link
+                to={{
+                  pathname: '/checkout',
+                  cartProps: {
+                    products: products
+                  } 
+                }}
               >
-                Checkout
-              </button>
+                <button className="cart-product-checkout-btn" type="button">
+                  Checkout
+                </button>
+              </Link>
             </div>
           ) : (
             <></>
