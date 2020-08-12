@@ -142,7 +142,7 @@ export default (props) => {
                   />
                 </div>
 
-                <div style={{ paddingTop: "20px" }}>
+                <div style={{ paddingTop: "20px", display: "flex" }}>
                   <input
                     placeholder="Phone"
                     type="tel"
@@ -150,6 +150,18 @@ export default (props) => {
                     onChange={(e) => setPhone(e.target.value)}
                     style={{ width: "100%", height: "50px" }}
                   />
+              </div>
+            </div>
+
+            <div style={{ height: "70px", paddingTop: "20px", display: "flex", justifyContent: "space-between" }}>
+              <div style={{ alignSelf: "center" }}>
+                Return to cart
+              </div>
+
+              <div>
+                <button style={{ height: "100%" }}>
+                  Continue to shipping
+                </button>
               </div>
             </div>
         </div>
