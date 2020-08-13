@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import CartContext from '../../Contexts/CartContext'
 
-export default (props) => {
+export default () => {
   const [ email, setEmail ] = useState("")
   const [ firstName, setFirstName ] = useState("")
   const [ address, setAddress ] = useState("")
@@ -10,9 +11,19 @@ export default (props) => {
   const [ state, setState ] = useState("")
   const [ zip, setZip ] = useState("")
   const [ phone, setPhone ] = useState("")
-  // const {
-     
-  // } = props.location.cartProps.products
+  const [ subtotal, setSubtotal ] = useState(0)
+
+  const {
+    products
+  } = useContext(CartContext)
+
+  useEffect(() => {
+    const subtotal = products.reduce((accum, currentVal) => {
+      return accum += currentVal[4].quantity * currentVal[0].product.price
+    }, 0)
+
+    setSubtotal(subtotal)
+  }, [])
 
   return (
     <div style={{ paddingBottom: "80px" }}>
@@ -23,7 +34,7 @@ export default (props) => {
         />
       </div>
 
-      <div style={{ padding: "0 80px", display: "grid", gridTemplateColumns: "1fr 1fr", gridGap: "80px" }}>
+      <div style={{ padding: "0 80px", display: "grid", gridTemplateColumns: "1.5fr 1fr", gridGap: "80px" }}>
         <div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", paddingTop: "80px" }}>
               <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
@@ -166,8 +177,97 @@ export default (props) => {
             </div>
         </div>
 
-        <div>
-            Right
+        <div style={{ paddingTop: "40px" }}>
+          <div>
+            {
+              products.map((product, productIdx) => {
+                console.log(product)
+                return (
+                  <div key={productIdx} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", columnGap: "5px", padding: "40px 0", borderBottom: "1px solid #CCC" }}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <div style={{ width: "100px", height: "100px", display: "flex" }}>
+                        <img
+                          src={product[3].image}
+                          style={{ width: "100%", height: "100%" }}
+                          alt="productImage"
+                        />
+
+                        <div style={{ position: "relative" }}>
+                          <div style={{ width: "25px", height: "25px", position: "absolute", top: "-12px", right: "-12px", backgroundColor: "rgba(114,114,114,0.9)", color: "white", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {product[4].quantity}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                      <div>
+                        {product[0].product.title}
+                      </div>
+
+                      <div style={{ textAlign: "center" }}>
+                        {product[2].color} / {product[1].size.toUpperCase()}
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                      ${product[0].product.price * product[4].quantity}
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", columnGap: "20px", padding: "40px 0", borderBottom: "1px solid #CCC" }}>
+            <div>
+              <input
+                placeholder="Discount or promo code"
+                type="text"
+                style={{ width: "100%", height: "50px" }}
+              />
+            </div>
+
+            <div>
+              <button
+                style={{ width: "100%", height: "50px" }}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+
+          <div style={{ padding: "40px 0", borderBottom: "1px solid #CCC" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "20px" }}>
+              <div style={{ fontSize: "14px" }}>
+                Subtotal
+              </div>
+
+              <div>
+                ${subtotal}
+              </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ fontSize: "14px" }}>
+                Shipping
+              </div>
+
+              <div>
+                $6
+              </div>
+            </div>
+          </div>
+
+          <div style={{ paddingTop: "40px", display: "flex", justifyContent: "space-between" }}>
+            <div>
+              Total
+            </div>
+
+            <div>
+              ${subtotal + 6}
+            </div>
+          </div>
         </div>
       </div>
     </div>
