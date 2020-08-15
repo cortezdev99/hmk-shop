@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Products from '../Products/Products'
 import FilterProducts from '../Utilities/FilterProducts'
 import Data from '../Utilities/Data'
@@ -18,6 +18,14 @@ export default () => {
 
     setProducts(filteredProducts)
   }
+
+  useEffect(() => {
+    const rootElement = document.getElementById('root')
+    rootElement.scrollIntoView({
+      behavior: "auto",
+      block: "start"
+    }, 500)
+  }, [])
   
   return (
     <div className="new-arrivals-container">

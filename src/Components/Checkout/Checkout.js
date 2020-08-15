@@ -24,10 +24,16 @@ export default () => {
     }, 0)
 
     setSubtotal(subtotal)
+
+    const rootElement = document.getElementById('root')
+    rootElement.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    }, 500)
   }, [])
 
   return (
-    <div style={{ paddingBottom: "80px" }}>
+    <div id="checkout-container" style={{ paddingBottom: "80px" }}>
       <div>
         <img
           src="https://via.placeholder.com/1900x646"

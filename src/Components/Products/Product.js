@@ -1,9 +1,8 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import GallerySlider from '../Utilities/GallerySlider'
 
 export default (props) => {
-  console.log()
   const [image, setImage] = useState(Object.values(Object.values(props.product.images[0])[0][0])[0])
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import ProductDetailsGallerySlider from './ProductDetailsGallerySlider'
 import Shipping from '../Utilities/Shipping'
 import CartContext from '../../Contexts/CartContext'
@@ -19,6 +19,14 @@ export default (props) => {
       sizes,
       details
     } = props.location.productDetailsProps.product
+
+  useEffect(() => {
+    const rootElement = document.getElementById('root')
+    rootElement.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    }, 500)
+  }, [])
 
     const [ activeColor, setActiveColor ] = useState(0)
     const [ color, setColor ] = useState(Object.keys(images[0])[0])
