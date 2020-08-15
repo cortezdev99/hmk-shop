@@ -203,7 +203,7 @@ export default () => {
                     </div>
 
                     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                      <div>
+                      <div style={{ textAlign: "center" }}>
                         {product[0].product.title}
                       </div>
 

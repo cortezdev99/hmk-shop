@@ -47,8 +47,18 @@ export default () => {
       }, 700)
   }
 
-  const handleCheckoutClick = () => {
-    console.log('Checking out')
+  const handleCheckoutClick = (e) => {
+    // console.log('Checking out')
+    // e.preventDefault();
+
+    // const htmlElement = document.getElementById('html')
+    // const cartWrapperElement = document.getElementById('cart-wrapper')
+    // cartWrapperElement.classList.toggle('cart-slide')
+
+    // setTimeout(() => {
+    //   htmlElement.classList.toggle('html-overflow-hidden')
+    //   setIsCartOpen(false)
+    // }, 700)
   }
 
   useEffect(() => {
@@ -170,6 +180,16 @@ export default () => {
                   cartProps: {
                     products: products
                   } 
+                }}
+                onClick={() => {
+                  const htmlElement = document.getElementById('html')
+                  const cartWrapperElement = document.getElementById('cart-wrapper')
+                  cartWrapperElement.classList.toggle('cart-slide')
+
+                  setTimeout(() => {
+                    htmlElement.classList.toggle('html-overflow-hidden')
+                    setIsCartOpen(false)
+                  }, 700)
                 }}
               >
                 <button className="cart-product-checkout-btn" type="button">
