@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react'
 import CartContext from '../../Contexts/CartContext'
 import CountryDropdown from './CountryDropdown'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default () => {
+  // TODO Add Free Shipping Logic On Orders Over $100
+  // Todo Add Logic To Add Discount
   const [ email, setEmail ] = useState("")
   const [ firstName, setFirstName ] = useState("")
   const [ address, setAddress ] = useState("")
@@ -18,6 +21,10 @@ export default () => {
   const {
     products
   } = useContext(CartContext)
+
+  if (products.length < 1) {
+    return <Redirect to="/" />
+  }
 
   useEffect(() => {
     const rootElement = document.getElementById('app-container')
@@ -36,7 +43,7 @@ export default () => {
     }, 0)
     
     setSubtotal(subtotal)
-  }, [])
+  }, [products])
 
   return (
     <div id="checkout-container" style={{ paddingBottom: "80px" }}>
@@ -44,6 +51,7 @@ export default () => {
         <img
           src="https://via.placeholder.com/1900x646"
           style={{ height: "40%", maxHeight: "200px", backgroundSize: "cover", width: "100%" }}
+          alt="bannerImage"
         />
       </div>
 
@@ -182,7 +190,7 @@ export default () => {
 
             <div style={{ height: "70px", paddingTop: "20px", display: "flex", justifyContent: "space-between" }}>
               <Link
-                style={{ alignSelf: "center" }}
+                style={{ display: "flex", justifyContent: "center", alignItems: "center", textDecoration: "none", color: "#1d1d1d" }}
                 to="/"
                 onClick={() => {
                   const rootElement = document.getElementById('app-container')
@@ -192,12 +200,12 @@ export default () => {
                   navbarElement.classList.toggle('hidden-nav')
                 }}
               >
-                Return to home
+                <span style={{ paddingRight: "5px", fontSize: "14px" }}><FontAwesomeIcon icon="arrow-left" /></span> Return to home
               </Link>
 
               <div>
                 <Link
-                  style={{ height: "100%" }}
+                  style={{ height: "100%", width: "100%", padding: "1em", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#1d1d1d", backgroundColor: "#45b3e0", borderRadius: "5px" }}
                   to={{
                     pathname: `/checkout/payment`,
                     paymentProps: {
@@ -214,6 +222,9 @@ export default () => {
                       contact: {
                         phone,
                         email
+                      },
+                      total: {
+                        total: region === "USA" ? subtotal + 6 : subtotal + 8
                       }
                     } 
                   }}
