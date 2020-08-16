@@ -191,3 +191,16 @@
   opacity: 0;
   transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms;
 }
+
+// No Products Checkout Btn Slide Out Animation
+.checkout-btn-translate-out {
+  transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms;
+  transform: translateY(120px);
+  opacity: 0;
+}
+
+// No Products When Opened Btn No Show
+.checkout-btn-no-show {
+  transform: translateY(120px);
+  opacity: 0;
+}

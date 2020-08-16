@@ -38,7 +38,11 @@ export default () => {
 
   const handleRemoveProduct = (id) => {
       const cartProductWrapper = document.getElementById(`cart-product-wrapper-${id}`)
+      const checkoutBtnElm = document.getElementById('cart-product-checkout-wrapper')
       cartProductWrapper.classList.toggle('cart-product-remove-product-anim')
+      if (products.length === 1) {
+        checkoutBtnElm.classList.toggle('checkout-btn-translate-out')
+      }
 
       setTimeout(() => {
         cartProductWrapper.classList.toggle('cart-product-remove-product-anim')
@@ -47,25 +51,16 @@ export default () => {
       }, 700)
   }
 
-  const handleCheckoutClick = (e) => {
-    // console.log('Checking out')
-    // e.preventDefault();
-
-    // const htmlElement = document.getElementById('html')
-    // const cartWrapperElement = document.getElementById('cart-wrapper')
-    // cartWrapperElement.classList.toggle('cart-slide')
-
-    // setTimeout(() => {
-    //   htmlElement.classList.toggle('html-overflow-hidden')
-    //   setIsCartOpen(false)
-    // }, 700)
-  }
-
   useEffect(() => {
     const cartWrapperElement = document.getElementById('cart-wrapper')
     const cartSlideAnimElement = document.getElementsByClassName('cart-slide')
     if (isCartOpen && cartSlideAnimElement.length === 0) {
       cartWrapperElement.classList.toggle('cart-slide')
+    }
+
+    const checkoutBtnElm = document.getElementById('cart-product-checkout-wrapper')
+    if (products.length === 0 && checkoutBtnElm !== null) {
+      checkoutBtnElm.classList.toggle('checkout-btn-no-show')
     }
   })
 
@@ -171,36 +166,30 @@ export default () => {
           )
         }
 
-        {
-          products.length > 0 ? (
-            <div className="cart-product-checkout-wrapper">
-              <Link
-                to={{
-                  pathname: '/checkout',
-                  cartProps: {
-                    products: products
-                  } 
-                }}
-                onClick={() => {
-                  const htmlElement = document.getElementById('html')
-                  const cartWrapperElement = document.getElementById('cart-wrapper')
-                  cartWrapperElement.classList.toggle('cart-slide')
+        <div className="cart-product-checkout-wrapper" id="cart-product-checkout-wrapper">
+          <Link
+            to={{
+              pathname: '/checkout',
+              cartProps: {
+                products: products
+              } 
+            }}
+            onClick={() => {
+              const htmlElement = document.getElementById('html')
+              const cartWrapperElement = document.getElementById('cart-wrapper')
+              cartWrapperElement.classList.toggle('cart-slide')
 
-                  setTimeout(() => {
-                    htmlElement.classList.toggle('html-overflow-hidden')
-                    setIsCartOpen(false)
-                  }, 700)
-                }}
-              >
-                <button className="cart-product-checkout-btn" type="button">
-                  Checkout
-                </button>
-              </Link>
-            </div>
-          ) : (
-            <></>
-          )
-        }
+              setTimeout(() => {
+                htmlElement.classList.toggle('html-overflow-hidden')
+                setIsCartOpen(false)
+              }, 700)
+            }}
+          >
+            <button className="cart-product-checkout-btn" type="button">
+              Checkout
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   )
