@@ -104,7 +104,7 @@ export default () => {
                   />
                 </div>
 
-                <div className="checkout-contact-info-input-wrapper" style={{ paddingTop: "20px", display: "flex" }}>
+                <div className="checkout-contact-info-phone-input-wrapper" style={{ paddingTop: "20px", display: "flex" }}>
                   <input
                     className="checkout-input"
                     placeholder="Phone"
