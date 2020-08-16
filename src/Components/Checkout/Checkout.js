@@ -3,6 +3,7 @@ import CartContext from '../../Contexts/CartContext'
 import CountryDropdown from './CountryDropdown'
 import { Link, Redirect } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Shipping from '../Utilities/Shipping'
 
 export default () => {
   // TODO Add Free Shipping Logic On Orders Over $100
@@ -337,6 +338,10 @@ export default () => {
             <div className="checkout-total-price">
               {region === "USA" ? `$${subtotal + 6}` : region === "" ? "Not calculated yet." : `$${subtotal + 8}`}
             </div>
+          </div>
+
+          <div >
+            <Shipping paddingReAlign={true} />
           </div>
         </div>
       </div>

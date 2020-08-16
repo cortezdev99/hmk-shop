@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default () => {
+export default (props) => {
   // TODO - make span tag in returns section link to the returns page
 
   const handleShippingToggle = () => {
@@ -14,7 +14,7 @@ export default () => {
   }
 
   return (
-    <div className="shipping-container">
+    <div className={`shipping-container ${props.paddingReAlign ? "checkout-padding-re-align" : null}`}>
       <div id="shipping-wrapper" className="shipping-wrapper">
         <div className="shipping-toggle-wrapper" onClick={handleShippingToggle}>
           <div className="shipping-toggle-header">
