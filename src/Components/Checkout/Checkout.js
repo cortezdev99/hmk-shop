@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import CartContext from '../../Contexts/CartContext'
 import CountryDropdown from './CountryDropdown'
+import { Link } from 'react-router-dom'
 
 export default () => {
   const [ email, setEmail ] = useState("")
@@ -19,17 +20,22 @@ export default () => {
   } = useContext(CartContext)
 
   useEffect(() => {
-    const subtotal = products.reduce((accum, currentVal) => {
-      return accum += currentVal[4].quantity * currentVal[0].product.price
-    }, 0)
+    const rootElement = document.getElementById('app-container')
+    const navbarElement = document.getElementById('navbar-wrapper-id')
+    
+    rootElement.classList.toggle('no-scroll-margin')
+    navbarElement.classList.toggle('hidden-nav')
 
-    setSubtotal(subtotal)
-
-    const rootElement = document.getElementById('root')
     rootElement.scrollIntoView({
       behavior: "smooth",
       block: "start"
     }, 500)
+
+    const subtotal = products.reduce((accum, currentVal) => {
+      return accum += currentVal[4].quantity * currentVal[0].product.price
+    }, 0)
+    
+    setSubtotal(subtotal)
   }, [])
 
   return (
@@ -43,7 +49,7 @@ export default () => {
 
       <div style={{ padding: "0 80px", display: "grid", gridTemplateColumns: "1.5fr 1fr", gridGap: "80px" }}>
         <div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", paddingTop: "80px" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", paddingTop: "72px" }}>
               <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
                 <span style={{ marginTop: "8px", border: "1px solid #CCC", borderBottom: "none", borderRight: "none" }}></span>
                 <span style={{ textAlign: "center" }}>Express Checkout</span>
@@ -76,15 +82,26 @@ export default () => {
             </div>
 
             <div style={{ width: "100%", paddingTop: "80px" }}>
-              <div style={{ paddingBottom: "20px", fontSize: "18px" }}>Contact Information</div>
+              <div style={{ fontSize: "18px" }}>Contact Information</div>
+                <div style={{ paddingTop: "20px" }}>
+                  <input
+                    placeholder="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{ width: "100%", height: "50px" }}
+                  />
+                </div>
 
-              <input
-                placeholder="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{ width: "100%", height: "50px" }}
-              />
+                <div style={{ paddingTop: "20px", display: "flex" }}>
+                  <input
+                    placeholder="Phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    style={{ width: "100%", height: "50px" }}
+                  />
+                </div>
             </div>
 
             <div style={{ width: "100%", paddingTop: "80px" }}>
@@ -161,27 +178,48 @@ export default () => {
                     style={{ width: "100%", height: "50px" }}
                   />
                 </div>
-
-                <div style={{ paddingTop: "20px", display: "flex" }}>
-                  <input
-                    placeholder="Phone"
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    style={{ width: "100%", height: "50px" }}
-                  />
-              </div>
             </div>
 
             <div style={{ height: "70px", paddingTop: "20px", display: "flex", justifyContent: "space-between" }}>
-              <div style={{ alignSelf: "center" }}>
-                Return to cart
-              </div>
+              <Link
+                style={{ alignSelf: "center" }}
+                to="/"
+                onClick={() => {
+                  const rootElement = document.getElementById('app-container')
+                  const navbarElement = document.getElementById('navbar-wrapper-id')
+                  
+                  rootElement.classList.toggle('no-scroll-margin')
+                  navbarElement.classList.toggle('hidden-nav')
+                }}
+              >
+                Return to home
+              </Link>
 
               <div>
-                <button style={{ height: "100%" }}>
-                  Continue to shipping
-                </button>
+                <Link
+                  style={{ height: "100%" }}
+                  to={{
+                    pathname: `/checkout/payment`,
+                    paymentProps: {
+                      products: products,
+                      shipping: {
+                        firstName,
+                        address,
+                        address2,
+                        city,
+                        region,
+                        state,
+                        zip
+                      },
+                      contact: {
+                        phone,
+                        email
+                      }
+                    } 
+                  }}
+                >
+                  Continue to payment
+                </Link>
               </div>
             </div>
         </div>
@@ -262,7 +300,7 @@ export default () => {
               </div>
 
               <div>
-                $6
+                { region === 'USA' ? "$6" : region === "" ? "Not calculated yet." : "$8" }
               </div>
             </div>
           </div>
@@ -273,7 +311,7 @@ export default () => {
             </div>
 
             <div>
-              ${subtotal + 6}
+              {region === "USA" ? `$${subtotal + 6}` : region === "" ? "Not calculated yet." : `$${subtotal + 8}`}
             </div>
           </div>
         </div>

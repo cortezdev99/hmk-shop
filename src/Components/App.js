@@ -11,6 +11,7 @@ import Icons from './Utilities/Icons';
 import ProductDetails from './Products/ProductDetails';
 import CartProvider from '../Providers/CartProvider';
 import Checkout from './Checkout/Checkout'
+import Payment from './Checkout/Payment';
 
 function App() {
   Icons()
@@ -21,7 +22,7 @@ function App() {
         <Router>
           <Navbar />
           <Cart />
-          <div className="app-container">
+          <div className="app-container" id="app-container">
             <Switch>
               <Route exact path='/' component={NewArrivals} />
               <Route exact path='/best-sellers' component={BestSellers} />
@@ -29,6 +30,7 @@ function App() {
               <Route exact path='/sale' component={Sale} />
               <Route exact path='/products/:slug' component={ProductDetails} />
               <Route exact path='/checkout' component={Checkout} />
+              <Route exact path='/checkout/payment' component={Payment} />
             </Switch>
           </div>
         </Router>
