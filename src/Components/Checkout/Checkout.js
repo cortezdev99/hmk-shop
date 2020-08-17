@@ -1,23 +1,32 @@
-import React, { useEffect, useState, useContext } from 'react'
-import CartContext from '../../Contexts/CartContext'
-import CountryDropdown from './CountryDropdown'
-import { Link, Redirect } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Shipping from '../Utilities/Shipping'
+import React, { useEffect, useState, useContext } from 'react';
+import CartContext from '../../Contexts/CartContext';
+import CountryDropdown from './CountryDropdown';
+import { Link, Redirect } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Shipping from '../Utilities/Shipping';
+import Payment from './Payment';
+import { firestore } from '../../Config/fbConfig'
+import {CardElement, useElements, useStripe} from '@stripe/react-stripe-js';
+// import axios from 'axios'
+
 
 export default () => {
   // TODO Add Free Shipping Logic On Orders Over $100
   // Todo Add Logic To Add Discount
+  // var stripe = Stripe(process.env.REACT_APP_PUBLISHABLE_KEY);
   const [ email, setEmail ] = useState("")
   const [ firstName, setFirstName ] = useState("")
+  const [ lastName, setLastName ] = useState("")
   const [ address, setAddress ] = useState("")
   const [ address2, setAddress2 ] = useState("")
   const [ city, setCity ] = useState("")
-  const [ region, setRegion ] = useState("")
+  const [ region, setRegion ] = useState([])
   const [ state, setState ] = useState("")
   const [ zip, setZip ] = useState("")
   const [ phone, setPhone ] = useState("")
   const [ subtotal, setSubtotal ] = useState(0)
+  const stripe = useStripe();
+  const elements = useElements();
 
   const {
     products
@@ -45,6 +54,85 @@ export default () => {
     
     setSubtotal(subtotal)
   }, [products])
+
+  const handlePurchase = async (ev) => {
+    ev.preventDefault();
+
+    const billingDetails = {
+      email,
+      phone,
+      name: `${firstName} ${lastName}`,
+      address: {
+        line1: address,
+        line2: address2,
+        country: region.split(',')[1],
+        state,
+        city,
+        postal_code: zip
+      }
+    }
+
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: elements.getElement(CardElement),
+      billing_details: billingDetails
+    });
+
+    if (error) {
+      console.log(error)
+    } else {
+      const { id } = paymentMethod;
+      let test = []
+      products.map((product) => {
+        const productId = product[0].product.id
+        const productPrice = product[0].product.price
+        const title = product[0].product.title
+        const quantity = product[4].quantity
+        const productColor = product[2].color
+        const productSize = product[1].size
+        test.push({ productId, title, productPrice, quantity, productColor, productSize })
+      })
+
+      try {
+        firestore.collection('payments').doc(id).set({
+          paymentMethod,
+          test
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+
+    // stripe.createPaymentMethod({
+    //   type: 'card',
+    //   card: elements.getElement(CardElement),
+    //   billing_details: billingDetails
+    // }).then((resp) => {
+    //   if (resp.error) {
+    //     console.log(resp.error)
+    //   } else {
+    //     console.log(resp.paymentMethod)
+    //   }
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
+  }
+
+  const cardElementOptions = {
+    style: {
+      base: {
+        
+      },
+      invalid: {
+
+      },
+      complete: {
+        
+      }
+    },
+    hidePostalCode: true
+  }
 
   return (
     <div className="checkout-container"  id="checkout-container">
@@ -129,8 +217,8 @@ export default () => {
                   className="checkout-input"
                   placeholder="Last name"
                   type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
 
@@ -187,6 +275,18 @@ export default () => {
                 </div>
             </div>
 
+            <div style={{  paddingTop: '80px' }}>
+                <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
+                  Card Information
+                </div>
+
+                <div style={{ height: "50px", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <CardElement
+                    options={cardElementOptions} 
+                  />
+                </div>
+            </div>
+
             <div className="checkout-left-column-btns-wrapper">
               <Link
                 className="checkout-left-column-left-link"
@@ -203,35 +303,18 @@ export default () => {
               </Link>
 
               <div>
-                <Link
+                <button
                   className="checkout-left-column-right-link"
-                  to={{
-                    pathname: `/checkout/payment`,
-                    paymentProps: {
-                      products: products,
-                      shipping: {
-                        firstName,
-                        address,
-                        address2,
-                        city,
-                        region,
-                        state,
-                        zip
-                      },
-                      contact: {
-                        phone,
-                        email
-                      },
-                      total: {
-                        total: region === "USA" ? subtotal + 6 : subtotal + 8
-                      }
-                    } 
-                  }}
+                  style={{ display: "flex", justifyContent: "space-evenly", padding: "0 3rem", border: "1px solid #1d1d1d", cursor: 'pointer' }}
+                  onClick={handlePurchase}
+                  // disabled={stripe}
                 >
-                  Continue to payment
-                </Link>
+                  <div>Purchase </div>
+                  {/* TODO USE FONT AWESOME ICON BULLET POINT */}
+                  <div>${subtotal}</div>
+                </button>
               </div>
-            </div>
+          </div>
         </div>
 
         <div className="checkout-right-column-wrapper">
