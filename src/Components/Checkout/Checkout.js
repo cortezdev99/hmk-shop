@@ -95,8 +95,8 @@ export default () => {
 
       try {
         firestore.collection('payments').doc(id).set({
-          paymentMethod,
-          test
+          payment_method: paymentMethod,
+          products: test
         })
       } catch (error) {
         console.log(error)
@@ -305,6 +305,7 @@ export default () => {
               <div>
                 <button
                   className="checkout-left-column-right-link"
+                  to="/checkout/payment"
                   style={{ display: "flex", justifyContent: "space-evenly", padding: "0 3rem", border: "1px solid #1d1d1d", cursor: 'pointer' }}
                   onClick={handlePurchase}
                   // disabled={stripe}

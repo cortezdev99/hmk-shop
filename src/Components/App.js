@@ -14,6 +14,8 @@ import Checkout from './Checkout/Checkout'
 import Payment from './Checkout/Payment';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
+import Test1 from './Checkout/CreateAccount';
+import CreateAccount from './Checkout/CreateAccount';
 
 function App() {
   Icons()
@@ -34,7 +36,7 @@ function App() {
                 <Route exact path='/sale' component={Sale} />
                 <Route exact path='/products/:slug' component={ProductDetails} />
                 <Route exact path='/checkout' component={Checkout} />
-                <Route exact path='/checkout/payment' component={Payment} />
+                <Route exact path='/create-account' component={CreateAccount} />
               </Switch>
             </div>
           </Router>
