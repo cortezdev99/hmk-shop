@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
+import firebase from 'firebase/app';
+import 'firebase/auth'
+import { Link } from 'react-router-dom';
 
 export default () => {
   const [email, setEmail] = useState("")
+  const [noEmailErr, setNoEmailErr] = useState(false)
+  const [noPasswordErr, setNoPasswordErr] = useState(false)
   const [password, setPassword] = useState("")
+  const [successfulSubmition, setSuccessfulSubmition] = useState(false);
 
   const handleShippingToggle = () => {
     const shippingWrapperElmnt = document.getElementById('shipping-wrapper')
@@ -13,6 +19,30 @@ export default () => {
     rotatingElmnt1.classList.toggle('rotating-plus-minus-rotated')
     rotatingElmnt2.classList.toggle('rotating-plus-minus-rotated')
   }
+
+  const handleCreateAccountClick = async (e) => {
+    e.preventDefault();
+    if (email.length === 0 && password.length === 0) {
+      return setNoEmailErr(true), setNoPasswordErr(true)
+    } else if (password.length === 0) {
+      return setNoPasswordErr(true)
+    } else if (email.length === 0) {
+      return setNoEmailErr(true)
+    }
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+      setSuccessfulSubmition(true)
+    }).catch((err) => {
+      console.log(err.code, err.message)
+    })
+  }
+
+  const handleSignoutClick = (e) => {
+    e.preventDefault();
+    firebase.auth().signOut()
+  }
+
+  console.log(firebase.auth().uuid)
 
   return (
     <div>
@@ -30,33 +60,80 @@ export default () => {
             Create an account
           </div>
 
-          <form>
-            <div style={{ height: "50px", width: "100%", marginBottom: "40px" }}>
-              <input
-                style={{ width: "100%", height: "100%", borderRadius: "5px", border: "1px solid #1d1d1d" }}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-              />
-            </div>
+          {
+            successfulSubmition || firebase.auth().uuid ? (
+              <div>
+                <div>
+                  Success! You can now continue to checkout.
+                </div>
 
-            <div style={{ height: "50px", width: "100%", marginBottom: "40px" }}>
-              <input
-                style={{ width: "100%", height: "100%", borderRadius: "5px", border: "1px solid #1d1d1d" }}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-              />
-            </div>
+                <div>
+                  <Link
+                    to="/checkout"
+                  >
+                    Continue to checkout
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <form>
+                <div style={{ width: "100%", marginBottom: "40px" }}>
+                  <input
+                    style={{ width: "100%", height: "50px", borderRadius: "5px", border: "1px solid #1d1d1d" }}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                  />
 
-            <div style={{ height: "50px" }}>
-              <button style={{ height: "100%", padding: "1rem 4rem", borderRadius: "5px", border: "none", background: "#45b3e0", color: "#1d1d1d", fontWeight: "500", fontSize: "15px", cursor: "pointer" }}>
-                Create
-              </button>
-            </div>
-          </form>
+                  {
+                    noEmailErr && email.length === 0 ? (
+                      <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                        * Required
+                      </div>
+                    ) : null
+                  }
+                </div>
+
+                <div style={{ width: "100%", marginBottom: "40px" }}>
+                  <input
+                    style={{ width: "100%", height: "50px", borderRadius: "5px", border: "1px solid #1d1d1d" }}
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                  />
+
+                  {
+                    noPasswordErr && password.length === 0 ? (
+                      <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                        * Required
+                      </div>
+                    ) : null
+                  }
+                </div>
+
+                <div style={{ height: "50px" }}>
+                  <button
+                    style={{ height: "100%", padding: "1rem 4rem", borderRadius: "5px", border: "none", background: "#45b3e0", color: "#1d1d1d", fontWeight: "500", fontSize: "15px", cursor: "pointer" }}
+                    onClick={handleCreateAccountClick}
+                  >
+                    Create
+                  </button>
+                </div>
+
+                <div style={{ height: "50px" }}>
+                  <button
+                    style={{ height: "100%", padding: "1rem 4rem", borderRadius: "5px", border: "none", background: "#45b3e0", color: "#1d1d1d", fontWeight: "500", fontSize: "15px", cursor: "pointer" }}
+                    onClick={handleSignoutClick}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </form>
+            )
+          }
+
         </div>
 
         <div>
@@ -97,7 +174,7 @@ export default () => {
 
                 <div>
                   <li className="shipping-inner-content-li">
-                    By using a unique identifier, you have the ability to purchase the same items again if desired.
+                    By using a unique identifier, you have the ability to purchase the same items again if desired while also having the protection against inconviniences.
                   </li>
                 </div>
               </div>
@@ -109,7 +186,7 @@ export default () => {
 
                 <div>
                   <li className="shipping-inner-content-li">
-                    By created an account you will have access to a Purchase History Dashboard.
+                    By creating an account you will have access to a Purchase History Dashboard.
                   </li>
                 </div>
 
