@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Shipping from '../Utilities/Shipping';
 import Payment from './Payment';
 import { firestore } from '../../Config/fbConfig'
+import 'firebase/auth'
+import firebase from 'firebase/app';
 import {CardElement, useElements, useStripe} from '@stripe/react-stripe-js';
 // import axios from 'axios'
 
@@ -25,6 +27,9 @@ export default () => {
   const [ zip, setZip ] = useState("")
   const [ phone, setPhone ] = useState("")
   const [ subtotal, setSubtotal ] = useState(0)
+  const [ cardholderName, setCardholderName ] = useState("")
+  const [ customerData, setCustomerData ] = useState({})
+  const [ userUID, setUserUID ] = useState("");
   const stripe = useStripe();
   const elements = useElements();
 
@@ -42,18 +47,56 @@ export default () => {
     
     rootElement.classList.toggle('no-scroll-margin')
     navbarElement.classList.toggle('hidden-nav')
-
+    
     rootElement.scrollIntoView({
       behavior: "smooth",
       block: "start"
     }, 500)
+    
+    if (userUID.length === 0) {
+      setUserUID(firebase.auth().currentUser.uid);
+    }
 
     const subtotal = products.reduce((accum, currentVal) => {
       return accum += currentVal[4].quantity * currentVal[0].product.price
     }, 0)
     
     setSubtotal(subtotal)
+
+    firestore.collection('stripe_customers').doc(firebase.auth().currentUser.uid).get().then((resp) => {
+      setCustomerData(resp.data())
+    }).catch((err) => {
+      console.log(err)
+    })
   }, [products])
+
+  const handleAddPaymentMethod = async (ev) => {
+    ev.preventDefault();
+
+    const { setupIntent, error } = await stripe.confirmCardSetup(
+      customerData.setup_secret,
+      {
+        payment_method: {
+          card: elements.getElement(CardElement),
+          billing_details: {
+            name: cardholderName,
+          },
+        },
+      }
+    );
+
+    if (error) {
+      console.log(error)
+      return;
+    }
+
+    await firebase
+    .firestore()
+    .collection('stripe_customers')
+    .doc(userUID)
+    .collection('payment_methods')
+    .add({ id: setupIntent.payment_method });
+  }
 
   const handlePurchase = async (ev) => {
     ev.preventDefault();
@@ -277,13 +320,28 @@ export default () => {
 
             <div style={{  paddingTop: '80px' }}>
                 <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
-                  Card Information
+                  Payment method
+                </div>
+
+                <div>
+                  <input
+                    style={{ height: "50px", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px" }}
+                    type="text"
+                    value={cardholderName}
+                    onChange={(e) => setCardholderName(e.target.value)}
+                  />
                 </div>
 
                 <div style={{ height: "50px", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <CardElement
                     options={cardElementOptions} 
                   />
+                </div>
+
+                <div>
+                  <button onClick={handleAddPaymentMethod}>
+                    Add this card
+                  </button>
                 </div>
             </div>
 

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import firebase from 'firebase/app'
+import 'firebase/auth';
 import '../Styles/main.scss';
 import Navbar from './Nav/Navbar';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -16,10 +18,29 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import Test1 from './Checkout/CreateAccount';
 import CreateAccount from './Checkout/CreateAccount';
+import Test3 from './Checkout/Test3';
 
 function App() {
   Icons()
   const stripePromise = loadStripe(process.env.REACT_APP_PUBLISHABLE_KEY);
+  const [ user, setUser ] = useState(false)
+
+  function onAuthStateChanged(user) {
+    setUser(user);
+  }
+
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  })
+
+  const stacksToBeRendered = () => {
+    if (user) {
+      return (
+        <Route exact path='/test' component={Test3} />
+      )
+    }
+  }
 
   return (
     <div className="App">
@@ -37,6 +58,7 @@ function App() {
                 <Route exact path='/products/:slug' component={ProductDetails} />
                 <Route exact path='/checkout' component={Checkout} />
                 <Route exact path='/create-account' component={CreateAccount} />
+                { stacksToBeRendered() }
               </Switch>
             </div>
           </Router>
