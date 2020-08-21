@@ -30,6 +30,9 @@ export default () => {
   const [ cardholderName, setCardholderName ] = useState("")
   const [ customerData, setCustomerData ] = useState({})
   const [ userUID, setUserUID ] = useState("");
+  const [ paymentMethods, setPaymentMethods ] = useState([]);
+  const [ paymentMethod, setPaymentMethod ] = useState(false)
+  const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
 
@@ -96,6 +99,91 @@ export default () => {
     .doc(userUID)
     .collection('payment_methods')
     .add({ id: setupIntent.payment_method });
+  }
+
+  const handleGettingPaymentMethods = () => {
+    firestore
+      .collection('stripe_customers')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('payment_methods')
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          return setNoPaymentMethods(true)
+        }
+
+        if (paymentMethods.length !== snapshot.size) {
+          const currentState = paymentMethods
+          snapshot.forEach((doc) => {
+            currentState.push(doc.data())
+          })
+  
+          setPaymentMethods([...currentState])
+        }
+    })
+
+    return (
+      <div>
+        <select
+          style={{ borderRadius: "5px", border: "1px solid #1d1d1d", paddingLeft: "15px" }}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+        >
+          <option disabled selected>Select a payment method</option>
+          {
+            paymentMethods.map((paymentMethod) => {
+              return (
+                <option value={paymentMethod.id}>{paymentMethod.card.brand} **** {paymentMethod.card.last4} || Expires {paymentMethod.card.exp_month}/{paymentMethod.card.exp_year}</option>
+              )
+            })
+          }
+        </select>
+      </div>
+    )
+  }
+
+  const handleCheckoutPurchase = async (ev) => {
+    ev.preventDefault();
+
+    // const billingDetails = {
+    //   email,
+    //   phone,
+    //   name: `${firstName} ${lastName}`,
+    //   address: {
+    //     line1: address,
+    //     line2: address2,
+    //     country: region.split(',')[1],
+    //     state,
+    //     city,
+    //     postal_code: zip
+    //   }
+    // }
+
+    // const payment_method = paymentMethods.filter((method) => method.id === paymentMethod)
+    
+    let test = []
+    products.map((product) => {
+      const productId = product[0].product.id
+      const productPrice = product[0].product.price
+      const title = product[0].product.title
+      const quantity = product[4].quantity
+      const productColor = product[2].color
+      const productSize = product[1].size
+      test.push({ productId, title, productPrice, quantity, productColor, productSize })
+    })
+
+    const data = {
+      payment_method: paymentMethod,
+      currency: 'usd',
+      status: 'new',
+      products: test
+    }
+
+    await firebase
+      .firestore()
+      .collection('stripe_customers')
+      .doc(userUID)
+      .collection('payments')
+      .add(data);
   }
 
   const handlePurchase = async (ev) => {
@@ -320,7 +408,7 @@ export default () => {
 
             <div style={{  paddingTop: '80px' }}>
                 <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
-                  Payment method
+                  Add a payment method
                 </div>
 
                 <div>
@@ -345,6 +433,18 @@ export default () => {
                 </div>
             </div>
 
+            <div style={{  paddingTop: '80px' }}>
+              <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
+                Choose from your payment methods
+              </div>
+
+              <div>
+                {
+                  handleGettingPaymentMethods()
+                }
+              </div>
+            </div>
+
             <div className="checkout-left-column-btns-wrapper">
               <Link
                 className="checkout-left-column-left-link"
@@ -365,7 +465,7 @@ export default () => {
                   className="checkout-left-column-right-link"
                   to="/checkout/payment"
                   style={{ display: "flex", justifyContent: "space-evenly", padding: "0 3rem", border: "1px solid #1d1d1d", cursor: 'pointer' }}
-                  onClick={handlePurchase}
+                  onClick={handleCheckoutPurchase}
                   // disabled={stripe}
                 >
                   <div>Purchase </div>
