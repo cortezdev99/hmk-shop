@@ -16,6 +16,7 @@ export default () => {
   // TODO Add Free Shipping Logic On Orders Over $100
   // Todo Add Logic To Add Discount
   // var stripe = Stripe(process.env.REACT_APP_PUBLISHABLE_KEY);
+  const [ triggerReRender, setTriggerReRender ] = useState(false);
   const [ email, setEmail ] = useState("")
   const [ firstName, setFirstName ] = useState("")
   const [ lastName, setLastName ] = useState("")
@@ -66,11 +67,14 @@ export default () => {
     
     setSubtotal(subtotal)
 
-    firestore.collection('stripe_customers').doc(firebase.auth().currentUser.uid).get().then((resp) => {
-      setCustomerData(resp.data())
-    }).catch((err) => {
-      console.log(err)
-    })
+    if (firebase.auth().currentUser.uid) {
+      firestore.collection('stripe_customers').doc(firebase.auth().currentUser.uid).get().then((resp) => {
+        setCustomerData(resp.data())
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
   }, [products])
 
   const handleAddPaymentMethod = async (ev) => {
@@ -93,12 +97,47 @@ export default () => {
       return;
     }
 
-    await firebase
+    firebase
     .firestore()
     .collection('stripe_customers')
     .doc(userUID)
     .collection('payment_methods')
-    .add({ id: setupIntent.payment_method });
+    .add({ id: setupIntent.payment_method })
+    .then((resp) => {
+        resp.onSnapshot({
+          // Listen for document metadata changes
+          includeMetadataChanges: true
+      }, (doc) => {
+        if (doc.data().card) {
+          const currentState = paymentMethods
+          currentState.push(doc.data());
+          setPaymentMethods([...currentState])
+        }
+      });
+    })
+      // resp.onSnapshot({
+        // Listen for document metadata changes
+    //     includeMetadataChanges: true
+    // }, (doc) => {
+        // ...
+      // resp.onSnapshot((doc) => {
+      //   includeMetadataChanges: true
+      // }, (doc) => {
+      
+      // })
+      // const docRefId = resp.id;
+      // firebase
+      // .firestore()
+      // .collection('stripe_customers')
+      // .doc(userUID)
+      // .collection('payment_methods')
+      // .doc(docRefId)
+      // .onSnapshot((snapshot) => {
+      //   snapshot.
+      // })
+    // }).catch((err) => {
+    //   alert(err)
+    // })
   }
 
   const handleGettingPaymentMethods = () => {
@@ -117,7 +156,7 @@ export default () => {
           snapshot.forEach((doc) => {
             currentState.push(doc.data())
           })
-  
+
           setPaymentMethods([...currentState])
         }
     })
@@ -130,9 +169,9 @@ export default () => {
         >
           <option disabled selected>Select a payment method</option>
           {
-            paymentMethods.map((paymentMethod) => {
+            paymentMethods.map((paymentMethod, paymentMethodIdx) => {
               return (
-                <option value={paymentMethod.id}>{paymentMethod.card.brand} **** {paymentMethod.card.last4} || Expires {paymentMethod.card.exp_month}/{paymentMethod.card.exp_year}</option>
+                <option key={paymentMethodIdx} value={paymentMethod.id}>{paymentMethod.card.brand} **** {paymentMethod.card.last4} || Expires {paymentMethod.card.exp_month}/{paymentMethod.card.exp_year}</option>
               )
             })
           }
