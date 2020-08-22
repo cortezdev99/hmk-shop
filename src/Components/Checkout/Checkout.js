@@ -115,29 +115,6 @@ export default () => {
         }
       });
     })
-      // resp.onSnapshot({
-        // Listen for document metadata changes
-    //     includeMetadataChanges: true
-    // }, (doc) => {
-        // ...
-      // resp.onSnapshot((doc) => {
-      //   includeMetadataChanges: true
-      // }, (doc) => {
-      
-      // })
-      // const docRefId = resp.id;
-      // firebase
-      // .firestore()
-      // .collection('stripe_customers')
-      // .doc(userUID)
-      // .collection('payment_methods')
-      // .doc(docRefId)
-      // .onSnapshot((snapshot) => {
-      //   snapshot.
-      // })
-    // }).catch((err) => {
-    //   alert(err)
-    // })
   }
 
   const handleGettingPaymentMethods = () => {
