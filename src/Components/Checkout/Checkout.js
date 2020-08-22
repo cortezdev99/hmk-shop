@@ -141,24 +141,42 @@ export default () => {
     )
   }
 
+  // Handle card actions like 3D Secure
+  async function handleCardAction(payment, docId) {
+    const { error, paymentIntent } = await stripe.handleCardAction(
+      payment.client_secret
+    );
+    if (error) {
+      alert(error.message);
+      payment = error.payment_intent;
+    } else if (paymentIntent) {
+      payment = paymentIntent;
+    }
+
+    await firebase
+      .firestore()
+      .collection('stripe_customers')
+      .doc(userUID)
+      .collection('payments')
+      .doc(docId)
+      .set(payment, { merge: true });
+  }
+
+
   const handleCheckoutPurchase = async (ev) => {
     ev.preventDefault();
 
-    // const billingDetails = {
-    //   email,
-    //   phone,
-    //   name: `${firstName} ${lastName}`,
-    //   address: {
-    //     line1: address,
-    //     line2: address2,
-    //     country: region.split(',')[1],
-    //     state,
-    //     city,
-    //     postal_code: zip
-    //   }
-    // }
-
-    // const payment_method = paymentMethods.filter((method) => method.id === paymentMethod)
+    const shippingDetails = {
+      name: `${firstName} ${lastName}`,
+      address: {
+        line1: address,
+        line2: address2,
+        postal_code: zip,
+        city,
+        state,
+        country: region.split(',')[1]
+      }
+    }
     
     let test = []
     products.map((product) => {
@@ -175,79 +193,36 @@ export default () => {
       payment_method: paymentMethod,
       currency: 'usd',
       status: 'new',
-      products: test
+      shipping_details: shippingDetails,
+      products: test,
+      contact_info: {
+        email,
+        phone
+      },
+      user: firebase.auth().currentUser.uid
     }
 
-    await firebase
+    firebase
       .firestore()
       .collection('stripe_customers')
       .doc(userUID)
       .collection('payments')
-      .add(data);
-  }
+      .add(data).then((docRef) => {
+        docRef.onSnapshot((snapshot) => {
+          const data = snapshot.data()
 
-  const handlePurchase = async (ev) => {
-    ev.preventDefault();
-
-    const billingDetails = {
-      email,
-      phone,
-      name: `${firstName} ${lastName}`,
-      address: {
-        line1: address,
-        line2: address2,
-        country: region.split(',')[1],
-        state,
-        city,
-        postal_code: zip
-      }
-    }
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: elements.getElement(CardElement),
-      billing_details: billingDetails
-    });
-
-    if (error) {
-      console.log(error)
-    } else {
-      const { id } = paymentMethod;
-      let test = []
-      products.map((product) => {
-        const productId = product[0].product.id
-        const productPrice = product[0].product.price
-        const title = product[0].product.title
-        const quantity = product[4].quantity
-        const productColor = product[2].color
-        const productSize = product[1].size
-        test.push({ productId, title, productPrice, quantity, productColor, productSize })
-      })
-
-      try {
-        firestore.collection('payments').doc(id).set({
-          payment_method: paymentMethod,
-          products: test
+          if (data.status === 'succeeded') {
+            //IF SUCCESS PUSH TO PURCHASE DASHBOARD
+          } else if (data.status === 'requires_action') {
+            handleCardAction(data, docRef.id);
+          } else if (data.error) {
+            alert(data.error)
+          }
         })
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-
-    // stripe.createPaymentMethod({
-    //   type: 'card',
-    //   card: elements.getElement(CardElement),
-    //   billing_details: billingDetails
-    // }).then((resp) => {
-    //   if (resp.error) {
-    //     console.log(resp.error)
-    //   } else {
-    //     console.log(resp.paymentMethod)
-    //   }
-    // }).catch((err) => {
-    //   console.log(err)
-    // })
+      }).catch((err) => {
+        alert(err)
+      })
+    
   }
 
   const cardElementOptions = {
