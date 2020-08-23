@@ -190,24 +190,6 @@ export default () => {
         </div>
       </div>
     )
-
-    // return (
-    //   <div>
-    //     <select
-    //       style={{ borderRadius: "5px", border: "1px solid #1d1d1d", paddingLeft: "15px" }}
-    //       onChange={(e) => setPaymentMethod(e.target.value)}
-    //     >
-    //       <option disabled selected>Select a payment method</option>
-    //       {
-    //         paymentMethods.map((paymentMethod, paymentMethodIdx) => {
-    //           return (
-    //             <option key={paymentMethodIdx} value={paymentMethod.id}>{paymentMethod.card.brand} **** {paymentMethod.card.last4} || Expires {paymentMethod.card.exp_month}/{paymentMethod.card.exp_year}</option>
-    //           )
-    //         })
-    //       }
-    //     </select>
-    //   </div>
-    // )
   }
 
   // Handle card actions like 3D Secure
