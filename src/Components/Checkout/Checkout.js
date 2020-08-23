@@ -15,8 +15,6 @@ import {CardElement, useElements, useStripe} from '@stripe/react-stripe-js';
 export default () => {
   // TODO Add Free Shipping Logic On Orders Over $100
   // Todo Add Logic To Add Discount
-  // var stripe = Stripe(process.env.REACT_APP_PUBLISHABLE_KEY);
-  const [ triggerReRender, setTriggerReRender ] = useState(false);
   const [ email, setEmail ] = useState("")
   const [ firstName, setFirstName ] = useState("")
   const [ lastName, setLastName ] = useState("")
@@ -34,6 +32,7 @@ export default () => {
   const [ paymentMethods, setPaymentMethods ] = useState([]);
   const [ paymentMethod, setPaymentMethod ] = useState(false)
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
+  const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
 
@@ -138,23 +137,77 @@ export default () => {
         }
     })
 
+    const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
+      return setPaymentMethod(paymentMethod.id), setActivePaymentMethod(paymentMethodIdx)
+    }
+
     return (
       <div>
-        <select
-          style={{ borderRadius: "5px", border: "1px solid #1d1d1d", paddingLeft: "15px" }}
-          onChange={(e) => setPaymentMethod(e.target.value)}
-        >
-          <option disabled selected>Select a payment method</option>
+        <div>
+          <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
+            Choose from your payment methods
+          </div>
+        </div>
+
+        <div>
           {
             paymentMethods.map((paymentMethod, paymentMethodIdx) => {
               return (
-                <option key={paymentMethodIdx} value={paymentMethod.id}>{paymentMethod.card.brand} **** {paymentMethod.card.last4} || Expires {paymentMethod.card.exp_month}/{paymentMethod.card.exp_year}</option>
+                <button 
+                  onClick={() => handleUsePaymentClick(paymentMethod, paymentMethodIdx)}
+                  style={{ height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
+                >
+                  <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
+                    <div style={{ fontSize: "12px" }}>
+                      {
+                        paymentMethodIdx === activePaymentMethod ? (
+                          <FontAwesomeIcon icon={["fas", "circle"]} />
+                        ) : (
+                          <FontAwesomeIcon icon={["far", "circle"]} />
+                        )
+                      }
+                    </div>
+                  </div>
+
+                  <div style={{ height: "100%", width: "90%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 20px", fontSize: "14px" }}>
+                    <div style={{ display: "flex" }}>
+                      <div style={{ paddingRight: "10px", textTransform: "capitalize" }}>{paymentMethod.card.brand}</div>
+                      <div style={{ paddingRight: "10px" }}>****</div>
+                      <div>{paymentMethod.card.last4}</div>
+                    </div>
+
+                    <div style={{ display: "flex" }}>
+                      <div style={{ paddingRight: "10px" }}>Expires</div>
+                      <div style={{ paddingRight: "10px" }} >{paymentMethod.card.exp_month}</div>
+                      <div style={{ paddingRight: "10px" }}>/</div>
+                      <div>{paymentMethod.card.exp_year}</div>
+                    </div>
+                  </div>
+                </button>
               )
             })
           }
-        </select>
+        </div>
       </div>
     )
+
+    // return (
+    //   <div>
+    //     <select
+    //       style={{ borderRadius: "5px", border: "1px solid #1d1d1d", paddingLeft: "15px" }}
+    //       onChange={(e) => setPaymentMethod(e.target.value)}
+    //     >
+    //       <option disabled selected>Select a payment method</option>
+    //       {
+    //         paymentMethods.map((paymentMethod, paymentMethodIdx) => {
+    //           return (
+    //             <option key={paymentMethodIdx} value={paymentMethod.id}>{paymentMethod.card.brand} **** {paymentMethod.card.last4} || Expires {paymentMethod.card.exp_month}/{paymentMethod.card.exp_year}</option>
+    //           )
+    //         })
+    //       }
+    //     </select>
+    //   </div>
+    // )
   }
 
   // Handle card actions like 3D Secure
@@ -406,34 +459,33 @@ export default () => {
                   <input
                     style={{ height: "50px", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px" }}
                     type="text"
+                    className="checkout-input"
                     value={cardholderName}
+                    placeholder="Card holder name"
                     onChange={(e) => setCardholderName(e.target.value)}
                   />
                 </div>
 
-                <div style={{ height: "50px", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <div style={{ marginTop: "20px", height: "50px", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <CardElement
                     options={cardElementOptions} 
                   />
                 </div>
 
-                <div>
-                  <button onClick={handleAddPaymentMethod}>
+                <div style={{ marginTop: "20px" }}>
+                  <button 
+                    onClick={handleAddPaymentMethod}
+                    style={{ padding: "1rem 2rem", border: "1px solid #1d1d1d", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
+                  >
                     Add this card
                   </button>
                 </div>
             </div>
 
-            <div style={{  paddingTop: '80px' }}>
-              <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
-                Choose from your payment methods
-              </div>
-
-              <div>
-                {
-                  handleGettingPaymentMethods()
-                }
-              </div>
+            <div style={{ paddingTop: "80px" }}>
+              {
+                handleGettingPaymentMethods()
+              }
             </div>
 
             <div className="checkout-left-column-btns-wrapper">
