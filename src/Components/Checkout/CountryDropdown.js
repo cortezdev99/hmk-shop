@@ -6,7 +6,7 @@ export default (props) => {
       id="country"
       className="country-select-element"
       name="country"
-      style={{ borderRadius: "5px", border: "1px solid #1d1d1d", paddingLeft: "15px" }}
+      style={{ width: "100%", height: "50px", borderRadius: "5px", border: "1px solid #1d1d1d", paddingLeft: "15px" }}
       onChange={(e) => props.setRegion(e.target.value)}
     >
       <option disabled selected>Country or Region</option>

@@ -24,6 +24,13 @@ export default () => {
   const [ region, setRegion ] = useState([])
   const [ state, setState ] = useState("")
   const [ zip, setZip ] = useState("")
+  const [ noFirstNameErr, setNoFirstNameErr ] = useState(false)
+  const [ noLastNameErr, setNoLastNameErr ] = useState(false)
+  const [ noAddressErr, setNoAddressErr ] = useState(false)
+  const [ noCityErr, setNoCityErr ] = useState(false)
+  const [ noRegionErr, setNoRegionErr ] = useState(false)
+  const [ noStateErr, setNoStateErr ] = useState(false)
+  const [ noZipErr, setNoZipErr ] = useState(false)
   const [ phone, setPhone ] = useState("")
   const [ subtotal, setSubtotal ] = useState(0)
   const [ cardholderName, setCardholderName ] = useState("")
@@ -277,33 +284,68 @@ export default () => {
   }
 
   const handleAddShippingAddress = () => {
-    firebase
-      .firestore()
-      .collection('stripe_customers')
-      .doc(userUID)
-      .collection('billing_addresses')
-      .add({
-        name: `${firstName} ${lastName}`,
-        address: {
-          line1: address,
-          line2: address2,
-          postal_code: zip,
-          city,
-          state,
-          country: region
-        }
-      }) .then((resp) => {
-        resp.onSnapshot({
-          // Listen for document metadata changes
-          includeMetadataChanges: true
-      }, (doc) => {
-        const currentState = shippingAddresses
-        currentState.push(doc.data());
-        setShippingAddresses([...currentState])
-      });
-    }).catch((err) => {
-      alert(err)
-    })
+    const errors = []
+    if (address.length === 0) {
+      errors.push(setNoAddressErr)
+    }
+
+    if (city.length === 0) {
+      errors.push(setNoCityErr)
+    }
+
+    if (region.length === 0) {
+      errors.push(setNoRegionErr)
+    }
+
+    if (zip.length === 0) {
+      errors.push(setNoZipErr)
+    }
+
+    if (state.length === 0) {
+      errors.push(setNoStateErr)
+    }
+
+    if (firstName.length === 0) {
+      errors.push(setNoFirstNameErr)
+    }
+
+    if (lastName.length === 0) {
+      errors.push(setNoLastNameErr)
+    }
+
+    if (errors.length > 0) {
+      errors.map((err) => {
+        return err(true)
+      })
+    } else {
+      firebase
+        .firestore()
+        .collection('stripe_customers')
+        .doc(userUID)
+        .collection('billing_addresses')
+        .add({
+          name: `${firstName} ${lastName}`,
+          address: {
+            line1: address,
+            line2: address2,
+            postal_code: zip,
+            city,
+            state,
+            country: region
+          }
+        }) .then((resp) => {
+          resp.onSnapshot({
+            // Listen for document metadata changes
+            includeMetadataChanges: true
+        }, (doc) => {
+          const currentState = shippingAddresses
+          currentState.push(doc.data());
+          setShippingAddresses([...currentState])
+        });
+      }).catch((err) => {
+        alert(err)
+      })
+    }
   }
 
   const cardElementOptions = {
@@ -392,21 +434,41 @@ export default () => {
               <div className="checkout-shipping-info-header">Shipping address</div>
 
               <div className="checkout-shipping-info-name-wrapper">
-                <input
-                  className="checkout-input"
-                  placeholder="First name"
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
+                <div>
+                  <input
+                    className="checkout-input"
+                    placeholder="First name"
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                  
+                  {
+                    noFirstNameErr && firstName.length === 0 ? (
+                      <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                        * Required
+                      </div>
+                    ) : null
+                  }
+                </div>
 
-                <input
-                  className="checkout-input"
-                  placeholder="Last name"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
+                <div>
+                  <input
+                    className="checkout-input"
+                    placeholder="Last name"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+
+                  {
+                    noLastNameErr && lastName.length === 0 ? (
+                      <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                        * Required
+                      </div>
+                    ) : null
+                  }
+                </div>
               </div>
 
               <div className="checkout-shipping-info-address-one-wrapper  checkout-input-padding">
@@ -417,6 +479,14 @@ export default () => {
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
+
+                  {
+                    noAddressErr && address.length === 0 ? (
+                      <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                        * Required
+                      </div>
+                    ) : null
+                  }
               </div>
 
               <div className="checkout-shipping-info-address-two-wrapper checkout-input-padding">
@@ -437,28 +507,66 @@ export default () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                   />
+
+                  {
+                    noCityErr && city.length === 0 ? (
+                      <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                        * Required
+                      </div>
+                    ) : null
+                  }
               </div>
 
                 <div className="checkout-shipping-info-region-state-city-wrapper checkout-input-padding">
-                  <CountryDropdown 
-                    setRegion={(country) => setRegion(country)}
-                  />
+                  <div>
+                    <CountryDropdown 
+                      setRegion={(country) => setRegion(country)}
+                    />
 
-                  <input
-                    className="checkout-input"
-                    placeholder="State"
-                    type="text"
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
-                  />
+                    {
+                      noRegionErr && region.length === 0 ? (
+                        <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                          * Required
+                        </div>
+                      ) : null
+                    } 
+                  </div>
 
-                  <input
-                    className="checkout-input"
-                    placeholder="Zip code"
-                    type="text"
-                    value={zip}
-                    onChange={(e) => setZip(e.target.value)}
-                  />
+                  <div>
+                    <input
+                      className="checkout-input"
+                      placeholder="State"
+                      type="text"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                    />
+
+                    {
+                      noStateErr && state.length === 0 ? (
+                        <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                          * Required
+                        </div>
+                      ) : null
+                    }
+                  </div>
+
+                  <div>
+                    <input
+                      className="checkout-input"
+                      placeholder="Zip code"
+                      type="text"
+                      value={zip}
+                      onChange={(e) => setZip(e.target.value)}
+                    />
+
+                    {
+                      noZipErr && zip.length === 0 ? (
+                        <div style={{ paddingTop: "10px", color: "#FF0000" }}>
+                          * Required
+                        </div>
+                      ) : null
+                    }
+                  </div>
                 </div>
 
                 <div style={{ marginTop: "20px" }}>
