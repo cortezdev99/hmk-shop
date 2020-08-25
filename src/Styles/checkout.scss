@@ -35,8 +35,15 @@
   margin-top: 8px;
   border: 1px solid #CCC;
   border-bottom: none;
+}
+
+.checkout-express-checkout-header-border-left {
   border-right: none;
 }
+.checkout-express-checkout-header-border-right {
+  border-left: none;
+}
+
 
 .checkout-express-checkout-header {
   text-align: center;

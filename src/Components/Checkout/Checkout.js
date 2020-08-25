@@ -32,6 +32,7 @@ export default () => {
   const [ paymentMethods, setPaymentMethods ] = useState([]);
   const [ paymentMethod, setPaymentMethod ] = useState(false)
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
+  const [ shippingAddresses, setShippingAddresses ] = useState([])
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
@@ -273,7 +274,36 @@ export default () => {
       }).catch((err) => {
         alert(err)
       })
-    
+  }
+
+  const handleAddShippingAddress = () => {
+    firebase
+      .firestore()
+      .collection('stripe_customers')
+      .doc(userUID)
+      .collection('billing_addresses')
+      .add({
+        name: `${firstName} ${lastName}`,
+        address: {
+          line1: address,
+          line2: address2,
+          postal_code: zip,
+          city,
+          state,
+          country: region
+        }
+      }) .then((resp) => {
+        resp.onSnapshot({
+          // Listen for document metadata changes
+          includeMetadataChanges: true
+      }, (doc) => {
+        const currentState = shippingAddresses
+        currentState.push(doc.data());
+        setShippingAddresses([...currentState])
+      });
+    }).catch((err) => {
+      alert(err)
+    })
   }
 
   const cardElementOptions = {
@@ -305,9 +335,9 @@ export default () => {
         <div className="checkout-left-column">
             <div className="checkout-express-checkout-wrapper">
               <div className="checkout-express-checkout-header-wrapper">
-                <span className="checkout-express-checkout-header-border"></span>
+                <span className="checkout-express-checkout-header-border checkout-express-checkout-header-border-left"></span>
                 <span className="checkout-express-checkout-header">Express Checkout</span>
-                <span className="checkout-express-checkout-header-border"></span>
+                <span className="checkout-express-checkout-header-border checkout-express-checkout-header-border-right"></span>
               </div>
 
               <div className="checkout-express-checkout-btns-wrapper">
@@ -429,6 +459,15 @@ export default () => {
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
                   />
+                </div>
+
+                <div style={{ marginTop: "20px" }}>
+                  <button 
+                    onClick={handleAddShippingAddress}
+                    style={{ padding: "1rem 2rem", border: "1px solid #1d1d1d", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
+                  >
+                    Add this shipping address
+                  </button>
                 </div>
             </div>
 
