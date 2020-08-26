@@ -35,11 +35,14 @@ export default () => {
   const [ subtotal, setSubtotal ] = useState(0)
   const [ cardholderName, setCardholderName ] = useState("")
   const [ customerData, setCustomerData ] = useState({})
+  const [ billingAddresses, setBillingAddresses ] = useState([])
+  const [ billingAddress, setBillingAddress ] = useState(false)
+  const [ activeBillingAddress, setActiveBillingAddress ] = useState(false)
+  const [ noBillingAddresses, setNoBillingAddresses ] = useState(false)
   const [ userUID, setUserUID ] = useState("");
   const [ paymentMethods, setPaymentMethods ] = useState([]);
   const [ paymentMethod, setPaymentMethod ] = useState(false)
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
-  const [ shippingAddresses, setShippingAddresses ] = useState([])
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
@@ -200,6 +203,80 @@ export default () => {
     )
   }
 
+  const handleGettingBillingAddresses = () => {
+    firestore
+      .collection('stripe_customers')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('billing_addresses')
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          return setNoBillingAddresses(true)
+        }
+
+        if (billingAddresses.length !== snapshot.size) {
+          const currentState = billingAddresses
+          snapshot.forEach((doc) => {
+            currentState.push(doc.data())
+          })
+
+          setBillingAddresses([...currentState])
+        }
+    }).catch((err) => {
+      console.log(err)
+    })
+
+    const handleUseAddressClick = (billingAddress, billingAddressIdx) => {
+      return setBillingAddress(billingAddress), setActiveBillingAddress(billingAddressIdx)
+    }
+
+    return (
+      <div>
+        <div>
+          <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
+            Choose from your shipping addresses
+          </div>
+        </div>
+
+        <div>
+          {
+            billingAddresses.map((billingAddress, billingAddressIdx) => {
+              return (
+                <button 
+                  onClick={() => handleUseAddressClick(billingAddress, billingAddressIdx)}
+                  style={{ height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
+                >
+                  <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
+                    <div style={{ fontSize: "12px" }}>
+                      {
+                        billingAddressIdx === activeBillingAddress ? (
+                          <FontAwesomeIcon icon={["fas", "circle"]} />
+                        ) : (
+                          <FontAwesomeIcon icon={["far", "circle"]} />
+                        )
+                      }
+                    </div>
+                  </div>
+
+                  <div style={{ height: "100%", width: "90%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 20px", fontSize: "14px" }}>
+                    <div style={{ display: "flex" }}>
+                      <div style={{ paddingRight: "10px" }}>{billingAddress.address.line1}</div>
+                    </div>
+
+                    <div style={{ display: "flex" }}>
+                      <div style={{ paddingRight: "10px" }}>{billingAddress.address.state}</div>
+                      <div style={{ paddingRight: "10px" }} >{billingAddress.address.postal_code}</div>
+                    </div>
+                  </div>
+                </button>
+              )
+            })
+          }
+        </div>
+      </div>
+    )
+  }
+
   // Handle card actions like 3D Secure
   async function handleCardAction(payment, docId) {
     const { error, paymentIntent } = await stripe.handleCardAction(
@@ -338,9 +415,9 @@ export default () => {
             // Listen for document metadata changes
             includeMetadataChanges: true
         }, (doc) => {
-          const currentState = shippingAddresses
+          const currentState = billingAddresses
           currentState.push(doc.data());
-          setShippingAddresses([...currentState])
+          setBillingAddresses([...currentState])
         });
       }).catch((err) => {
         alert(err)
@@ -614,6 +691,12 @@ export default () => {
             <div style={{ paddingTop: "80px" }}>
               {
                 handleGettingPaymentMethods()
+              }
+            </div>
+
+            <div style={{ paddingTop: "80px" }}>
+              {
+                handleGettingBillingAddresses()
               }
             </div>
 
