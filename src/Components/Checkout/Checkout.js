@@ -152,11 +152,34 @@ export default () => {
       return setPaymentMethod(paymentMethod.id), setActivePaymentMethod(paymentMethodIdx)
     }
 
+    const handleOpeningInnerContent = () => {
+      const el = document.getElementById('checkout-payment-methods-wrapper')
+      const el2 = document.getElementById('rotating-thing-1')
+      const el3 = document.getElementById('rotating-thing-2')
+      if (paymentMethods.length < 3) {
+        el.classList.toggle('transform-inner-content')
+      } else {
+        el.classList.toggle('transform-inner-content-large')
+      }
+      el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+    }
+
     return (
-      <div>
-        <div>
-          <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
+      <div id="checkout-payment-methods-wrapper" id="checkout-payment-methods-wrapper" style={{ height: "100%", maxHeight: "42px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+        <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div className="shipping-toggle-header">
             Choose from your payment methods
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
+            <div id="rotating-thing-1" className="rotating-thing-1" style={{ top: "-11px", position: "absolute", transform: "rotate(90deg)", transition: "0.7s" }}>
+              |
+            </div>
+
+            <div id="rotating-thing-2" className="rotating-thing-2" style={{ left: "2px", top: "-10px", position: "absolute", transform: "rotate(180deg)", width: "5px", transition: "0.7s" }}>
+              |
+            </div>
           </div>
         </div>
 
@@ -166,7 +189,7 @@ export default () => {
               return (
                 <button 
                   onClick={() => handleUsePaymentClick(paymentMethod, paymentMethodIdx)}
-                  style={{ height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
+                  style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
                 >
                   <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
                     <div style={{ fontSize: "12px" }}>
@@ -233,7 +256,7 @@ export default () => {
     return (
       <div>
         <div>
-          <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
+          <div style={{ height: "42px", fontSize: '18px', padding: "0px 20px", display: "flex", alignItems: "center" }}>
             Choose from your shipping addresses
           </div>
         </div>
@@ -244,7 +267,7 @@ export default () => {
               return (
                 <button 
                   onClick={() => handleUseAddressClick(billingAddress, billingAddressIdx)}
-                  style={{ height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
+                  style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
                 >
                   <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
                     <div style={{ fontSize: "12px" }}>

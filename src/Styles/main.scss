@@ -52,3 +52,25 @@ code {
   width: 100%;
   padding: 15px;
 }
+
+.rotating-plus-minus-rotated-tester-1 {
+  transform: rotate(450deg) !important;
+  opacity: 0.85;
+  left: 3px !important;
+  top: -11px !important;
+}
+
+.rotating-plus-minus-rotated-tester {
+  transform: rotate(450deg) !important;
+  opacity: 0.85;
+  // left: 1px !important;
+  // bottom: 1px !important;
+}
+
+.transform-inner-content {
+  max-height: 300px !important;
+}
+
+.transform-inner-content-large {
+  max-height: 500px !important;
+}
