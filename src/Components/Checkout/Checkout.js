@@ -303,14 +303,14 @@ export default () => {
     ev.preventDefault();
 
     const shippingDetails = {
-      name: `${firstName} ${lastName}`,
+      name: billingAddress.name,
       address: {
-        line1: address,
-        line2: address2,
-        postal_code: zip,
-        city,
-        state,
-        country: region.split(',')[1]
+        line1: billingAddress.address.line1,
+        line2: billingAddress.address.line2,
+        postal_code: billingAddress.address.postal_code,
+        city: billingAddress.address.city,
+        state: billingAddress.address.state,
+        country: billingAddress.address.country.split(',')[1]
       }
     }
     
