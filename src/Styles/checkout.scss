@@ -89,7 +89,7 @@
 
 .checkout-contact-info-wrapper {
   width: 100%;
-  padding-top: 80px;
+  // padding-top: 80px;
 }
 
 .checkout-contact-info-header {
@@ -122,7 +122,6 @@
 
 .checkout-shipping-info-wrapper {
   width: 100%;
-  padding-top: 80px;
 }
 
 .checkout-shipping-info-header {
@@ -147,8 +146,9 @@
 }
 
 .checkout-left-column-btns-wrapper {
-  height: 70px;
-  padding-top: 20px;
+  height: 50px;
+  // padding-top: 80px;
+  margin-top: 80px;
   display: flex;
   justify-content: space-between;
 }

@@ -166,7 +166,7 @@ export default () => {
     }
 
     return (
-      <div id="checkout-payment-methods-wrapper" id="checkout-payment-methods-wrapper" style={{ height: "100%", maxHeight: "42px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+      <div id="checkout-payment-methods-wrapper" id="checkout-payment-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
         <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div className="shipping-toggle-header">
             Choose from your payment methods
@@ -267,7 +267,7 @@ export default () => {
     }
 
     return (
-      <div id="checkout-shipping-methods-wrapper" className="checkout-shipping-methods-wrapper" style={{ height: "100%", maxHeight: "42px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+      <div id="checkout-shipping-methods-wrapper" className="checkout-shipping-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
         <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div className="shipping-toggle-header">
             Choose from your shipping addresses
@@ -471,6 +471,22 @@ export default () => {
     }
   }
 
+  const handleOpeningInnerContent = (wrapper, plusMinus) => {
+      const el = document.getElementById(wrapper)
+      const el2 = document.getElementById(`${plusMinus}1`)
+      const el3 = document.getElementById(`${plusMinus}2`)
+
+      if (wrapper === 'checkout-add-payment-wrapper') {
+        el.classList.toggle('transform-add-payment-inner-content')
+      } else if (wrapper === 'checkout-shipping-info-wrapper') {
+        el.classList.toggle('transform-add-shipping-inner-content')
+      } else if (wrapper === 'checkout-contact-info-wrapper') {
+        el.classList.toggle('transform-add-contact-info-inner-content')
+      }
+      el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+  }
+
   const cardElementOptions = {
     style: {
       base: {
@@ -530,31 +546,63 @@ export default () => {
               <span className="checkout-options-seperator-border"></span>
             </div>
 
-            <div className="checkout-contact-info-wrapper">
-              <div className="checkout-contact-info-header">Contact Information</div>
-                <div className="checkout-contact-info-input-wrapper">
-                  <input
-                    className="checkout-input"
-                    placeholder="Email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+            <div id="checkout-contact-info-wrapper" className="checkout-contact-info-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+              {/* <div className="checkout-contact-info-header">Contact Information</div> */}
+              <div onClick={() => handleOpeningInnerContent('checkout-contact-info-wrapper', 'contact-info-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div className="shipping-toggle-header">
+                  Add contact information
                 </div>
 
-                <div className="checkout-contact-info-phone-input-wrapper">
-                  <input
-                    className="checkout-input"
-                    placeholder="Phone"
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
+                  <div id="contact-info-rotating-thinger-1" className="rotating-thing-1" style={{ top: "-11px", position: "absolute", transform: "rotate(90deg)", transition: "0.7s" }}>
+                    |
+                  </div>
+
+                  <div id="contact-info-rotating-thinger-2" className="rotating-thing-2" style={{ left: "2px", top: "-10px", position: "absolute", transform: "rotate(180deg)", width: "5px", transition: "0.7s" }}>
+                    |
+                  </div>
                 </div>
+              </div>
+
+              <div className="checkout-contact-info-input-wrapper">
+                <input
+                  className="checkout-input"
+                  placeholder="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="checkout-contact-info-phone-input-wrapper">
+                <input
+                  className="checkout-input"
+                  placeholder="Phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
             </div>
 
-            <div className="checkout-shipping-info-wrapper">
-              <div className="checkout-shipping-info-header">Shipping address</div>
+            <div id="checkout-shipping-info-wrapper" className="checkout-shipping-info-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+              {/* <div className="checkout-shipping-info-header">Shipping address</div> */}
+
+              <div onClick={() => handleOpeningInnerContent('checkout-shipping-info-wrapper', 'shipping-address-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div className="shipping-toggle-header">
+                  Add a shipping address
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
+                  <div id="shipping-address-rotating-thinger-1" className="rotating-thing-1" style={{ top: "-11px", position: "absolute", transform: "rotate(90deg)", transition: "0.7s" }}>
+                    |
+                  </div>
+
+                  <div id="shipping-address-rotating-thinger-2" className="rotating-thing-2" style={{ left: "2px", top: "-10px", position: "absolute", transform: "rotate(180deg)", width: "5px", transition: "0.7s" }}>
+                    |
+                  </div>
+                </div>
+              </div>
 
               <div className="checkout-shipping-info-name-wrapper">
                 <div>
@@ -702,10 +750,22 @@ export default () => {
                 </div>
             </div>
 
-            <div style={{  paddingTop: '80px' }}>
-                <div style={{ paddingBottom: '20px', fontSize: '18px' }}>
+            <div id="checkout-add-payment-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+              <div onClick={() => handleOpeningInnerContent('checkout-add-payment-wrapper', 'add-payment-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div className="shipping-toggle-header">
                   Add a payment method
                 </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
+                  <div id="add-payment-rotating-thinger-1" className="rotating-thing-1" style={{ top: "-11px", position: "absolute", transform: "rotate(90deg)", transition: "0.7s" }}>
+                    |
+                  </div>
+
+                  <div id="add-payment-rotating-thinger-2" className="rotating-thing-2" style={{ left: "2px", top: "-10px", position: "absolute", transform: "rotate(180deg)", width: "5px", transition: "0.7s" }}>
+                    |
+                  </div>
+                </div>
+              </div>
 
                 <div>
                   <input
