@@ -253,11 +253,34 @@ export default () => {
       return setBillingAddress(billingAddress), setActiveBillingAddress(billingAddressIdx)
     }
 
+    const handleOpeningInnerContent = () => {
+      const el = document.getElementById('checkout-shipping-methods-wrapper')
+      const el2 = document.getElementById('rotating-thinger-1')
+      const el3 = document.getElementById('rotating-thinger-2')
+      if (paymentMethods.length < 3) {
+        el.classList.toggle('transform-inner-content')
+      } else {
+        el.classList.toggle('transform-inner-content-large')
+      }
+      el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+    }
+
     return (
-      <div>
-        <div>
-          <div style={{ height: "42px", fontSize: '18px', padding: "0px 20px", display: "flex", alignItems: "center" }}>
+      <div id="checkout-shipping-methods-wrapper" className="checkout-shipping-methods-wrapper" style={{ height: "100%", maxHeight: "42px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+        <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div className="shipping-toggle-header">
             Choose from your shipping addresses
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
+            <div id="rotating-thinger-1" className="rotating-thing-1" style={{ top: "-11px", position: "absolute", transform: "rotate(90deg)", transition: "0.7s" }}>
+              |
+            </div>
+
+            <div id="rotating-thinger-2" className="rotating-thing-2" style={{ left: "2px", top: "-10px", position: "absolute", transform: "rotate(180deg)", width: "5px", transition: "0.7s" }}>
+              |
+            </div>
           </div>
         </div>
 
