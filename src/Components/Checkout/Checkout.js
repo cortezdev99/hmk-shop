@@ -487,6 +487,10 @@ export default () => {
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
   }
 
+  const handleAddContactInfo = () => {
+
+  }
+
   const cardElementOptions = {
     style: {
       base: {
@@ -547,7 +551,6 @@ export default () => {
             </div>
 
             <div id="checkout-contact-info-wrapper" className="checkout-contact-info-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
-              {/* <div className="checkout-contact-info-header">Contact Information</div> */}
               <div onClick={() => handleOpeningInnerContent('checkout-contact-info-wrapper', 'contact-info-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div className="shipping-toggle-header">
                   Add contact information
@@ -583,10 +586,18 @@ export default () => {
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
+
+              <div style={{ marginTop: "20px" }}>
+                  <button 
+                    onClick={handleAddContactInfo}
+                    style={{ padding: "1rem 2rem", border: "1px solid #1d1d1d", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
+                  >
+                    Add this contact information
+                  </button>
+                </div>
             </div>
 
             <div id="checkout-shipping-info-wrapper" className="checkout-shipping-info-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
-              {/* <div className="checkout-shipping-info-header">Shipping address</div> */}
 
               <div onClick={() => handleOpeningInnerContent('checkout-shipping-info-wrapper', 'shipping-address-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div className="shipping-toggle-header">
