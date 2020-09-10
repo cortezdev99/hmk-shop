@@ -42,6 +42,7 @@ export default () => {
   const [ userUID, setUserUID ] = useState("");
   const [ paymentMethods, setPaymentMethods ] = useState([]);
   const [ paymentMethod, setPaymentMethod ] = useState(false)
+  const [ contacts, setContacts ] = useState([])
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const stripe = useStripe();
@@ -488,7 +489,26 @@ export default () => {
   }
 
   const handleAddContactInfo = () => {
-
+    firebase
+        .firestore()
+        .collection('stripe_customers')
+        .doc(userUID)
+        .collection('contact_information')
+        .add({
+          email,
+          phone
+        }).then((resp) => {
+          resp.onSnapshot({
+            // Listen for document metadata changes
+            includeMetadataChanges: true
+        }, (doc) => {
+          const currentState = contacts
+          currentState.push(doc.data());
+          setContacts([...currentState])
+        });
+      }).catch((err) => {
+        alert(err)
+      })
   }
 
   const cardElementOptions = {
@@ -590,14 +610,14 @@ export default () => {
               <div style={{ marginTop: "20px" }}>
                   <button 
                     onClick={handleAddContactInfo}
-                    style={{ padding: "1rem 2rem", border: "1px solid #1d1d1d", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
+                    style={{ padding: "1rem 2rem", border: "none", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
                   >
-                    Add this contact information
+                    Add this contact
                   </button>
                 </div>
             </div>
 
-            <div id="checkout-shipping-info-wrapper" className="checkout-shipping-info-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+            <div id="checkout-shipping-info-wrapper" className="checkout-shipping-info-wrapper" style={{ marginTop: "40px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
 
               <div onClick={() => handleOpeningInnerContent('checkout-shipping-info-wrapper', 'shipping-address-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div className="shipping-toggle-header">
@@ -754,14 +774,14 @@ export default () => {
                 <div style={{ marginTop: "20px" }}>
                   <button 
                     onClick={handleAddShippingAddress}
-                    style={{ padding: "1rem 2rem", border: "1px solid #1d1d1d", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
+                    style={{ padding: "1rem 2rem", border: "none", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
                   >
-                    Add this shipping address
+                    Add this address
                   </button>
                 </div>
             </div>
 
-            <div id="checkout-add-payment-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+            <div id="checkout-add-payment-wrapper" style={{ marginTop: "40px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
               <div onClick={() => handleOpeningInnerContent('checkout-add-payment-wrapper', 'add-payment-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div className="shipping-toggle-header">
                   Add a payment method
@@ -798,20 +818,20 @@ export default () => {
                 <div style={{ marginTop: "20px" }}>
                   <button 
                     onClick={handleAddPaymentMethod}
-                    style={{ padding: "1rem 2rem", border: "1px solid #1d1d1d", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
+                    style={{ padding: "1rem 2rem", border: "none", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
                   >
                     Add this card
                   </button>
                 </div>
             </div>
 
-            <div style={{ paddingTop: "80px" }}>
+            <div style={{ paddingTop: "40px" }}>
               {
                 handleGettingPaymentMethods()
               }
             </div>
 
-            <div style={{ paddingTop: "80px" }}>
+            <div style={{ paddingTop: "40px" }}>
               {
                 handleGettingBillingAddresses()
               }
@@ -836,7 +856,7 @@ export default () => {
                 <button
                   className="checkout-left-column-right-link"
                   to="/checkout/payment"
-                  style={{ display: "flex", justifyContent: "space-evenly", padding: "0 3rem", border: "1px solid #1d1d1d", cursor: 'pointer' }}
+                  style={{ display: "flex", justifyContent: "space-evenly", padding: "0 3rem", border: "none", cursor: 'pointer' }}
                   onClick={handleCheckoutPurchase}
                   // disabled={stripe}
                 >
