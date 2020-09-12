@@ -42,7 +42,10 @@ export default () => {
   const [ userUID, setUserUID ] = useState("");
   const [ paymentMethods, setPaymentMethods ] = useState([]);
   const [ paymentMethod, setPaymentMethod ] = useState(false)
-  const [ contacts, setContacts ] = useState([])
+  const [ noBillingAddressSelected, setNoBillingAddressSelected ] = useState(false)
+  const [ noPaymentMethodSelected, setNoPaymentMethodSelected ] = useState(false)
+  const [ noEmail, setNoEmail ] = useState(false)
+  const [ noPhoneNumber, setNoPhoneNumber ] = useState(false)
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const stripe = useStripe();
@@ -169,8 +172,16 @@ export default () => {
     return (
       <div id="checkout-payment-methods-wrapper" id="checkout-payment-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
         <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div className="shipping-toggle-header">
+          <div className="shipping-toggle-header" style={{ display: "flex" }}>
             Choose from your payment methods
+
+            <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
+              {
+                noPaymentMethodSelected && !paymentMethod ? (
+                  "* Required"
+                ) : null
+              }
+            </div>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
@@ -270,8 +281,16 @@ export default () => {
     return (
       <div id="checkout-shipping-methods-wrapper" className="checkout-shipping-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
         <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div className="shipping-toggle-header">
+          <div className="shipping-toggle-header" style={{ display: "flex" }}>
             Choose from your shipping addresses
+
+            <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
+              {
+                noBillingAddressSelected && !billingAddress ? (
+                  "* Required"
+                ) : null
+              }
+            </div>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
@@ -349,43 +368,65 @@ export default () => {
   const handleCheckoutPurchase = async (ev) => {
     ev.preventDefault();
 
-    const shippingDetails = {
-      name: billingAddress.name,
-      address: {
-        line1: billingAddress.address.line1,
-        line2: billingAddress.address.line2,
-        postal_code: billingAddress.address.postal_code,
-        city: billingAddress.address.city,
-        state: billingAddress.address.state,
-        country: billingAddress.address.country.split(',')[1]
+    const errors = []
+    if (!billingAddress) {
+      errors.push(setNoBillingAddressSelected)
+    }
+
+    if (!paymentMethod) {
+      errors.push(setNoPaymentMethodSelected)
+    }
+
+    if (email.length === 0) {
+      errors.push(setNoEmail)
+    }
+
+    if (phone.length === 0) {
+      errors.push(setNoPhoneNumber)
+    }
+
+    if (errors.length > 0) {
+      errors.map((err) => {
+        return err(true)
+      })
+    } else {
+      const shippingDetails = {
+        name: billingAddress.name,
+        address: {
+          line1: billingAddress.address.line1,
+          line2: billingAddress.address.line2,
+          postal_code: billingAddress.address.postal_code,
+          city: billingAddress.address.city,
+          state: billingAddress.address.state,
+          country: billingAddress.address.country.split(',')[1]
+        }
       }
-    }
     
-    let test = []
-    products.map((product) => {
-      const productId = product[0].product.id
-      const productPrice = product[0].product.price
-      const title = product[0].product.title
-      const quantity = product[4].quantity
-      const productColor = product[2].color
-      const productSize = product[1].size
-      test.push({ productId, title, productPrice, quantity, productColor, productSize })
-    })
+      let test = []
+      products.map((product) => {
+        const productId = product[0].product.id
+        const productPrice = product[0].product.price
+        const title = product[0].product.title
+        const quantity = product[4].quantity
+        const productColor = product[2].color
+        const productSize = product[1].size
+        test.push({ productId, title, productPrice, quantity, productColor, productSize })
+      })
 
-    const data = {
-      payment_method: paymentMethod,
-      currency: 'usd',
-      status: 'new',
-      shipping_details: shippingDetails,
-      products: test,
-      contact_info: {
-        email,
-        phone
-      },
-      user: firebase.auth().currentUser.uid
-    }
+      const data = {
+        payment_method: paymentMethod,
+        currency: 'usd',
+        status: 'new',
+        shipping_details: shippingDetails,
+        products: test,
+        contact_info: {
+          email,
+          phone
+        },
+        user: firebase.auth().currentUser.uid
+      }
 
-    firebase
+      firebase
       .firestore()
       .collection('stripe_customers')
       .doc(userUID)
@@ -405,6 +446,7 @@ export default () => {
       }).catch((err) => {
         alert(err)
       })
+    }
   }
 
   const handleAddShippingAddress = () => {
@@ -488,29 +530,6 @@ export default () => {
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
   }
 
-  const handleAddContactInfo = () => {
-    firebase
-        .firestore()
-        .collection('stripe_customers')
-        .doc(userUID)
-        .collection('contact_information')
-        .add({
-          email,
-          phone
-        }).then((resp) => {
-          resp.onSnapshot({
-            // Listen for document metadata changes
-            includeMetadataChanges: true
-        }, (doc) => {
-          const currentState = contacts
-          currentState.push(doc.data());
-          setContacts([...currentState])
-        });
-      }).catch((err) => {
-        alert(err)
-      })
-  }
-
   const cardElementOptions = {
     style: {
       base: {
@@ -570,55 +589,7 @@ export default () => {
               <span className="checkout-options-seperator-border"></span>
             </div>
 
-            <div id="checkout-contact-info-wrapper" className="checkout-contact-info-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
-              <div onClick={() => handleOpeningInnerContent('checkout-contact-info-wrapper', 'contact-info-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div className="shipping-toggle-header">
-                  Add contact information
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
-                  <div id="contact-info-rotating-thinger-1" className="rotating-thing-1" style={{ top: "-11px", position: "absolute", transform: "rotate(90deg)", transition: "0.7s" }}>
-                    |
-                  </div>
-
-                  <div id="contact-info-rotating-thinger-2" className="rotating-thing-2" style={{ left: "2px", top: "-10px", position: "absolute", transform: "rotate(180deg)", width: "5px", transition: "0.7s" }}>
-                    |
-                  </div>
-                </div>
-              </div>
-
-              <div className="checkout-contact-info-input-wrapper">
-                <input
-                  className="checkout-input"
-                  placeholder="Email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div className="checkout-contact-info-phone-input-wrapper">
-                <input
-                  className="checkout-input"
-                  placeholder="Phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-              </div>
-
-              <div style={{ marginTop: "20px" }}>
-                  <button 
-                    onClick={handleAddContactInfo}
-                    style={{ padding: "1rem 2rem", border: "none", backgroundColor: "#45b3e0", color: "#1d1d1d", borderRadius: "5px", cursor: "pointer" }}
-                  >
-                    Add this contact
-                  </button>
-                </div>
-            </div>
-
-            <div id="checkout-shipping-info-wrapper" className="checkout-shipping-info-wrapper" style={{ marginTop: "40px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
-
+            <div id="checkout-shipping-info-wrapper" className="checkout-shipping-info-wrapper" style={{ marginTop: "80px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
               <div onClick={() => handleOpeningInnerContent('checkout-shipping-info-wrapper', 'shipping-address-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div className="shipping-toggle-header">
                   Add a shipping address
@@ -835,6 +806,54 @@ export default () => {
               {
                 handleGettingBillingAddresses()
               }
+            </div>
+
+            <div id="checkout-contact-info-wrapper" className="checkout-contact-info-wrapper" style={{ marginTop: "40px", height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+              <div onClick={() => handleOpeningInnerContent('checkout-contact-info-wrapper', 'contact-info-rotating-thinger-')} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div className="shipping-toggle-header" style={{ display: "flex" }}>
+                  Contact information
+
+                  <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
+                    {
+                      noEmail && noPhoneNumber && phone.length === 0 && email.length === 0 ? (
+                        "* Required"
+                      ) : noEmail && email.length === 0 || noPhoneNumber && phone.length === 0 ? (
+                        "* Incomplete"
+                      ) : null
+                    }
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative", width: "12px" }}>
+                  <div id="contact-info-rotating-thinger-1" className="rotating-thing-1" style={{ top: "-11px", position: "absolute", transform: "rotate(90deg)", transition: "0.7s" }}>
+                    |
+                  </div>
+
+                  <div id="contact-info-rotating-thinger-2" className="rotating-thing-2" style={{ left: "2px", top: "-10px", position: "absolute", transform: "rotate(180deg)", width: "5px", transition: "0.7s" }}>
+                    |
+                  </div>
+                </div>
+              </div>
+
+              <div className="checkout-contact-info-input-wrapper">
+                <input
+                  className="checkout-input"
+                  placeholder="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="checkout-contact-info-phone-input-wrapper">
+                <input
+                  className="checkout-input"
+                  placeholder="Phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
             </div>
 
             <div className="checkout-left-column-btns-wrapper">
