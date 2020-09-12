@@ -152,14 +152,15 @@ export default () => {
         }
     })
 
+    const el = document.getElementById('checkout-payment-methods-wrapper')
+    const el2 = document.getElementById('rotating-thing-1')
+    const el3 = document.getElementById('rotating-thing-2')
+
     const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
       return setPaymentMethod(paymentMethod.id), setActivePaymentMethod(paymentMethodIdx)
     }
 
     const handleOpeningInnerContent = () => {
-      const el = document.getElementById('checkout-payment-methods-wrapper')
-      const el2 = document.getElementById('rotating-thing-1')
-      const el3 = document.getElementById('rotating-thing-2')
       if (paymentMethods.length < 3) {
         el.classList.toggle('transform-inner-content')
       } else {
@@ -167,6 +168,24 @@ export default () => {
       }
       el2.classList.toggle('rotating-plus-minus-rotated-tester')
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+    }
+
+    const handleScrollToAddPaymentMethodSection = () => {
+      const addPaymentMethodElem = document.getElementById('checkout-add-payment-wrapper')
+      addPaymentMethodElem.scrollIntoView({
+        block: "center",
+        behavior: "smooth"
+      })
+      
+      if (paymentMethods.length < 3) {
+        el.classList.toggle('transform-inner-content')
+      } else {
+        el.classList.toggle('transform-inner-content-large')
+      }
+      el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      el3.classList.toggle('rotating-plus-minus-rotated-tester-1');
+
+      return  () => handleOpeningInnerContent('checkout-add-payment-wrapper', 'add-payment-rotating-thinger-')
     }
 
     return (
@@ -197,41 +216,57 @@ export default () => {
 
         <div>
           {
-            paymentMethods.map((paymentMethod, paymentMethodIdx) => {
-              return (
-                <button 
-                  onClick={() => handleUsePaymentClick(paymentMethod, paymentMethodIdx)}
-                  style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
-                >
-                  <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
-                    <div style={{ fontSize: "12px" }}>
-                      {
-                        paymentMethodIdx === activePaymentMethod ? (
-                          <FontAwesomeIcon icon={["fas", "circle"]} />
-                        ) : (
-                          <FontAwesomeIcon icon={["far", "circle"]} />
-                        )
-                      }
-                    </div>
-                  </div>
+            !noPaymentMethods && paymentMethods.length > 0 ? (
+              <div>
+                {
+                  paymentMethods.map((paymentMethod, paymentMethodIdx) => {
+                    return (
+                      <button 
+                        onClick={() => handleUsePaymentClick(paymentMethod, paymentMethodIdx)}
+                        style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
+                      >
+                        <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
+                          <div style={{ fontSize: "12px" }}>
+                            {
+                              paymentMethodIdx === activePaymentMethod ? (
+                                <FontAwesomeIcon icon={["fas", "circle"]} />
+                              ) : (
+                                <FontAwesomeIcon icon={["far", "circle"]} />
+                              )
+                            }
+                          </div>
+                        </div>
 
-                  <div style={{ height: "100%", width: "90%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 20px", fontSize: "14px" }}>
-                    <div style={{ display: "flex" }}>
-                      <div style={{ paddingRight: "10px", textTransform: "capitalize" }}>{paymentMethod.card.brand}</div>
-                      <div style={{ paddingRight: "10px" }}>****</div>
-                      <div>{paymentMethod.card.last4}</div>
-                    </div>
+                        <div style={{ height: "100%", width: "90%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 20px", fontSize: "14px" }}>
+                          <div style={{ display: "flex" }}>
+                            <div style={{ paddingRight: "10px", textTransform: "capitalize" }}>{paymentMethod.card.brand}</div>
+                            <div style={{ paddingRight: "10px" }}>****</div>
+                            <div>{paymentMethod.card.last4}</div>
+                          </div>
 
-                    <div style={{ display: "flex" }}>
-                      <div style={{ paddingRight: "10px" }}>Expires</div>
-                      <div style={{ paddingRight: "10px" }} >{paymentMethod.card.exp_month}</div>
-                      <div style={{ paddingRight: "10px" }}>/</div>
-                      <div>{paymentMethod.card.exp_year}</div>
-                    </div>
-                  </div>
-                </button>
-              )
-            })
+                          <div style={{ display: "flex" }}>
+                            <div style={{ paddingRight: "10px" }}>Expires</div>
+                            <div style={{ paddingRight: "10px" }} >{paymentMethod.card.exp_month}</div>
+                            <div style={{ paddingRight: "10px" }}>/</div>
+                            <div>{paymentMethod.card.exp_year}</div>
+                          </div>
+                        </div>
+                      </button>
+                    )
+                  })
+                }
+              </div>
+            ) : (
+              <div style={{ marginTop: "20px", display: "flex" }}>
+                <ul style={{ fontSize: "18px", color: "#FF8800" }}>
+                  <FontAwesomeIcon icon={["fas", "exclamation-triangle"]} />
+                </ul>
+
+                <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
+                  You don't have any payment methods, you can add one <span onClick={handleScrollToAddPaymentMethodSection} style={{ cursor: "pointer", textDecorationLine: "underline" }}>here</span>!
+                </div>
+              </div>
+            )
           }
         </div>
       </div>
@@ -850,7 +885,7 @@ export default () => {
                   className="checkout-input"
                   placeholder="Phone"
                   type="tel"
-                  value={phone}
+                  value={phone.replace(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, '($1) $2-$3')}
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
