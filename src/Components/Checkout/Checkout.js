@@ -152,15 +152,16 @@ export default () => {
         }
     })
 
-    const el = document.getElementById('checkout-payment-methods-wrapper')
-    const el2 = document.getElementById('rotating-thing-1')
-    const el3 = document.getElementById('rotating-thing-2')
-
+    
     const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
       return setPaymentMethod(paymentMethod.id), setActivePaymentMethod(paymentMethodIdx)
     }
-
+    
     const handleOpeningInnerContent = () => {
+      const el = document.getElementById('checkout-payment-methods-wrapper')
+      const el2 = document.getElementById('rotating-thing-1')
+      const el3 = document.getElementById('rotating-thing-2')
+
       if (paymentMethods.length < 3) {
         el.classList.toggle('transform-inner-content')
       } else {
@@ -172,20 +173,20 @@ export default () => {
 
     const handleScrollToAddPaymentMethodSection = () => {
       const addPaymentMethodElem = document.getElementById('checkout-add-payment-wrapper')
+      const addPaymentMethodPlusMinusOne = document.getElementById('add-payment-rotating-thinger-1')
+      const addPaymentMethodPlusMinusTwo = document.getElementById('add-payment-rotating-thinger-2')
       addPaymentMethodElem.scrollIntoView({
         block: "center",
         behavior: "smooth"
       })
-      
-      if (paymentMethods.length < 3) {
-        el.classList.toggle('transform-inner-content')
-      } else {
-        el.classList.toggle('transform-inner-content-large')
-      }
-      el2.classList.toggle('rotating-plus-minus-rotated-tester')
-      el3.classList.toggle('rotating-plus-minus-rotated-tester-1');
 
-      return  () => handleOpeningInnerContent('checkout-add-payment-wrapper', 'add-payment-rotating-thinger-')
+      setTimeout(() => {
+        if (addPaymentMethodElem.classList.contains('transform-add-payment-inner-content') === false) {
+          addPaymentMethodElem.classList.toggle('transform-add-payment-inner-content')
+          addPaymentMethodPlusMinusOne.classList.toggle('rotating-plus-minus-rotated-tester')
+          addPaymentMethodPlusMinusTwo.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        }
+      }, 300)
     }
 
     return (
