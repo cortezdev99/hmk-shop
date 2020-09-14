@@ -44,6 +44,8 @@ export default () => {
   const [ userUID, setUserUID ] = useState("");
   const [ paymentMethods, setPaymentMethods ] = useState([]);
   const [ paymentMethod, setPaymentMethod ] = useState(false)
+  const [ getBillingAddressesError, setGetBillingAddressesError ] = useState(false)
+  const [ loadingBillingAddresses, setLoadingBillingAddresses ] = useState(true)
   const [ noBillingAddressSelected, setNoBillingAddressSelected ] = useState(false)
   const [ noPaymentMethodSelected, setNoPaymentMethodSelected ] = useState(false)
   const [ noEmail, setNoEmail ] = useState(false)
@@ -336,8 +338,11 @@ export default () => {
       .collection('billing_addresses')
       .get()
       .then((snapshot) => {
+      if (snapshot.metadata.fromCache) {
+        setGetBillingAddressesError(true)
+      } else { 
         if (snapshot.empty) {
-          return setNoBillingAddresses(true)
+          setNoBillingAddresses(true)
         }
 
         if (billingAddresses.length !== snapshot.size) {
@@ -348,8 +353,9 @@ export default () => {
 
           setBillingAddresses([...currentState])
         }
-    }).catch((err) => {
-      console.log(err, 'ERROR')
+      }
+
+      setLoadingBillingAddresses(false)
     })
 
     const handleUseAddressClick = (billingAddress, billingAddressIdx) => {
@@ -368,6 +374,56 @@ export default () => {
       el2.classList.toggle('rotating-plus-minus-rotated-tester')
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
     }
+
+    const handleScrollToAddBillingAddressSection = () => {
+      const billingAddressWrapperElem = document.getElementById('checkout-shipping-info-wrapper')
+      const billingAddressPlusMinusOne = document.getElementById('shipping-address-rotating-thinger-1')
+      const billingAddressPlusMinusTwo = document.getElementById('shipping-address-rotating-thinger-2')
+      billingAddressWrapperElem.scrollIntoView({
+        block: "center",
+        behavior: "smooth"
+      })
+
+      setTimeout(() => {
+        if (billingAddressWrapperElem.classList.contains('transform-add-shipping-inner-content') === false) {
+          billingAddressWrapperElem.classList.toggle('transform-add-shipping-inner-content')
+          billingAddressPlusMinusOne.classList.toggle('rotating-plus-minus-rotated-tester')
+          billingAddressPlusMinusTwo.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        }
+      }, 300)
+    }
+
+    const handleGetBillingAddressesRetry = () => {
+      setLoadingBillingAddresses(true)
+
+      firestore
+      .collection('stripe_customers')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('billing_addresses')
+      .get()
+      .then((snapshot) => {
+      if (snapshot.metadata.fromCache) {
+        setGetPaymentMethodsError(true)
+      } else { 
+        if (snapshot.empty) {
+          return setNoBillingAddresses(true)
+        }
+
+        if (billingAddresses.length !== snapshot.size) {
+          const currentState = billingAddresses
+          snapshot.forEach((doc) => {
+            currentState.push(doc.data())
+          })
+
+          setBillingAddresses([...currentState])
+        }
+      }
+
+      setLoadingBillingAddresses(false)
+      })
+    }
+
+    console.log(loadingBillingAddresses)
 
     return (
       <div id="checkout-shipping-methods-wrapper" className="checkout-shipping-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
@@ -397,37 +453,73 @@ export default () => {
 
         <div>
           {
-            billingAddresses.map((billingAddress, billingAddressIdx) => {
-              return (
-                <button 
-                  onClick={() => handleUseAddressClick(billingAddress, billingAddressIdx)}
-                  style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
-                >
-                  <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
-                    <div style={{ fontSize: "12px" }}>
-                      {
-                        billingAddressIdx === activeBillingAddress ? (
-                          <FontAwesomeIcon icon={["fas", "circle"]} />
-                        ) : (
-                          <FontAwesomeIcon icon={["far", "circle"]} />
-                        )
-                      }
-                    </div>
-                  </div>
+            !noBillingAddresses && billingAddresses.length > 0 ? (
+              <div>
+                {
+                  billingAddresses.map((billingAddress, billingAddressIdx) => {
+                    return (
+                      <button 
+                        onClick={() => handleUseAddressClick(billingAddress, billingAddressIdx)}
+                        style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
+                      >
+                        <div style={{ height: "100%", width: "10%", display: "flex", alignItems: "center", justifyContent: "center", borderRight: "1px solid #1d1d1d" }}>
+                          <div style={{ fontSize: "12px" }}>
+                            {
+                              billingAddressIdx === activeBillingAddress ? (
+                                <FontAwesomeIcon icon={["fas", "circle"]} />
+                              ) : (
+                                <FontAwesomeIcon icon={["far", "circle"]} />
+                              )
+                            }
+                          </div>
+                        </div>
 
-                  <div style={{ height: "100%", width: "90%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 20px", fontSize: "14px" }}>
-                    <div style={{ display: "flex" }}>
-                      <div style={{ paddingRight: "10px" }}>{billingAddress.address.line1}</div>
-                    </div>
+                        <div style={{ height: "100%", width: "90%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 20px", fontSize: "14px" }}>
+                          <div style={{ display: "flex" }}>
+                            <div style={{ paddingRight: "10px" }}>{billingAddress.address.line1}</div>
+                          </div>
 
-                    <div style={{ display: "flex" }}>
-                      <div style={{ paddingRight: "10px" }}>{billingAddress.address.state}</div>
-                      <div style={{ paddingRight: "10px" }} >{billingAddress.address.postal_code}</div>
-                    </div>
-                  </div>
-                </button>
-              )
-            })
+                          <div style={{ display: "flex" }}>
+                            <div style={{ paddingRight: "10px" }}>{billingAddress.address.state}</div>
+                            <div style={{ paddingRight: "10px" }} >{billingAddress.address.postal_code}</div>
+                          </div>
+                        </div>
+                      </button>
+                    )
+                  })
+                }
+              </div>
+            ) : !noBillingAddresses && billingAddresses.length === 0 && getBillingAddressesError && !loadingBillingAddresses ? (
+              <div style={{ marginTop: "20px", display: "flex", alignItems: "center" }}>
+              <ul style={{ fontSize: "22px", color: "#FF0000" }}>
+                <FontAwesomeIcon icon={["fas", "dizzy"]} />
+              </ul>
+
+              <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
+                Looks like there was a problem with your internet connection. Click <span onClick={handleGetBillingAddressesRetry} style={{ cursor: "pointer", textDecorationLine: "underline" }}>here</span> to retry.
+              </div>
+            </div>
+            ) : noBillingAddresses && billingAddresses.length === 0 && !loadingBillingAddresses ? (
+              <div style={{ marginTop: "20px", display: "flex" }}>
+                <ul style={{ fontSize: "18px", color: "#FF8800" }}>
+                  <FontAwesomeIcon icon={["fas", "exclamation-triangle"]} />
+                </ul>
+
+                <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
+                  You don't have any billing addresses, you can add one <span onClick={handleScrollToAddBillingAddressSection} style={{ cursor: "pointer", textDecorationLine: "underline" }}>here</span>!
+                </div>
+              </div>
+            ) : (
+              <div style={{ marginTop: "20px", display: "flex" }}>
+                <ul style={{ fontSize: "18px", color: "#CCC" }}>
+                  <FontAwesomeIcon icon={["fas", "circle-notch"]} spin={true} />
+                </ul>
+
+                <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
+                  Loading...
+                </div>
+              </div>
+            )
           }
         </div>
       </div>
