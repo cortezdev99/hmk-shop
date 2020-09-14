@@ -38,6 +38,7 @@ export default () => {
   const [ billingAddresses, setBillingAddresses ] = useState([])
   const [ billingAddress, setBillingAddress ] = useState(false)
   const [ activeBillingAddress, setActiveBillingAddress ] = useState(false)
+  const [ loadingPaymentMethods, setLoadingPaymentMethods ] = useState(true);
   const [ noBillingAddresses, setNoBillingAddresses ] = useState(false)
   const [ getPaymentMethodsError, setGetPaymentMethodsError ] = useState(false)
   const [ userUID, setUserUID ] = useState("");
@@ -139,15 +140,12 @@ export default () => {
       .collection('payment_methods')
       .get()
       .then((snapshot) => {
-        console.log(snapshot.metadata.fromCache, 'IMPORTANT')
         if (snapshot.metadata.fromCache) {
           setGetPaymentMethodsError(true)
         } else {
           if (snapshot.empty) {
-            return setNoPaymentMethods(true)
-          }
-  
-          if (paymentMethods.length !== snapshot.size) {
+            setNoPaymentMethods(true)
+          } else if (paymentMethods.length !== snapshot.size) {
             const currentState = paymentMethods
             snapshot.forEach((doc) => {
               currentState.push(doc.data())
@@ -156,6 +154,8 @@ export default () => {
             setPaymentMethods([...currentState])
           }
         }
+     
+        setLoadingPaymentMethods(false)
       })
     
     // console.log(getPaymentMethodsError)
@@ -197,21 +197,20 @@ export default () => {
     }
 
     const handleGetPaymentMethodsRetry = () => {
+      setLoadingPaymentMethods(true)
+
       firestore
       .collection('stripe_customers')
       .doc(firebase.auth().currentUser.uid)
       .collection('payment_methods')
       .get()
       .then((snapshot) => {
-        console.log(snapshot.metadata.fromCache, 'IMPORTANT')
         if (snapshot.metadata.fromCache) {
           setGetPaymentMethodsError(true)
         } else {
           if (snapshot.empty) {
-            return setNoPaymentMethods(true)
-          }
-  
-          if (paymentMethods.length !== snapshot.size) {
+            setNoPaymentMethods(true)
+          } else if (paymentMethods.length !== snapshot.size) {
             const currentState = paymentMethods
             snapshot.forEach((doc) => {
               currentState.push(doc.data())
@@ -220,6 +219,8 @@ export default () => {
             setPaymentMethods([...currentState])
           }
         }
+     
+        setLoadingPaymentMethods(false)
       })
     }
 
@@ -251,7 +252,7 @@ export default () => {
 
         <div>
           {
-            !noPaymentMethods && paymentMethods.length > 0 ? (
+            !noPaymentMethods && paymentMethods.length > 0 && !loadingPaymentMethods ? (
               <div>
                 {
                   paymentMethods.map((paymentMethod, paymentMethodIdx) => {
@@ -291,7 +292,7 @@ export default () => {
                   })
                 }
               </div>
-            ) : !noPaymentMethods && paymentMethods.length === 0 && getPaymentMethodsError ? (
+            ) : !noPaymentMethods && paymentMethods.length === 0 && getPaymentMethodsError && !loadingPaymentMethods ? (
               <div style={{ marginTop: "20px", display: "flex", alignItems: "center" }}>
               <ul style={{ fontSize: "22px", color: "#FF0000" }}>
                 <FontAwesomeIcon icon={["fas", "dizzy"]} />
@@ -301,7 +302,7 @@ export default () => {
                 Looks like there was a problem with your internet connection. Click <span onClick={handleGetPaymentMethodsRetry} style={{ cursor: "pointer", textDecorationLine: "underline" }}>here</span> to retry.
               </div>
             </div>
-            ) : (
+            ) : noPaymentMethods && paymentMethods.length === 0 && !loadingPaymentMethods ? (
               <div style={{ marginTop: "20px", display: "flex" }}>
                 <ul style={{ fontSize: "18px", color: "#FF8800" }}>
                   <FontAwesomeIcon icon={["fas", "exclamation-triangle"]} />
@@ -309,6 +310,16 @@ export default () => {
 
                 <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
                   You don't have any payment methods, you can add one <span onClick={handleScrollToAddPaymentMethodSection} style={{ cursor: "pointer", textDecorationLine: "underline" }}>here</span>!
+                </div>
+              </div>
+            ) : (
+              <div style={{ marginTop: "20px", display: "flex" }}>
+                <ul style={{ fontSize: "18px", color: "#FF8800" }}>
+                  <FontAwesomeIcon icon={["fas", "exclamation-triangle"]} />
+                </ul>
+
+                <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
+                  Loading...
                 </div>
               </div>
             )
