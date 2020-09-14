@@ -39,6 +39,7 @@ export default () => {
   const [ billingAddress, setBillingAddress ] = useState(false)
   const [ activeBillingAddress, setActiveBillingAddress ] = useState(false)
   const [ noBillingAddresses, setNoBillingAddresses ] = useState(false)
+  const [ getPaymentMethodsError, setGetPaymentMethodsError ] = useState(false)
   const [ userUID, setUserUID ] = useState("");
   const [ paymentMethods, setPaymentMethods ] = useState([]);
   const [ paymentMethod, setPaymentMethod ] = useState(false)
@@ -138,20 +139,26 @@ export default () => {
       .collection('payment_methods')
       .get()
       .then((snapshot) => {
-        if (snapshot.empty) {
-          return setNoPaymentMethods(true)
+        console.log(snapshot.metadata.fromCache, 'IMPORTANT')
+        if (snapshot.metadata.fromCache) {
+          setGetPaymentMethodsError(true)
+        } else {
+          if (snapshot.empty) {
+            return setNoPaymentMethods(true)
+          }
+  
+          if (paymentMethods.length !== snapshot.size) {
+            const currentState = paymentMethods
+            snapshot.forEach((doc) => {
+              currentState.push(doc.data())
+            })
+  
+            setPaymentMethods([...currentState])
+          }
         }
-
-        if (paymentMethods.length !== snapshot.size) {
-          const currentState = paymentMethods
-          snapshot.forEach((doc) => {
-            currentState.push(doc.data())
-          })
-
-          setPaymentMethods([...currentState])
-        }
-    })
-
+      })
+    
+    // console.log(getPaymentMethodsError)
     
     const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
       return setPaymentMethod(paymentMethod.id), setActivePaymentMethod(paymentMethodIdx)
@@ -187,6 +194,33 @@ export default () => {
           addPaymentMethodPlusMinusTwo.classList.toggle('rotating-plus-minus-rotated-tester-1')
         }
       }, 300)
+    }
+
+    const handleGetPaymentMethodsRetry = () => {
+      firestore
+      .collection('stripe_customers')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('payment_methods')
+      .get()
+      .then((snapshot) => {
+        console.log(snapshot.metadata.fromCache, 'IMPORTANT')
+        if (snapshot.metadata.fromCache) {
+          setGetPaymentMethodsError(true)
+        } else {
+          if (snapshot.empty) {
+            return setNoPaymentMethods(true)
+          }
+  
+          if (paymentMethods.length !== snapshot.size) {
+            const currentState = paymentMethods
+            snapshot.forEach((doc) => {
+              currentState.push(doc.data())
+            })
+  
+            setPaymentMethods([...currentState])
+          }
+        }
+      })
     }
 
     return (
@@ -257,6 +291,16 @@ export default () => {
                   })
                 }
               </div>
+            ) : !noPaymentMethods && paymentMethods.length === 0 && getPaymentMethodsError ? (
+              <div style={{ marginTop: "20px", display: "flex", alignItems: "center" }}>
+              <ul style={{ fontSize: "22px", color: "#FF0000" }}>
+                <FontAwesomeIcon icon={["fas", "dizzy"]} />
+              </ul>
+
+              <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
+                Looks like there was a problem with your internet connection. Click <span onClick={handleGetPaymentMethodsRetry} style={{ cursor: "pointer", textDecorationLine: "underline" }}>here</span> to retry.
+              </div>
+            </div>
             ) : (
               <div style={{ marginTop: "20px", display: "flex" }}>
                 <ul style={{ fontSize: "18px", color: "#FF8800" }}>
@@ -294,7 +338,7 @@ export default () => {
           setBillingAddresses([...currentState])
         }
     }).catch((err) => {
-      console.log(err)
+      console.log(err, 'ERROR')
     })
 
     const handleUseAddressClick = (billingAddress, billingAddressIdx) => {
