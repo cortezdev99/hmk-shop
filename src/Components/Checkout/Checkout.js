@@ -314,8 +314,8 @@ export default () => {
               </div>
             ) : (
               <div style={{ marginTop: "20px", display: "flex" }}>
-                <ul style={{ fontSize: "18px", color: "#FF8800" }}>
-                  <FontAwesomeIcon icon={["fas", "exclamation-triangle"]} />
+                <ul style={{ fontSize: "18px", color: "#CCC" }}>
+                  <FontAwesomeIcon icon={["fas", "circle-notch"]} spin={true} />
                 </ul>
 
                 <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
