@@ -13,20 +13,21 @@ import Icons from './Utilities/Icons';
 import ProductDetails from './Products/ProductDetails';
 import CartProvider from '../Providers/CartProvider';
 import Checkout from './Checkout/Checkout'
-import Payment from './Checkout/Payment';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import Test1 from './Checkout/CreateAccount';
 import CreateAccount from './Checkout/CreateAccount';
-import Test3 from './Checkout/Test3';
 
 function App() {
   Icons()
   const stripePromise = loadStripe(process.env.REACT_APP_PUBLISHABLE_KEY);
   const [ user, setUser ] = useState(false)
+  const [ initializing, setInitializing ] = useState(true)
 
   function onAuthStateChanged(user) {
     setUser(user);
+    if (initializing) {
+      setInitializing(false)
+    }
   }
 
   useEffect(() => {
@@ -34,12 +35,8 @@ function App() {
     return subscriber;
   })
 
-  const stacksToBeRendered = () => {
-    if (user) {
-      return (
-        <Route exact path='/test' component={Test3} />
-      )
-    }
+  if (initializing) {
+    return <div />
   }
 
   return (
@@ -58,7 +55,6 @@ function App() {
                 <Route exact path='/products/:slug' component={ProductDetails} />
                 <Route exact path='/checkout' component={Checkout} />
                 <Route exact path='/create-account' component={CreateAccount} />
-                { stacksToBeRendered() }
               </Switch>
             </div>
           </Router>
