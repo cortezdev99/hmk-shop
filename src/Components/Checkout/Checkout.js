@@ -127,6 +127,10 @@ export default () => {
           includeMetadataChanges: true
       }, (doc) => {
         if (doc.data().card) {
+          if (noPaymentMethods) {
+            setNoPaymentMethods(false)
+          }
+        
           const currentState = paymentMethods
           currentState.push(doc.data());
           setPaymentMethods([...currentState])
@@ -260,6 +264,7 @@ export default () => {
                   paymentMethods.map((paymentMethod, paymentMethodIdx) => {
                     return (
                       <button 
+                        key={paymentMethodIdx}
                         onClick={() => handleUsePaymentClick(paymentMethod, paymentMethodIdx)}
                         style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
                       >
@@ -423,8 +428,6 @@ export default () => {
       })
     }
 
-    console.log(loadingBillingAddresses)
-
     return (
       <div id="checkout-shipping-methods-wrapper" className="checkout-shipping-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
         <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -459,6 +462,7 @@ export default () => {
                   billingAddresses.map((billingAddress, billingAddressIdx) => {
                     return (
                       <button 
+                        key={billingAddressIdx}
                         onClick={() => handleUseAddressClick(billingAddress, billingAddressIdx)}
                         style={{ marginTop: "20px", height: "50px", display: "flex", width: "100%", border: "1px solid #1d1d1d", borderRadius: "5px", background: "transparent", padding: "0px", cursor: "pointer" }}
                       >
@@ -687,6 +691,10 @@ export default () => {
             // Listen for document metadata changes
             includeMetadataChanges: true
         }, (doc) => {
+          if (noBillingAddresses) {
+            setNoBillingAddresses(false)
+          }
+
           const currentState = billingAddresses
           currentState.push(doc.data());
           setBillingAddresses([...currentState])
