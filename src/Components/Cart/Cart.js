@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
+import firebase from 'firebase/app'
 import CartContext from '../../Contexts/CartContext'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -167,28 +168,52 @@ export default () => {
         }
 
         <div className="cart-product-checkout-wrapper" id="cart-product-checkout-wrapper">
-          <Link
-            to={{
-              pathname: '/checkout',
-              cartProps: {
-                products: products
-              } 
-            }}
-            onClick={() => {
-              const htmlElement = document.getElementById('html')
-              const cartWrapperElement = document.getElementById('cart-wrapper')
-              cartWrapperElement.classList.toggle('cart-slide')
+          {
+            firebase.auth().currentUser === null ? (
+              <Link
+                to={{
+                  pathname: '/create-account'
+                }}
+                onClick={() => {
+                  const htmlElement = document.getElementById('html')
+                  const cartWrapperElement = document.getElementById('cart-wrapper')
+                  cartWrapperElement.classList.toggle('cart-slide')
 
-              setTimeout(() => {
-                htmlElement.classList.toggle('html-overflow-hidden')
-                setIsCartOpen(false)
-              }, 700)
-            }}
-          >
-            <button className="cart-product-checkout-btn" type="button">
-              Checkout
-            </button>
-          </Link>
+                  setTimeout(() => {
+                    htmlElement.classList.toggle('html-overflow-hidden')
+                    setIsCartOpen(false)
+                  }, 700)
+                }}
+              >
+                <button className="cart-product-checkout-btn" type="button">
+                  Checkout
+                </button>
+              </Link>
+            ) : (
+              <Link
+                to={{
+                  pathname: '/checkout',
+                  cartProps: {
+                    products: products
+                  } 
+                }}
+                onClick={() => {
+                  const htmlElement = document.getElementById('html')
+                  const cartWrapperElement = document.getElementById('cart-wrapper')
+                  cartWrapperElement.classList.toggle('cart-slide')
+
+                  setTimeout(() => {
+                    htmlElement.classList.toggle('html-overflow-hidden')
+                    setIsCartOpen(false)
+                  }, 700)
+                }}
+              >
+                <button className="cart-product-checkout-btn" type="button">
+                  Checkout
+                </button>
+              </Link>
+            )
+          }
         </div>
       </div>
     </div>

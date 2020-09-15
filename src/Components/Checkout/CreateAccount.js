@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import firebase from 'firebase/app';
 import 'firebase/auth'
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import CartContext from '../../Contexts/CartContext';
 
 export default () => {
   const [email, setEmail] = useState("")
@@ -9,6 +10,9 @@ export default () => {
   const [noPasswordErr, setNoPasswordErr] = useState(false)
   const [password, setPassword] = useState("")
   const [successfulSubmition, setSuccessfulSubmition] = useState(false);
+  const {
+    products
+  } = useContext(CartContext)
 
   const handleShippingToggle = () => {
     const shippingWrapperElmnt = document.getElementById('shipping-wrapper')
@@ -61,20 +65,15 @@ export default () => {
           </div>
 
           {
-            successfulSubmition || firebase.auth().uuid ? (
-              <div>
-                <div>
-                  Success! You can now continue to checkout.
-                </div>
-
-                <div>
-                  <Link
-                    to="/checkout"
-                  >
-                    Continue to checkout
-                  </Link>
-                </div>
-              </div>
+            successfulSubmition || firebase.auth().currentUser ? (
+              <Redirect
+                to={{
+                  pathname: '/checkout',
+                  cartProps: {
+                    products: products
+                  } 
+                }}
+              />
             ) : (
               <form>
                 <div style={{ width: "100%", marginBottom: "40px" }}>
@@ -121,15 +120,6 @@ export default () => {
                     Create
                   </button>
                 </div>
-
-                <div style={{ height: "50px" }}>
-                  <button
-                    style={{ height: "100%", padding: "1rem 4rem", borderRadius: "5px", border: "none", background: "#45b3e0", color: "#1d1d1d", fontWeight: "500", fontSize: "15px", cursor: "pointer" }}
-                    onClick={handleSignoutClick}
-                  >
-                    Sign Out
-                  </button>
-                </div>
               </form>
             )
           }
@@ -137,6 +127,10 @@ export default () => {
         </div>
 
         <div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "80px", fontSize: "17px" }}>
+            You have to create an account before you can checkout!
+          </div>
+
           <div id="shipping-wrapper" className="shipping-wrapper">
             <div className="shipping-toggle-wrapper" onClick={handleShippingToggle}>
               <div className="shipping-toggle-header">
