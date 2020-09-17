@@ -8,7 +8,7 @@ import Payment from './Payment';
 import { firestore } from '../../Config/fbConfig'
 import 'firebase/auth'
 import firebase from 'firebase/app';
-import {CardElement, useElements, useStripe} from '@stripe/react-stripe-js';
+import {CardElement, useElements, useStripe, PaymentRequestButtonElement} from '@stripe/react-stripe-js';
 // import axios from 'axios'
 
 
@@ -52,6 +52,7 @@ export default () => {
   const [ noPhoneNumber, setNoPhoneNumber ] = useState(false)
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
+  const [ paymentRequest, setPaymentRequest ] = useState(null)
   const stripe = useStripe();
   const elements = useElements();
 
@@ -91,6 +92,26 @@ export default () => {
       }).catch((err) => {
         console.log(err)
       })
+    }
+
+    if (stripe) {
+      const pr = stripe.paymentRequest({
+        country: 'US',
+        currency: 'usd',
+        total: {
+          label: 'Demo total',
+          amount: subtotal,
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
+
+      // Check the availability of the Payment Request API.
+      pr.canMakePayment().then(result => {
+        if (result) {
+          setPaymentRequest(pr);
+        }
+      });
     }
 
   }, [products])
@@ -756,17 +777,14 @@ export default () => {
               </div>
 
               <div className="checkout-express-checkout-btns-wrapper">
-                <div className="checkout-express-checkout-btn-wrapper">
-                  <button className="checkout-express-checkout-btn">Google Pay</button>
-                </div>
+                {
+                  paymentRequest ? (
+                    <div className="checkout-express-checkout-btn-wrapper">
+                      <PaymentRequestButtonElement options={{paymentRequest}} />
+                    </div>
+                  ) : null
+                }
 
-                <div className="checkout-express-checkout-btn-wrapper">
-                  <button className="checkout-express-checkout-btn">Apple Pay</button>
-                </div>
-
-                <div className="checkout-express-checkout-btn-wrapper">
-                  <button className="checkout-express-checkout-btn">Amazon Pay</button>
-                </div>
 
                 <div className="checkout-express-checkout-btn-wrapper">
                   <button className="checkout-express-checkout-btn">Paypal</button>
