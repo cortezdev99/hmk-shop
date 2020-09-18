@@ -55,51 +55,157 @@ export default () => {
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const [ paymentRequest, setPaymentRequest ] = useState(null)
   const [ expressCheckoutPaymentIntent, setExpressCheckoutPaymentIntent ] = useState(null)
+  const [ expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting ] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
 
-  if (paymentRequest && expressCheckoutPaymentIntent) {
-    console.log('HIT CONDITIONAL')
-    paymentRequest.on('token', async (ev) => {
-      console.log(ev.token.id)
-      const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
-        expressCheckoutPaymentIntent.data.client_secret,
-        {payment_method: ev.token.id},
-        {handleActions: false}
-      );
+  // useEffect(() => {
+  //   if (paymentRequest) {
+  //     paymentRequest.on("paymentmethod", (ev) => {
+  //       const { setupIntent, error } = await stripe.confirmCardSetup(
+  //         customerData.setup_secret,
+  //         {
+  //           payment_method: {
+  //             card: elements.getElement(CardElement),
+  //             billing_details: {
+  //               name: cardholderName,
+  //             },
+  //           },
+  //         }
+  //       );
     
-      if (confirmError) {
-        console.log('ERROR')
-        // Report to the browser that the payment failed, prompting it to
-        // re-show the payment interface, or show an error message and close
-        // the payment interface.
-        ev.complete('fail');
-      } else {
-        // Report to the browser that the confirmation was successful, prompting
-        // it to close the browser payment method collection interface.
-        console.log('SUCCESS')
-        ev.complete('success');
-        // Check if the PaymentIntent requires any actions and if so let Stripe.js
-        // handle the flow. If using an API version older than "2019-02-11" instead
-        // instead check for: `paymentIntent.status === "requires_source_action"`.
-        if (paymentIntent.status === "requires_action") {
-          // Let Stripe.js handle the rest of the payment flow.
-          // const {error} = await stripe.confirmCardPayment(expressCheckoutPaymentIntent.client_secret);
-          // if (error) {
-          //   console.log('ERROR')
-          //   // The payment failed -- ask your customer for a new payment method.
-          // } else {
-          //   console.log('SUCCESS')
-          //   // The payment has succeeded.
-          // }
-          console.log('REQUIRED ACTION')
-        } else {
-          console.log('SUCCESS')
-          // The payment has succeeded.
+  //       if (error) {
+  //         console.log(error)
+  //         return;
+  //       }
+    
+  //       firebase
+  //       .firestore()
+  //       .collection('stripe_customers')
+  //       .doc(userUID)
+  //       .collection('payment_methods')
+  //       .add({ id: setupIntent.payment_method })
+  //       .then((resp) => {
+  //           resp.onSnapshot({
+  //             // Listen for document metadata changes
+  //             includeMetadataChanges: true
+  //         }, (doc) => {
+  //           if (doc.data().card) {
+  //             if (noPaymentMethods) {
+  //               setNoPaymentMethods(false)
+  //             }
+            
+  //             const currentState = paymentMethods
+  //             currentState.push(doc.data());
+  //             setPaymentMethods([...currentState])
+  //           }
+  //         });
+  //       })
+  //     })
+  //   }
+  // }, [stripe, paymentRequest])
+
+  useEffect(() => {
+    if (paymentRequest && !expressCheckoutPaymentSubmitting) {
+
+
+      paymentRequest.on('token', async (ev) => {
+        setExpressCheckoutPaymentSubmitting(true)
+        console.log(ev, 'EVENT')
+        let test = []
+        products.map((product) => {
+          const productId = product[0].product.id
+          const productPrice = product[0].product.price
+          const title = product[0].product.title
+          const quantity = product[4].quantity
+          const productColor = product[2].color
+          const productSize = product[1].size
+          test.push({ productId, title, productPrice, quantity, productColor, productSize })
+        })
+    
+        const data = {
+          products: test
         }
-      }
-    });
-  }
+    
+        const createExpressCheckoutPaymentIntent = firebase.functions().httpsCallable('createExpressCheckoutPaymentIntent');
+        createExpressCheckoutPaymentIntent(data).then(async (result) => {
+          // setExpressCheckoutPaymentIntent(result)
+          const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
+            result.data.client_secret,
+            {
+              // payment_method: ev.token.id
+              // payment_method_data: {
+              //   type: "card",
+              //   card: ev.token.id
+              // }
+              payment_method: {
+                // payemt_method_data: {
+                //   type: "card",
+                //   card: {
+                //     token: ev.token.id
+                //   },
+                // }
+
+                type: "card",
+                card: {
+                  token: ev.token.id
+                }
+              }
+
+              // payment_method_data: {
+              //   type: "card",
+              //   card: {
+              //       token: ev.token.id
+              //   }
+              // }
+            }
+          );
+        
+    
+          console.log('HITTTTING')
+          if (confirmError) {
+            console.log(confirmError)
+            // Report to the browser that the payment failed, prompting it to
+            // re-show the payment interface, or show an error message and close
+            // the payment interface.
+            ev.complete('fail');
+          } else {
+            // Report to the browser that the confirmation was successful, prompting
+            // it to close the browser payment method collection interface.
+            console.log('SUCCESS')
+            ev.complete('success');
+            // Check if the PaymentIntent requires any actions and if so let Stripe.js
+            // handle the flow. If using an API version older than "2019-02-11" instead
+            // instead check for: `paymentIntent.status === "requires_source_action"`.
+            if (paymentIntent.status === "requires_action") {
+              // Let Stripe.js handle the rest of the payment flow.
+              const {error} = await stripe.confirmCardPayment(result.data.client_secret);
+              if (error) {
+                console.log(error)
+                // The payment failed -- ask your customer for a new payment method.
+              } else {
+                console.log('SUCCESS')
+                // The payment has succeeded.
+              }
+              console.log('REQUIRED ACTION')
+            } else {
+              console.log('SUCCESS')
+              // The payment has succeeded.
+            }
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
+       
+        setExpressCheckoutPaymentSubmitting(false)
+      });
+    }
+  }, [stripe, paymentRequest])
+
+  // if (paymentRequest && !expressCheckoutPaymentSubmitting) {
+  //   console.log('HIT CONDITIONAL')
+    
+  // }
 
   const {
     products
@@ -168,28 +274,6 @@ export default () => {
           setPaymentRequest(paymentRequest);
         }
       });
-
-      let test = []
-      products.map((product) => {
-        const productId = product[0].product.id
-        const productPrice = product[0].product.price
-        const title = product[0].product.title
-        const quantity = product[4].quantity
-        const productColor = product[2].color
-        const productSize = product[1].size
-        test.push({ productId, title, productPrice, quantity, productColor, productSize })
-      })
-  
-      const data = {
-        products: test
-      }
-  
-      const createExpressCheckoutPaymentIntent = firebase.functions().httpsCallable('createExpressCheckoutPaymentIntent');
-      createExpressCheckoutPaymentIntent(data).then((result) => {
-        setExpressCheckoutPaymentIntent(result)
-      }).catch((err) => {
-        console.log(err)
-      })
     }
   }, [products, stripe])
 
@@ -819,6 +903,30 @@ export default () => {
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
   }
 
+  const handleExpressPaymentClick = () => {
+    // let test = []
+    // products.map((product) => {
+    //   const productId = product[0].product.id
+    //   const productPrice = product[0].product.price
+    //   const title = product[0].product.title
+    //   const quantity = product[4].quantity
+    //   const productColor = product[2].color
+    //   const productSize = product[1].size
+    //   test.push({ productId, title, productPrice, quantity, productColor, productSize })
+    // })
+
+    // const data = {
+    //   products: test
+    // }
+
+    // const createExpressCheckoutPaymentIntent = firebase.functions().httpsCallable('createExpressCheckoutPaymentIntent');
+    // createExpressCheckoutPaymentIntent(data).then((result) => {
+    //   setExpressCheckoutPaymentIntent(result)
+    // }).catch((err) => {
+    //   console.log(err)
+    // })
+  }
+
   const cardElementOptions = {
     style: {
       base: {
@@ -859,7 +967,10 @@ export default () => {
                     <div
                       className="checkout-express-checkout-btn-wrapper"
                     >
-                      <PaymentRequestButtonElement options={{paymentRequest}} />
+                      <PaymentRequestButtonElement
+                        options={{paymentRequest}}
+                        onClick={handleExpressPaymentClick}
+                      />
                     </div>
                   ) : null
                 }
