@@ -8,6 +8,7 @@ import Payment from './Payment';
 import { firestore } from '../../Config/fbConfig'
 import 'firebase/auth'
 import firebase from 'firebase/app';
+import 'firebase/functions'
 import {CardElement, useElements, useStripe, PaymentRequestButtonElement} from '@stripe/react-stripe-js';
 // import axios from 'axios'
 
@@ -53,8 +54,52 @@ export default () => {
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const [ paymentRequest, setPaymentRequest ] = useState(null)
+  const [ expressCheckoutPaymentIntent, setExpressCheckoutPaymentIntent ] = useState(null)
   const stripe = useStripe();
   const elements = useElements();
+
+  if (paymentRequest && expressCheckoutPaymentIntent) {
+    console.log('HIT CONDITIONAL')
+    paymentRequest.on('token', async (ev) => {
+      console.log(ev.token.id)
+      const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
+        expressCheckoutPaymentIntent.data.client_secret,
+        {payment_method: ev.token.id},
+        {handleActions: false}
+      );
+    
+      if (confirmError) {
+        console.log('ERROR')
+        // Report to the browser that the payment failed, prompting it to
+        // re-show the payment interface, or show an error message and close
+        // the payment interface.
+        ev.complete('fail');
+      } else {
+        // Report to the browser that the confirmation was successful, prompting
+        // it to close the browser payment method collection interface.
+        console.log('SUCCESS')
+        ev.complete('success');
+        // Check if the PaymentIntent requires any actions and if so let Stripe.js
+        // handle the flow. If using an API version older than "2019-02-11" instead
+        // instead check for: `paymentIntent.status === "requires_source_action"`.
+        if (paymentIntent.status === "requires_action") {
+          // Let Stripe.js handle the rest of the payment flow.
+          // const {error} = await stripe.confirmCardPayment(expressCheckoutPaymentIntent.client_secret);
+          // if (error) {
+          //   console.log('ERROR')
+          //   // The payment failed -- ask your customer for a new payment method.
+          // } else {
+          //   console.log('SUCCESS')
+          //   // The payment has succeeded.
+          // }
+          console.log('REQUIRED ACTION')
+        } else {
+          console.log('SUCCESS')
+          // The payment has succeeded.
+        }
+      }
+    });
+  }
 
   const {
     products
@@ -95,26 +140,58 @@ export default () => {
     }
 
     if (stripe) {
-      const pr = stripe.paymentRequest({
+      const paymentRequest = stripe.paymentRequest({
         country: 'US',
         currency: 'usd',
         total: {
           label: 'Demo total',
-          amount: subtotal,
+          amount: 1099,
         },
-        requestPayerName: true,
-        requestPayerEmail: true,
+      
+        requestShipping: true,
+        // `shippingOptions` is optional at this point:
+        shippingOptions: [
+          // The first shipping option in this list appears as the default
+          // option in the browser payment interface.
+          {
+            id: 'free-shipping',
+            label: 'Free shipping',
+            detail: 'Arrives in 5 to 7 days',
+            amount: 0,
+          },
+        ],
       });
 
       // Check the availability of the Payment Request API.
-      pr.canMakePayment().then(result => {
+      paymentRequest.canMakePayment().then(result => {
         if (result) {
-          setPaymentRequest(pr);
+          setPaymentRequest(paymentRequest);
         }
       });
-    }
 
-  }, [products])
+      let test = []
+      products.map((product) => {
+        const productId = product[0].product.id
+        const productPrice = product[0].product.price
+        const title = product[0].product.title
+        const quantity = product[4].quantity
+        const productColor = product[2].color
+        const productSize = product[1].size
+        test.push({ productId, title, productPrice, quantity, productColor, productSize })
+      })
+  
+      const data = {
+        products: test
+      }
+  
+      const createExpressCheckoutPaymentIntent = firebase.functions().httpsCallable('createExpressCheckoutPaymentIntent');
+      createExpressCheckoutPaymentIntent(data).then((result) => {
+        setExpressCheckoutPaymentIntent(result)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+  }, [products, stripe])
 
   const handleAddPaymentMethod = async (ev) => {
     ev.preventDefault();
@@ -779,7 +856,9 @@ export default () => {
               <div className="checkout-express-checkout-btns-wrapper">
                 {
                   paymentRequest ? (
-                    <div className="checkout-express-checkout-btn-wrapper">
+                    <div
+                      className="checkout-express-checkout-btn-wrapper"
+                    >
                       <PaymentRequestButtonElement options={{paymentRequest}} />
                     </div>
                   ) : null
