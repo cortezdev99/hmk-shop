@@ -59,56 +59,71 @@ export default () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  // useEffect(() => {
-  //   if (paymentRequest) {
-  //     paymentRequest.on("paymentmethod", (ev) => {
-  //       const { setupIntent, error } = await stripe.confirmCardSetup(
-  //         customerData.setup_secret,
-  //         {
-  //           payment_method: {
-  //             card: elements.getElement(CardElement),
-  //             billing_details: {
-  //               name: cardholderName,
-  //             },
-  //           },
-  //         }
-  //       );
-    
-  //       if (error) {
-  //         console.log(error)
-  //         return;
-  //       }
-    
-  //       firebase
-  //       .firestore()
-  //       .collection('stripe_customers')
-  //       .doc(userUID)
-  //       .collection('payment_methods')
-  //       .add({ id: setupIntent.payment_method })
-  //       .then((resp) => {
-  //           resp.onSnapshot({
-  //             // Listen for document metadata changes
-  //             includeMetadataChanges: true
-  //         }, (doc) => {
-  //           if (doc.data().card) {
-  //             if (noPaymentMethods) {
-  //               setNoPaymentMethods(false)
-  //             }
-            
-  //             const currentState = paymentMethods
-  //             currentState.push(doc.data());
-  //             setPaymentMethods([...currentState])
-  //           }
-  //         });
-  //       })
-  //     })
-  //   }
-  // }, [stripe, paymentRequest])
+  useEffect(() => {
+    if (stripe) {
+      let productObjectsToDisplayInCheckout = []
+
+      products.map((product) => {
+        const productPrice = product[0].product.price
+        const title = product[0].product.title
+        const quantity = product[4].quantity
+
+        productObjectsToDisplayInCheckout.push({
+          amount: (productPrice * quantity) * 100,
+          label: title
+        })
+      })
+
+      const expressCheckoutSubtotal = products.reduce((accum, currentVal) => {
+        return accum += currentVal[4].quantity * currentVal[0].product.price
+      }, 0)
+
+      const paymentRequest = stripe.paymentRequest({
+        country: 'US',
+        currency: 'usd',
+        total: {
+          label: 'Purchase total',
+          amount: expressCheckoutSubtotal,
+        },
+        displayItems: productObjectsToDisplayInCheckout,
+        requestPayerName: true,
+        requestPayerEmail: true,
+        requestShipping: true,
+        // `shippingOptions` is optional at this point:
+        shippingOptions: [
+          // The first shipping option in this list appears as the default
+          // option in the browser payment interface.
+          {
+            id: 'free-shipping',
+            label: 'Free shipping',
+            detail: 'Arrives in 5 to 7 days',
+            amount: 0,
+          },
+        ],
+      });
+
+      // Check the availability of the Payment Request API.
+      paymentRequest.canMakePayment().then(result => {
+        if (result) {
+          setPaymentRequest(paymentRequest);
+        }
+      });
+    }
+  }, [stripe, products])
+
+  useEffect(() => {
+   if (paymentRequest) {
+     paymentRequest.on('shippingaddresschange', (ev) => {
+      ev.updateWith({
+        status: 'success'
+        // shippingOptions: result.supportedShippingOptions,
+      });
+     })
+   }
+  }, [stripe, paymentRequest])
 
   useEffect(() => {
     if (paymentRequest && !expressCheckoutPaymentSubmitting) {
-
-
       paymentRequest.on('token', async (ev) => {
         setExpressCheckoutPaymentSubmitting(true)
         console.log(ev, 'EVENT')
@@ -133,34 +148,17 @@ export default () => {
           const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
             result.data.client_secret,
             {
-              // payment_method: ev.token.id
-              // payment_method_data: {
-              //   type: "card",
-              //   card: ev.token.id
-              // }
               payment_method: {
-                // payemt_method_data: {
-                //   type: "card",
-                //   card: {
-                //     token: ev.token.id
-                //   },
-                // }
-
                 type: "card",
                 card: {
                   token: ev.token.id
                 }
               }
-
-              // payment_method_data: {
-              //   type: "card",
-              //   card: {
-              //       token: ev.token.id
-              //   }
-              // }
             }
           );
         
+
+          console.log(paymentIntent, 'PAYMENT INTENT')
     
           console.log('HITTTTING')
           if (confirmError) {
@@ -244,38 +242,7 @@ export default () => {
         console.log(err)
       })
     }
-
-    if (stripe) {
-      const paymentRequest = stripe.paymentRequest({
-        country: 'US',
-        currency: 'usd',
-        total: {
-          label: 'Demo total',
-          amount: 1099,
-        },
-      
-        requestShipping: true,
-        // `shippingOptions` is optional at this point:
-        shippingOptions: [
-          // The first shipping option in this list appears as the default
-          // option in the browser payment interface.
-          {
-            id: 'free-shipping',
-            label: 'Free shipping',
-            detail: 'Arrives in 5 to 7 days',
-            amount: 0,
-          },
-        ],
-      });
-
-      // Check the availability of the Payment Request API.
-      paymentRequest.canMakePayment().then(result => {
-        if (result) {
-          setPaymentRequest(paymentRequest);
-        }
-      });
-    }
-  }, [products, stripe])
+  }, [products])
 
   const handleAddPaymentMethod = async (ev) => {
     ev.preventDefault();
