@@ -10,6 +10,7 @@ import 'firebase/auth'
 import firebase from 'firebase/app';
 import 'firebase/functions'
 import {CardElement, useElements, useStripe, PaymentRequestButtonElement} from '@stripe/react-stripe-js';
+import PaypalBtn from '../paypal/PaypalBtn';
 // import axios from 'axios'
 
 
@@ -997,7 +998,17 @@ export default () => {
 
 
                 <div className="checkout-express-checkout-btn-wrapper">
-                  <button className="checkout-express-checkout-btn">Paypal</button>
+                  <PaypalBtn
+                    options={{
+                      disableFunding: "credit,card",
+                      clientId: "Ad5t87C5PSZBkusJGq_zTh83uFWQDc9-FPzrxh13HNVTqgCAy6vYA76v4DkjrBeWFNxnI2pOXaMDcTEx"
+                    }}
+                    amount = {200}
+                    currency = {'USD'}
+                    onSuccess={() => {
+                      console.log('Hit')
+                    }}
+                    />
                 </div>
               </div>
             </div>
