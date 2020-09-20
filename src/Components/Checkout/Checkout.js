@@ -82,7 +82,7 @@ export default () => {
         currency: 'usd',
         total: {
           label: 'Purchase total',
-          amount: expressCheckoutSubtotal,
+          amount: expressCheckoutSubtotal * 100,
         },
         displayItems: productObjectsToDisplayInCheckout,
         requestPayerName: true,
