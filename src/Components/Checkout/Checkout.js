@@ -68,7 +68,7 @@ export default () => {
         const title = product[0].product.title
         const quantity = product[4].quantity
 
-        productObjectsToDisplayInCheckout.push({
+        return productObjectsToDisplayInCheckout.push({
           amount: (productPrice * quantity) * 100,
           label: title
         })
@@ -109,7 +109,7 @@ export default () => {
         }
       });
     }
-  }, [stripe, products])
+  }, [stripe])
 
   useEffect(() => {
    if (paymentRequest) {
@@ -135,7 +135,7 @@ export default () => {
           const quantity = product[4].quantity
           const productColor = product[2].color
           const productSize = product[1].size
-          test.push({ productId, title, productPrice, quantity, productColor, productSize })
+          return test.push({ productId, title, productPrice, quantity, productColor, productSize })
         })
     
         const data = {
@@ -160,7 +160,7 @@ export default () => {
 
           console.log(paymentIntent, 'PAYMENT INTENT')
     
-          console.log('HITTTTING')
+          // console.log('HITTTTING')
           if (confirmError) {
             console.log(confirmError)
             // Report to the browser that the payment failed, prompting it to
@@ -170,7 +170,8 @@ export default () => {
           } else {
             // Report to the browser that the confirmation was successful, prompting
             // it to close the browser payment method collection interface.
-            console.log('SUCCESS')
+            // console.log('SUCCESS')
+            console.log('hitting else conditional')
             ev.complete('success');
             // Check if the PaymentIntent requires any actions and if so let Stripe.js
             // handle the flow. If using an API version older than "2019-02-11" instead
@@ -182,13 +183,102 @@ export default () => {
                 console.log(error)
                 // The payment failed -- ask your customer for a new payment method.
               } else {
-                console.log('SUCCESS')
+                const shippingDetails = {
+                  name: ev.payerName,
+                  address: {
+                    line1: ev.shippingAddress.addressLine,
+                    postal_code: ev.shippingAddress.postalCode,
+                    city: ev.shippingAddress.city,
+                    state: ev.shippingAddress.region,
+                    country: ev.shippingAddress.country
+                  }
+                }
+              
+                let expressCheckoutPurchasedProducts = []
+                products.map((product) => {
+                  const productId = product[0].product.id
+                  const productPrice = product[0].product.price
+                  const title = product[0].product.title
+                  const quantity = product[4].quantity
+                  const productColor = product[2].color
+                  const productSize = product[1].size
+                  expressCheckoutPurchasedProducts.push({ productId, title, productPrice, quantity, productColor, productSize })
+                })
+          
+                const data = {
+                  payment_method: paymentIntent,
+                  currency: 'usd',
+                  status: 'new',
+                  shipping_details: shippingDetails,
+                  products: test,
+                  contact_info: {
+                    email: ev.payerEmail,
+                    phone: ev.payerPhone
+                  },
+                  user: firebase.auth().currentUser.uid
+                }
+          
+                firebase
+                .firestore()
+                .collection('stripe_customers')
+                .doc(userUID)
+                .collection('payments')
+                .add(data).then((docRef) => {
+                  // SUCCESS PUSH TO DASHBOARD
+                  console.log('SUCCESS PUSH TO DASHBOARD')
+                }).catch((err) => {
+                  alert(err)
+                })
                 // The payment has succeeded.
               }
-              console.log('REQUIRED ACTION')
+              // console.log('REQUIRED ACTION')
             } else {
-              console.log('SUCCESS')
-              // The payment has succeeded.
+              const shippingDetails = {
+                name: ev.payerName,
+                address: {
+                  line1: ev.shippingAddress.addressLine,
+                  postal_code: ev.shippingAddress.postalCode,
+                  city: ev.shippingAddress.city,
+                  state: ev.shippingAddress.region,
+                  country: ev.shippingAddress.country
+                }
+              }
+            
+              let expressCheckoutPurchasedProducts = []
+              products.map((product) => {
+                const productId = product[0].product.id
+                const productPrice = product[0].product.price
+                const title = product[0].product.title
+                const quantity = product[4].quantity
+                const productColor = product[2].color
+                const productSize = product[1].size
+                expressCheckoutPurchasedProducts.push({ productId, title, productPrice, quantity, productColor, productSize })
+              })
+        
+              const data = {
+                payment_method: paymentIntent,
+                currency: 'usd',
+                status: 'new',
+                shipping_details: shippingDetails,
+                products: test,
+                contact_info: {
+                  email: ev.payerEmail,
+                  phone: ev.payerPhone
+                },
+                user: firebase.auth().currentUser.uid
+              }
+        
+              firebase
+              .firestore()
+              .collection('stripe_customers')
+              .doc(userUID)
+              .collection('payments')
+              .add(data).then((docRef) => {
+                // SUCCESS PUSH TO DASHBOARD
+                console.log('SUCCESS PUSH TO DASHBOARD')
+              }).catch((err) => {
+                alert(err)
+              })
             }
           }
         }).catch((err) => {
@@ -380,7 +470,7 @@ export default () => {
     }
 
     return (
-      <div id="checkout-payment-methods-wrapper" id="checkout-payment-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
+      <div id="checkout-payment-methods-wrapper" style={{ height: "100%", maxHeight: "62px", overflow: "hidden", paddingBottom: "40px", borderBottom: "1px solid #CCC", width: "100%", transition: "max-height 0.7s" }}>
         <div onClick={handleOpeningInnerContent} style={{ cursor: "pointer", fontSize: '18px', padding: "0px 20px", paddingBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div className="shipping-toggle-header" style={{ display: "flex" }}>
             Choose from your payment methods
@@ -835,7 +925,7 @@ export default () => {
             state,
             country: region
           }
-        }) .then((resp) => {
+        }).then((resp) => {
           resp.onSnapshot({
             // Listen for document metadata changes
             includeMetadataChanges: true
