@@ -989,6 +989,7 @@ export default () => {
                     >
                       <PaymentRequestButtonElement
                         options={{paymentRequest}}
+                        id="checkout-payment-request-button-element"
                       />
                     </div>
                   ) : null
