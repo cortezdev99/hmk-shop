@@ -54,7 +54,6 @@ export default () => {
   const [ noPaymentMethods, setNoPaymentMethods ] = useState(false)
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const [ paymentRequest, setPaymentRequest ] = useState(null)
-  const [ expressCheckoutPaymentIntent, setExpressCheckoutPaymentIntent ] = useState(null)
   const [ expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting ] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
@@ -89,10 +88,7 @@ export default () => {
         requestPayerName: true,
         requestPayerEmail: true,
         requestShipping: true,
-        // `shippingOptions` is optional at this point:
         shippingOptions: [
-          // The first shipping option in this list appears as the default
-          // option in the browser payment interface.
           {
             id: 'free-shipping',
             label: 'Free shipping',
@@ -102,7 +98,6 @@ export default () => {
         ],
       });
 
-      // Check the availability of the Payment Request API.
       paymentRequest.canMakePayment().then(result => {
         if (result) {
           setPaymentRequest(paymentRequest);
@@ -116,7 +111,6 @@ export default () => {
      paymentRequest.on('shippingaddresschange', (ev) => {
       ev.updateWith({
         status: 'success'
-        // shippingOptions: result.supportedShippingOptions,
       });
      })
    }
@@ -144,7 +138,6 @@ export default () => {
     
         const createExpressCheckoutPaymentIntent = firebase.functions().httpsCallable('createExpressCheckoutPaymentIntent');
         createExpressCheckoutPaymentIntent(data).then(async (result) => {
-          // setExpressCheckoutPaymentIntent(result)
           const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
             result.data.client_secret,
             {
@@ -160,27 +153,22 @@ export default () => {
 
           console.log(paymentIntent, 'PAYMENT INTENT')
     
-          // console.log('HITTTTING')
           if (confirmError) {
-            console.log(confirmError)
+            /////////////////
+            // TODO /////////
             // Report to the browser that the payment failed, prompting it to
             // re-show the payment interface, or show an error message and close
             // the payment interface.
             ev.complete('fail');
           } else {
-            // Report to the browser that the confirmation was successful, prompting
-            // it to close the browser payment method collection interface.
-            // console.log('SUCCESS')
-            console.log('hitting else conditional')
             ev.complete('success');
-            // Check if the PaymentIntent requires any actions and if so let Stripe.js
-            // handle the flow. If using an API version older than "2019-02-11" instead
-            // instead check for: `paymentIntent.status === "requires_source_action"`.
+
             if (paymentIntent.status === "requires_action") {
-              // Let Stripe.js handle the rest of the payment flow.
               const {error} = await stripe.confirmCardPayment(result.data.client_secret);
+
               if (error) {
-                console.log(error)
+                ///////////////
+                //// TODO /////
                 // The payment failed -- ask your customer for a new payment method.
               } else {
                 const shippingDetails = {
@@ -274,6 +262,8 @@ export default () => {
               .doc(userUID)
               .collection('payments')
               .add(data).then((docRef) => {
+                //////////////
+                //// TODO ////
                 // SUCCESS PUSH TO DASHBOARD
                 console.log('SUCCESS PUSH TO DASHBOARD')
               }).catch((err) => {
@@ -282,6 +272,8 @@ export default () => {
             }
           }
         }).catch((err) => {
+          //////////////
+          //// TODO ////
           console.log(err)
         })
        
@@ -289,11 +281,6 @@ export default () => {
       });
     }
   }, [stripe, paymentRequest])
-
-  // if (paymentRequest && !expressCheckoutPaymentSubmitting) {
-  //   console.log('HIT CONDITIONAL')
-    
-  // }
 
   const {
     products
@@ -960,30 +947,6 @@ export default () => {
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
   }
 
-  const handleExpressPaymentClick = () => {
-    // let test = []
-    // products.map((product) => {
-    //   const productId = product[0].product.id
-    //   const productPrice = product[0].product.price
-    //   const title = product[0].product.title
-    //   const quantity = product[4].quantity
-    //   const productColor = product[2].color
-    //   const productSize = product[1].size
-    //   test.push({ productId, title, productPrice, quantity, productColor, productSize })
-    // })
-
-    // const data = {
-    //   products: test
-    // }
-
-    // const createExpressCheckoutPaymentIntent = firebase.functions().httpsCallable('createExpressCheckoutPaymentIntent');
-    // createExpressCheckoutPaymentIntent(data).then((result) => {
-    //   setExpressCheckoutPaymentIntent(result)
-    // }).catch((err) => {
-    //   console.log(err)
-    // })
-  }
-
   const cardElementOptions = {
     style: {
       base: {
@@ -1026,7 +989,6 @@ export default () => {
                     >
                       <PaymentRequestButtonElement
                         options={{paymentRequest}}
-                        onClick={handleExpressPaymentClick}
                       />
                     </div>
                   ) : null
