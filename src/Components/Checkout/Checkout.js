@@ -759,6 +759,8 @@ export default () => {
     )
   }
 
+  console.log(userUID)
+
   // Handle card actions like 3D Secure
   async function handleCardAction(payment, docId) {
     const { error, paymentIntent } = await stripe.handleCardAction(
@@ -951,20 +953,21 @@ export default () => {
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
   }
 
-  const handleSuccessfulPayPalPayment = (ev) => {
-    console.log(ev)
+  const handleSuccessfulPayPalPayment = async (ev) => {
+    // console.log(ev)
     const shippingDetails = {
       name: ev.purchase_units[0].shipping.name.full_name,
       address: {
-        line1: ev.purchase_units[0].shipping.address_line_1,
-        postal_code: ev.purchase_units[0].shipping.postal_code,
-        city: ev.purchase_units[0].shipping.admin_area_2,
-        state: ev.purchase_units[0].shipping.admin_area_1,
-        country: ev.purchase_units[0].shipping.country_code
+        line1: ev.purchase_units[0].shipping.address.address_line_1,
+        postal_code: ev.purchase_units[0].shipping.address.postal_code,
+        city: ev.purchase_units[0].shipping.address.admin_area_2,
+        state: ev.purchase_units[0].shipping.address.admin_area_1,
+        country: ev.purchase_units[0].shipping.address.country_code
       }
     }
-
-    console.log('PASSED SHIPPING DETAILS')
+  // console.log(ev.purchase_units[0].shippingSqswZCZAQDE)
+// 
+    // console.log('PASSED SHIPPING DETAILS')
   
     let expressCheckoutPurchasedProducts = []
     products.map((product) => {
@@ -977,7 +980,7 @@ export default () => {
       expressCheckoutPurchasedProducts.push({ productId, title, productPrice, quantity, productColor, productSize })
     })
 
-    console.log('PASSED PRODUCTS')
+    // console.log('PASSED PRODUCTS')
 
     const data = {
       payment_method: ev.purchase_units[0].payments.captures[0].id,
@@ -993,23 +996,23 @@ export default () => {
       user: firebase.auth().currentUser.uid
     }
 
-    console.log('PASSED DATA OBJECT')
+    // console.log('PASSED DATA OBJECT', userUID)
 
-    firebase
+    await firebase
     .firestore()
     .collection('stripe_customers')
     .doc(userUID)
     .collection('payments')
-    .add(data)
-    .then(() => {
+    .add(data).then((docRef) => {
+      //////////////
+      //// TODO ////
       // SUCCESS PUSH TO DASHBOARD
       console.log('SUCCESS PUSH TO DASHBOARD')
     }).catch((err) => {
-      console.log(err)
       alert(err)
     })
 
-    console.log('PASSED UPLOADING TO FIRESTORE')
+    // console.log('PASSED UPLOADING TO FIRESTORE')
   }
 
   const cardElementOptions = {
