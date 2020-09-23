@@ -199,11 +199,12 @@ export default () => {
                   currency: 'usd',
                   status: 'new',
                   shipping_details: shippingDetails,
-                  products: test,
+                  products: expressCheckoutPurchasedProducts,
                   contact_info: {
                     email: ev.payerEmail,
                     phone: ev.payerPhone
                   },
+                  expressCheckoutPurchase: true,
                   user: firebase.auth().currentUser.uid
                 }
           
@@ -249,11 +250,12 @@ export default () => {
                 currency: 'usd',
                 status: 'new',
                 shipping_details: shippingDetails,
-                products: test,
+                products: expressCheckoutPurchasedProducts,
                 contact_info: {
                   email: ev.payerEmail,
                   phone: ev.payerPhone
                 },
+                expressCheckoutPurchase: true,
                 user: firebase.auth().currentUser.uid
               }
         
@@ -837,6 +839,7 @@ export default () => {
           email,
           phone
         },
+        expressCheckoutPurchase: false,
         user: firebase.auth().currentUser.uid
       }
 
@@ -948,18 +951,68 @@ export default () => {
       el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
   }
 
-  const cardElementOptions = {
-    style: {
-      base: {
-        
-      },
-      invalid: {
-
-      },
-      complete: {
-        
+  const handleSuccessfulPayPalPayment = (ev) => {
+    console.log(ev)
+    const shippingDetails = {
+      name: ev.purchase_units[0].shipping.name.full_name,
+      address: {
+        line1: ev.purchase_units[0].shipping.address_line_1,
+        postal_code: ev.purchase_units[0].shipping.postal_code,
+        city: ev.purchase_units[0].shipping.admin_area_2,
+        state: ev.purchase_units[0].shipping.admin_area_1,
+        country: ev.purchase_units[0].shipping.country_code
       }
-    },
+    }
+
+    console.log('PASSED SHIPPING DETAILS')
+  
+    let expressCheckoutPurchasedProducts = []
+    products.map((product) => {
+      const productId = product[0].product.id
+      const productPrice = product[0].product.price
+      const title = product[0].product.title
+      const quantity = product[4].quantity
+      const productColor = product[2].color
+      const productSize = product[1].size
+      expressCheckoutPurchasedProducts.push({ productId, title, productPrice, quantity, productColor, productSize })
+    })
+
+    console.log('PASSED PRODUCTS')
+
+    const data = {
+      payment_method: ev.purchase_units[0].payments.captures[0].id,
+      currency: 'usd',
+      status: 'new',
+      shipping_details: shippingDetails,
+      products: expressCheckoutPurchasedProducts,
+      contact_info: {
+        email: ev.payer.email_address,
+        phone: ""
+      },
+      expressCheckoutPurchase: true,
+      user: firebase.auth().currentUser.uid
+    }
+
+    console.log('PASSED DATA OBJECT')
+
+    firebase
+    .firestore()
+    .collection('stripe_customers')
+    .doc(userUID)
+    .collection('payments')
+    .add(data)
+    .then(() => {
+      // SUCCESS PUSH TO DASHBOARD
+      console.log('SUCCESS PUSH TO DASHBOARD')
+    }).catch((err) => {
+      console.log(err)
+      alert(err)
+    })
+
+    console.log('PASSED UPLOADING TO FIRESTORE')
+  }
+
+  const cardElementOptions = {
     hidePostalCode: true
   }
 
@@ -997,7 +1050,7 @@ export default () => {
                 }
 
 
-                <div className="checkout-express-checkout-btn-wrapper">
+                <div className="checkout-express-checkout-btn-wrapper checkout-express-checkout-btn-wrapper-paypal">
                   <PaypalBtn
                     options={{
                       disableFunding: "credit,card",
@@ -1005,10 +1058,8 @@ export default () => {
                     }}
                     amount = {200}
                     currency = {'USD'}
-                    onSuccess={() => {
-                      console.log('Hit')
-                    }}
-                    />
+                    onSuccess={(ev) => handleSuccessfulPayPalPayment(ev)}
+                  />
                 </div>
               </div>
             </div>
