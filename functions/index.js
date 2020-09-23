@@ -52,15 +52,17 @@ exports.createStripePayment = functions.firestore
   .onCreate(async (snap, context) => {
     const { products, currency, payment_method, shipping_details, user, contact_info, expressCheckoutPurchase } = snap.data();
     if (expressCheckoutPurchase) {
+      functions.logger.log("Hello from EXPRESSCHECKOUT", expressCheckoutPurchase);
       await admin.firestore().collection('payments').doc(user).collection('processing').doc(snap.ref.id).set({
         customer: user,
         purchaseId: snap.ref.id,
-        payment,
+        payment_method,
         shipping_details,
         products,
         contact_info
       })
     } else {
+      functions.logger.log("Goodbye from REGULAR CHECKOUT", expressCheckoutPurchase);
       const amount = products.reduce((accum, currentVal) => {
         return accum += currentVal.productPrice * currentVal.quantity
       }, 0)
