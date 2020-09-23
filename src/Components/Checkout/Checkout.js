@@ -759,8 +759,6 @@ export default () => {
     )
   }
 
-  console.log(userUID)
-
   // Handle card actions like 3D Secure
   async function handleCardAction(payment, docId) {
     const { error, paymentIntent } = await stripe.handleCardAction(
@@ -954,7 +952,6 @@ export default () => {
   }
 
   const handleSuccessfulPayPalPayment = async (ev) => {
-    // console.log(ev)
     const shippingDetails = {
       name: ev.purchase_units[0].shipping.name.full_name,
       address: {
@@ -965,10 +962,7 @@ export default () => {
         country: ev.purchase_units[0].shipping.address.country_code
       }
     }
-  // console.log(ev.purchase_units[0].shippingSqswZCZAQDE)
-// 
-    // console.log('PASSED SHIPPING DETAILS')
-  
+
     let expressCheckoutPurchasedProducts = []
     products.map((product) => {
       const productId = product[0].product.id
@@ -979,8 +973,6 @@ export default () => {
       const productSize = product[1].size
       expressCheckoutPurchasedProducts.push({ productId, title, productPrice, quantity, productColor, productSize })
     })
-
-    // console.log('PASSED PRODUCTS')
 
     const data = {
       payment_method: ev.purchase_units[0].payments.captures[0].id,
@@ -996,8 +988,6 @@ export default () => {
       user: firebase.auth().currentUser.uid
     }
 
-    // console.log('PASSED DATA OBJECT', userUID)
-
     await firebase
     .firestore()
     .collection('stripe_customers')
@@ -1008,11 +998,7 @@ export default () => {
       //// TODO ////
       // SUCCESS PUSH TO DASHBOARD
       console.log('SUCCESS PUSH TO DASHBOARD')
-    }).catch((err) => {
-      alert(err)
     })
-
-    // console.log('PASSED UPLOADING TO FIRESTORE')
   }
 
   const cardElementOptions = {
