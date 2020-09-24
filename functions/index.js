@@ -66,6 +66,8 @@ exports.createStripePayment = functions.firestore
       const amount = products.reduce((accum, currentVal) => {
         return accum += currentVal.productPrice * currentVal.quantity
       }, 0)
+
+      const total = amount < 100 ? amount + 6 : amount
   
       try {
         // Look up the Stripe customer id.
@@ -75,7 +77,7 @@ exports.createStripePayment = functions.firestore
         const idempotencyKey = context.params.pushId;
         const payment = await stripe.paymentIntents.create(
           {
-            amount: Math.floor(amount * 100),
+            amount: Math.floor(total * 100),
             currency,
             customer,
             payment_method,
@@ -132,8 +134,10 @@ exports.confirmStripePayment = functions.firestore
       return accum += currentVal.productPrice * currentVal.quantity
     }, 0)
 
+    const total = amount < 100 ? amount + 6 : amount
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.floor(amount * 100),
+      amount: Math.floor(total * 100),
       currency: 'usd',
       // Verify your integration in this guide by including this parameter
       metadata: {integration_check: 'accept_a_payment'},

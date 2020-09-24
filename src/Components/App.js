@@ -16,6 +16,7 @@ import Checkout from './Checkout/Checkout'
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CreateAccount from './Checkout/CreateAccount';
+import TotalsLogicProvider from '../Providers/TotalsLogicProvider'
 
 function App() {
   Icons()
@@ -43,21 +44,23 @@ function App() {
     <div className="App">
       <Elements stripe={stripePromise}> 
         <CartProvider>
-          <Router>
-            <Navbar />
-            <Cart />
-            <div className="app-container" id="app-container">
-              <Switch>
-                <Route exact path='/' component={NewArrivals} />
-                <Route exact path='/best-sellers' component={BestSellers} />
-                <Route exact path='/all-apparel' component={AllApparel} />
-                <Route exact path='/sale' component={Sale} />
-                <Route exact path='/products/:slug' component={ProductDetails} />
-                <Route exact path='/checkout' component={Checkout} />
-                <Route exact path='/create-account' component={CreateAccount} />
-              </Switch>
-            </div>
-          </Router>
+          <TotalsLogicProvider>
+            <Router>
+              <Navbar />
+              <Cart />
+              <div className="app-container" id="app-container">
+                <Switch>
+                  <Route exact path='/' component={NewArrivals} />
+                  <Route exact path='/best-sellers' component={BestSellers} />
+                  <Route exact path='/all-apparel' component={AllApparel} />
+                  <Route exact path='/sale' component={Sale} />
+                  <Route exact path='/products/:slug' component={ProductDetails} />
+                  <Route exact path='/checkout' component={Checkout} />
+                  <Route exact path='/create-account' component={CreateAccount} />
+                </Switch>
+              </div>
+            </Router>
+          </TotalsLogicProvider>
         </CartProvider>
       </Elements>
     </div>

@@ -11,6 +11,7 @@ import firebase from 'firebase/app';
 import 'firebase/functions'
 import {CardElement, useElements, useStripe, PaymentRequestButtonElement} from '@stripe/react-stripe-js';
 import PaypalBtn from '../paypal/PaypalBtn';
+import TotalsLogicContext from '../../Contexts/TotalsLogicContext';
 // import axios from 'axios'
 
 
@@ -78,25 +79,34 @@ export default () => {
         return accum += currentVal[4].quantity * currentVal[0].product.price
       }, 0)
 
+      const shippingOptions = expressCheckoutSubtotal < 100 ? [
+        {
+          id: 'standard-shipping',
+          label: 'Standard shipping',
+          detail: 'Arrives in 5 to 7 days',
+          amount: 600,
+        }
+      ] : [
+        {
+          id: 'free-shipping',
+          label: 'Free shipping',
+          detail: 'Arrives in 5 to 7 days',
+          amount: 0,
+        },
+      ]
+
       const paymentRequest = stripe.paymentRequest({
         country: 'US',
         currency: 'usd',
         total: {
           label: 'Purchase total',
-          amount: expressCheckoutSubtotal * 100,
+          amount: expressCheckoutSubtotal < 100 ? (expressCheckoutSubtotal + 6) * 100 : expressCheckoutSubtotal * 100,
         },
         displayItems: productObjectsToDisplayInCheckout,
         requestPayerName: true,
         requestPayerEmail: true,
         requestShipping: true,
-        shippingOptions: [
-          {
-            id: 'free-shipping',
-            label: 'Free shipping',
-            detail: 'Arrives in 5 to 7 days',
-            amount: 0,
-          },
-        ],
+        shippingOptions: shippingOptions
       });
 
       paymentRequest.canMakePayment().then(result => {
@@ -1045,7 +1055,7 @@ export default () => {
                       disableFunding: "credit,card",
                       clientId: "Ad5t87C5PSZBkusJGq_zTh83uFWQDc9-FPzrxh13HNVTqgCAy6vYA76v4DkjrBeWFNxnI2pOXaMDcTEx"
                     }}
-                    amount={subtotal}
+                    amount={subtotal < 100 ? subtotal + 6 : subtotal}
                     currency={'USD'}
                     onSuccess={(ev) => handleSuccessfulPayPalPayment(ev)}
                   />
@@ -1349,9 +1359,7 @@ export default () => {
                   onClick={handleCheckoutPurchase}
                   // disabled={stripe}
                 >
-                  <div>Purchase </div>
-                  {/* TODO USE FONT AWESOME ICON BULLET POINT */}
-                  <div>${subtotal}</div>
+                  <div>Purchase</div>
                 </button>
               </div>
           </div>
@@ -1433,7 +1441,7 @@ export default () => {
               </div>
 
               <div className="checkout-shipping-price">
-                { region === 'USA' ? "$6" : region === "" ? "Not calculated yet." : "$8" }
+                { subtotal <= 100 ? "$6" : "FREE"}
               </div>
             </div>
           </div>
@@ -1444,7 +1452,7 @@ export default () => {
             </div>
 
             <div className="checkout-total-price">
-              {region === "USA" ? `$${subtotal + 6}` : region === "" ? "Not calculated yet." : `$${subtotal + 8}`}
+              {subtotal < 100 ? `$${subtotal + 6}` : "$" + subtotal }
             </div>
           </div>
 

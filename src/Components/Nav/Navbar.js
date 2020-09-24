@@ -1,13 +1,14 @@
 import React, { useEffect, useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import CartContext from '../../Contexts/CartContext'
+import TotalsLogicProvider from '../../Providers/TotalsLogicProvider'
 
 export default () => {
   const {
     setIsCartOpen,
     products
   } = useContext(CartContext)
-
+  
   const handleCartToggle = () => {
     const htmlElement = document.getElementById('html')
     htmlElement.classList.toggle('html-overflow-hidden')
