@@ -1045,8 +1045,8 @@ export default () => {
                       disableFunding: "credit,card",
                       clientId: "Ad5t87C5PSZBkusJGq_zTh83uFWQDc9-FPzrxh13HNVTqgCAy6vYA76v4DkjrBeWFNxnI2pOXaMDcTEx"
                     }}
-                    amount = {200}
-                    currency = {'USD'}
+                    amount={subtotal}
+                    currency={'USD'}
                     onSuccess={(ev) => handleSuccessfulPayPalPayment(ev)}
                   />
                 </div>
