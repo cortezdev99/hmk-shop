@@ -57,6 +57,7 @@ export default () => {
   const [ activePaymentMethod, setActivePaymentMethod ] = useState(false)
   const [ paymentRequest, setPaymentRequest ] = useState(null)
   const [ expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting ] = useState(false)
+  const [ discount, setDiscount ] = useState("")
   const stripe = useStripe();
   const elements = useElements();
 
@@ -1011,6 +1012,25 @@ export default () => {
     })
   }
 
+  const handleAddDiscountClick = () => {
+    if (discount.length > 0) {
+      firebase
+        .firestore()
+        .collection('discounts')
+        .doc(discount)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            // TODO APPLY DISCOUJT
+            console.log('VALID DISCOUNT')
+          } else {
+            // TODO TELL USER DISCOUNT ISN'T VALID
+            console.log('INVALID DISCOUNT')
+          }
+        })
+    }
+  }
+
   const cardElementOptions = {
     hidePostalCode: true
   }
@@ -1412,12 +1432,14 @@ export default () => {
                 className="checkout-input"
                 placeholder="Discount or promo code"
                 type="text"
+                onChange={(e) => setDiscount(e.target.value)}
               />
             </div>
 
             <div className="checkout-discount-btn-wrapper">
               <button
                 className="checkout-discount-btn"
+                onClick={handleAddDiscountClick}
               >
                 Apply
               </button>
