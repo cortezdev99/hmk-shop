@@ -146,6 +146,21 @@ exports.confirmStripePayment = functions.firestore
     return paymentIntent
   });
 
+  exports.discountBeingApplied = functions.https.onCall( async (data, context) => {
+    const discount = data.discount
+    let result = false
+
+    admin.firestore().collection('discounts').doc(discount).get().then((snapshot) => {
+      if (snapshot.exists) {
+        // TODO APPLY DISCOUJT
+        // console.log('VALID DISCOUNT')
+        result = snapshot.data();
+      }
+    })
+
+    return result
+  });
+
   function reportError(err, context = {}) {
     // This is the name of the StackDriver log stream that will receive the log
     // entry. This name can be any valid log stream name, but must contain "err"

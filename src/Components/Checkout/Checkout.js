@@ -58,6 +58,7 @@ export default () => {
   const [ paymentRequest, setPaymentRequest ] = useState(null)
   const [ expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting ] = useState(false)
   const [ discount, setDiscount ] = useState("")
+  const [ activeDiscount, setActiveDiscount ] = useState(false)
   const stripe = useStripe();
   const elements = useElements();
 
@@ -1013,21 +1014,17 @@ export default () => {
   }
 
   const handleAddDiscountClick = () => {
+    const data = {
+      discount
+    }
+
     if (discount.length > 0) {
-      firebase
-        .firestore()
-        .collection('discounts')
-        .doc(discount)
-        .get()
-        .then((snapshot) => {
-          if (snapshot.exists) {
-            // TODO APPLY DISCOUJT
-            console.log('VALID DISCOUNT')
-          } else {
-            // TODO TELL USER DISCOUNT ISN'T VALID
-            console.log('INVALID DISCOUNT')
-          }
-        })
+      const checkAndApplyDiscount = firebase.functions().httpsCallable('discountBeingApplied');
+      checkAndApplyDiscount(data).then(async (result) => {
+        console.log(result)
+      }).catch((err) => {
+        console.log(err)
+      })
     }
   }
 
