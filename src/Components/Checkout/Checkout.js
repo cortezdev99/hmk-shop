@@ -1034,7 +1034,16 @@ export default () => {
     if (discount.length > 0) {
       const checkAndApplyDiscount = firebase.functions().httpsCallable('discountBeingApplied');
       checkAndApplyDiscount(data).then(async (result) => {
-        console.log(result)
+        const {
+          usable,
+          error
+        } = result.data
+        
+        if (usable) {
+          setActiveDiscount(result.data)
+        } else {
+          console.log(error)
+        }
       }).catch((err) => {
         console.log(err)
       })
@@ -1476,6 +1485,20 @@ export default () => {
                 { subtotal <= 100 ? "$6" : "FREE"}
               </div>
             </div>
+
+            {
+              activeDiscount ? (
+                <div className="checkout-shipping-wrapper" style={{ paddingTop: "20px" }}>
+                  <div className="checkout-shipping-header">
+                    Discount
+                  </div>
+
+                  <div className="checkout-shipping-price">
+                    { activeDiscount.displayable_discount }
+                  </div>
+                </div>
+              ) : null
+            }
           </div>
 
           <div className="checkout-total-wrapper">
@@ -1484,7 +1507,16 @@ export default () => {
             </div>
 
             <div className="checkout-total-price">
-              {subtotal < 100 ? `$${subtotal + 6}` : "$" + subtotal }
+              {/* { subtotal < 100 && !activeDiscount ? `$${subtotal + 6}` : "$" + subtotal } */}
+              { 
+                subtotal < 100 && !activeDiscount ?
+                  `$${subtotal + 6}`
+                : subtotal < 100 && activeDiscount ? 
+                  `$${subtotal + 6 - activeDiscount.discount_amount }` 
+                : subtotal >= 100 && activeDiscount ?
+                  "$" + (subtotal - activeDiscount.discount_amount) 
+                : "$" + subtotal
+              }
             </div>
           </div>
 
