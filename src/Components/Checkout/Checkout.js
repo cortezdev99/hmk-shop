@@ -1014,9 +1014,21 @@ export default () => {
   }
 
   const handleAddDiscountClick = () => {
+    let deconstructedProducts = []
+    products.map((product) => {
+      const productId = product[0].product.id
+      const productPrice = product[0].product.price
+      const title = product[0].product.title
+      const quantity = product[4].quantity
+      const productColor = product[2].color
+      const productSize = product[1].size
+      return deconstructedProducts.push({ productId, title, productPrice, quantity, productColor, productSize })
+    })
+
     const data = {
       discount: discount.toUpperCase(),
-      user: firebase.auth().currentUser.uid
+      user: firebase.auth().currentUser.uid,
+      products: deconstructedProducts
     }
 
     if (discount.length > 0) {

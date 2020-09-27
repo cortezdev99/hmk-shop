@@ -148,6 +148,11 @@ exports.confirmStripePayment = functions.firestore
   exports.discountBeingApplied = functions.https.onCall( async (data, context) => {
     const discount = data.discount
     const userUID = data.user
+    const products = data.products
+    const amount = products.reduce((accum, currentVal) => {
+      return accum += currentVal.productPrice * currentVal.quantity
+    }, 0)
+  
     let result
     
     await admin.firestore()
@@ -157,7 +162,8 @@ exports.confirmStripePayment = functions.firestore
         if (snapshot.exists) {
             const {
               uses_per_user,
-              discount_amount
+              discount_amount,
+              displayable_discount
             } = snapshot.data()
 
             await admin.firestore()
@@ -172,8 +178,16 @@ exports.confirmStripePayment = functions.firestore
                   } = snap.data()
 
                   if (times_used < uses_per_user) {
-                    result = {
-                      usable: true
+                    if (displayable_discount === 'BOGO') {
+
+                    } else {
+                      let discount_amount_total = amount * (discount_amount / 100)
+
+                      result = {
+                        usable: true,
+                        discount_amount: discount_amount_total,
+                        displayable_discount
+                      }
                     }
                   } else {
                     result = {
@@ -182,12 +196,19 @@ exports.confirmStripePayment = functions.firestore
                     }
                   }
                 } else {
-                  result = {
-                    usable: true
+                  if (displayable_discount === 'BOGO') {
+
+                  } else {
+                    let discount_amount_total = amount * (discount_amount / 100)
+
+                    result = {
+                      usable: true,
+                      discount_amount: discount_amount_total,
+                      displayable_discount
+                    }
                   }
                 }
               })
-          // result = snapshot.data();
           } else {
             result = {
               usable: false,
