@@ -52,7 +52,6 @@ exports.createStripePayment = functions.firestore
   .onCreate(async (snap, context) => {
     const { products, currency, payment_method, shipping_details, user, contact_info, expressCheckoutPurchase } = snap.data();
     if (expressCheckoutPurchase) {
-      functions.logger.log("Hello from EXPRESSCHECKOUT", expressCheckoutPurchase);
       await admin.firestore().collection('payments').doc(user).collection('processing').doc(snap.ref.id).set({
         customer: user,
         purchaseId: snap.ref.id,
@@ -62,7 +61,7 @@ exports.createStripePayment = functions.firestore
         contact_info
       })
     } else {
-      functions.logger.log("Goodbye from REGULAR CHECKOUT", expressCheckoutPurchase);
+      // functions.logger.log("Goodbye from REGULAR CHECKOUT", expressCheckoutPurchase);
       const amount = products.reduce((accum, currentVal) => {
         return accum += currentVal.productPrice * currentVal.quantity
       }, 0)
@@ -148,15 +147,54 @@ exports.confirmStripePayment = functions.firestore
 
   exports.discountBeingApplied = functions.https.onCall( async (data, context) => {
     const discount = data.discount
-    let result = false
+    const userUID = data.user
+    let result
+    
+    await admin.firestore()
+      .collection('discounts')
+      .doc(discount)
+      .get().then( async (snapshot) => {
+        if (snapshot.exists) {
+            const {
+              uses_per_user,
+              discount_amount
+            } = snapshot.data()
 
-    admin.firestore().collection('discounts').doc(discount).get().then((snapshot) => {
-      if (snapshot.exists) {
-        // TODO APPLY DISCOUJT
-        // console.log('VALID DISCOUNT')
-        result = snapshot.data();
-      }
-    })
+            await admin.firestore()
+              .collection('stripe_customers')
+              .doc(userUID)
+              .collection('used_discounts')
+              .doc(discount)
+              .get().then((snap) => {
+                if (snap.exists) {
+                  const {
+                    times_used
+                  } = snap.data()
+
+                  if (times_used < uses_per_user) {
+                    result = {
+                      usable: true
+                    }
+                  } else {
+                    result = {
+                      usable: false,
+                      error: "Discount usage exceeded. "
+                    }
+                  }
+                } else {
+                  result = {
+                    usable: true
+                  }
+                }
+              })
+          // result = snapshot.data();
+          } else {
+            result = {
+              usable: false,
+              error: "Discount does not exist."
+            }
+          }
+        })
 
     return result
   });

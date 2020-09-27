@@ -1015,7 +1015,8 @@ export default () => {
 
   const handleAddDiscountClick = () => {
     const data = {
-      discount
+      discount: discount.toUpperCase(),
+      user: firebase.auth().currentUser.uid
     }
 
     if (discount.length > 0) {
