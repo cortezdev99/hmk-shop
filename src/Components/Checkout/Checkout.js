@@ -840,6 +840,8 @@ export default () => {
         const productSize = product[1].size
         test.push({ productId, title, productPrice, quantity, productColor, productSize })
       })
+      
+      console.log(activeDiscount)
 
       const data = {
         payment_method: paymentMethod,
@@ -851,6 +853,7 @@ export default () => {
           email,
           phone
         },
+        discount: activeDiscount,
         expressCheckoutPurchase: false,
         user: firebase.auth().currentUser.uid
       }
@@ -1507,7 +1510,6 @@ export default () => {
             </div>
 
             <div className="checkout-total-price">
-              {/* { subtotal < 100 && !activeDiscount ? `$${subtotal + 6}` : "$" + subtotal } */}
               { 
                 subtotal < 100 && !activeDiscount ?
                   `$${subtotal + 6}`

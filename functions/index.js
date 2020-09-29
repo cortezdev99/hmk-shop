@@ -50,7 +50,7 @@ exports.addPaymentMethodDetails = functions.firestore
 exports.createStripePayment = functions.firestore
   .document('stripe_customers/{userId}/payments/{pushId}')
   .onCreate(async (snap, context) => {
-    const { products, currency, payment_method, shipping_details, user, contact_info, expressCheckoutPurchase } = snap.data();
+    const { products, currency, payment_method, shipping_details, user, contact_info, expressCheckoutPurchase, discount } = snap.data();
     if (expressCheckoutPurchase) {
       await admin.firestore().collection('payments').doc(user).collection('processing').doc(snap.ref.id).set({
         customer: user,
@@ -61,12 +61,31 @@ exports.createStripePayment = functions.firestore
         contact_info
       })
     } else {
-      // functions.logger.log("Goodbye from REGULAR CHECKOUT", expressCheckoutPurchase);
+      functions.logger.log("HELLO FROM CREATE STRIPE PAYMENT", discount, discount.discount);
       const amount = products.reduce((accum, currentVal) => {
         return accum += currentVal.productPrice * currentVal.quantity
       }, 0)
 
-      const total = amount < 100 ? amount + 6 : amount
+      let shipping_amount = amount < 100 ? 6 : 0
+      let total
+
+      if (discount.usable) {
+        await admin.firestore()
+        .collection('discounts')
+        .doc(discount.discount)
+        .get().then( async (snapshot) => {
+          if (snapshot.exists) {
+              const {
+                discount_amount,
+              } = snapshot.data()
+              total = (amount + shipping_amount) - ((amount + shipping_amount) * (discount_amount / 100))
+          } else {
+            total = amount + shipping_amount
+          }
+        })
+      } else {
+        total = amount + shipping_amount
+      }
   
       try {
         // Look up the Stripe customer id.
@@ -152,6 +171,7 @@ exports.confirmStripePayment = functions.firestore
     const amount = products.reduce((accum, currentVal) => {
       return accum += currentVal.productPrice * currentVal.quantity
     }, 0)
+    const shipping_cost = amount < 100 ? 6 : 0
   
     let result
     
@@ -181,9 +201,11 @@ exports.confirmStripePayment = functions.firestore
                     if (displayable_discount === 'BOGO') {
 
                     } else {
-                      let discount_amount_total = amount * (discount_amount / 100)
+                      let discount_amount_total = (amount + shipping_cost) * (discount_amount / 100)
 
                       result = {
+                        discount,
+                        numeral_discount: discount_amount,
                         usable: true,
                         discount_amount: discount_amount_total,
                         displayable_discount
@@ -199,9 +221,10 @@ exports.confirmStripePayment = functions.firestore
                   if (displayable_discount === 'BOGO') {
 
                   } else {
-                    let discount_amount_total = amount * (discount_amount / 100)
+                    let discount_amount_total = (amount + shipping_cost) * (discount_amount / 100)
 
                     result = {
+                      discount,
                       usable: true,
                       discount_amount: discount_amount_total,
                       displayable_discount
