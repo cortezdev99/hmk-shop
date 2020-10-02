@@ -145,10 +145,12 @@ export default () => {
   }, [stripe, paymentRequest]);
 
   useEffect(() => {
+    // console.log(activeDiscount, 'TESTING')
     if (paymentRequest && !expressCheckoutPaymentSubmitting) {
+      console.log(activeDiscount, 'TEST')
       paymentRequest.on("token", async ev => {
         setExpressCheckoutPaymentSubmitting(true);
-        console.log(ev, "EVENT");
+        // console.log(ev, "EVENT", activeDiscount);
         let test = [];
         products.map(product => {
           const productId = product[0].product.id;
@@ -166,6 +168,8 @@ export default () => {
             productSize
           });
         });
+
+        console.log(activeDiscount, "TESTERING")
 
         const data = {
           products: test,
@@ -331,17 +335,17 @@ export default () => {
                   });
               }
             }
+            setExpressCheckoutPaymentSubmitting(false);
           })
           .catch(err => {
             //////////////
             //// TODO ////
             console.log(err);
+            setExpressCheckoutPaymentSubmitting(false);
           });
-
-        setExpressCheckoutPaymentSubmitting(false);
       });
     }
-  }, [stripe, paymentRequest]);
+  }, [stripe, paymentRequest, activeDiscount, products, expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting]);
 
   const { products } = useContext(CartContext);
 
@@ -1374,6 +1378,7 @@ export default () => {
           const { usable, error } = result.data;
 
           if (usable) {
+            // console.log(result.data)
             setActiveDiscount(result.data);
           } else {
             console.log(error);
@@ -1384,6 +1389,8 @@ export default () => {
         });
     }
   };
+
+  // console.log(activeDiscount)
 
   const cardElementOptions = {
     hidePostalCode: true

@@ -184,12 +184,47 @@ exports.confirmStripePayment = functions.firestore
 exports.createExpressCheckoutPaymentIntent = functions.https.onCall(
   async (data, context) => {
     const products = data.products;
-
+    const discount = data.discount
     const amount = products.reduce((accum, currentVal) => {
       return (accum += currentVal.productPrice * currentVal.quantity);
     }, 0);
+    const shipping_amount = amount < 100 ? 6 : 0;
+    let total
 
-    const total = amount < 100 ? amount + 6 : amount;
+    functions.logger.log(
+      "HELLO FROM FIRST CHECK", data
+    );
+
+    if (discount.usable) {
+      functions.logger.log(
+        "HELLO FROM CONDITIONAL HIT"
+      );
+      await admin
+        .firestore()
+        .collection("discounts")
+        .doc(discount.discount)
+        .get()
+        .then(async snapshot => {
+          functions.logger.log(
+            "HELLO FROM DISCOUNT USABLE"
+          );
+          if (snapshot.exists) {
+            functions.logger.log(
+              "HELLO DISCOUNT IS BEING APPLIED"
+            );
+            const { discount_amount } = snapshot.data();
+            total =
+              (amount +
+              shipping_amount) -
+              (amount + shipping_amount) * (discount_amount / 100);
+          } else {
+            total = amount + shipping_amount;
+          }
+        });
+    } else {
+      total = amount + shipping_amount;
+    }
+    // const total = amount < 100 ? amount + 6 : amount;
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.floor(total * 100),
