@@ -39,7 +39,7 @@ export default () => {
   if (window.document.body.clientWidth < 1023) {
     return (
       <div className="navbar-wrapper" id="navbar-wrapper-id" style={{ padding: "0 40px", display: "flex", alignItems: "center" }}>
-        <div style={{ width: "10%", display: "flex", justifyContent: "flex-end", fontSize: "20px" }}>
+        <div style={{ width: "10%", fontSize: "20px" }}>
           <FontAwesomeIcon icon={["fas", "bars"]} />
         </div>
 
@@ -50,7 +50,7 @@ export default () => {
         <div
           className="navbar-link"
           onClick={handleCartToggle}
-          style={{ width: "10%", display: "flex", alignItems: "center" }}
+          style={{ width: "10%", display: "flex", alignItems: "center", justifyContent: "flex-end" }}
         >
           <span style={{ fontSize: "20px", marginRight: "5px" }}>
             <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
