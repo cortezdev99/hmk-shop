@@ -70,6 +70,8 @@ export default () => {
   const [activeDiscount, setActiveDiscount] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+  const [ testerState, setTesterState ] = useState(false)
+  let discountTester = false
 
   useEffect(() => {
     if (stripe) {
@@ -147,9 +149,29 @@ export default () => {
   useEffect(() => {
     // console.log(activeDiscount, 'TESTING')
     if (paymentRequest && !expressCheckoutPaymentSubmitting) {
-      console.log(activeDiscount, 'TEST')
+      // let evMark = []
+      // if (paymentRequest && !tester) {
+      // console.log(activeDiscount, 'TEST')
       paymentRequest.on("token", async ev => {
+        // evMark.push(ev)
+        // console.log(ev)
+        // if (evMark.length === 2) {
+        //   console.log(ev, 'THING')
+        // }
+        // if (paymentRequest && !tester) {
+        //   console.log(ev)
+        // }
+        // if (testerState) {
+          // } else {
+            //   console.log(activeDiscount)
+            // }
+            // console.log(discountTester)
+            // console.log(ev)
+            // if (testerState) {
+              // console.log(activeDiscount)
+            // }
         setExpressCheckoutPaymentSubmitting(true);
+        // tester = true
         // console.log(ev, "EVENT", activeDiscount);
         let test = [];
         products.map(product => {
@@ -169,7 +191,7 @@ export default () => {
           });
         });
 
-        console.log(activeDiscount, "TESTERING")
+        // console.log(activeDiscount, "TESTERING")
 
         const data = {
           products: test,
@@ -179,174 +201,180 @@ export default () => {
         const createExpressCheckoutPaymentIntent = firebase
           .functions()
           .httpsCallable("createExpressCheckoutPaymentIntent");
-        createExpressCheckoutPaymentIntent(data)
-          .then(async result => {
-            const {
-              paymentIntent,
-              error: confirmError
-            } = await stripe.confirmCardPayment(result.data.client_secret, {
-              payment_method: {
-                type: "card",
-                card: {
-                  token: ev.token.id
-                }
-              }
-            });
+        const result = await createExpressCheckoutPaymentIntent(data)
+        // console.log(result)
+          // .then(async result => {
+          //   console.log(result)
+          // console.log(result)
+        const {
+          paymentIntent,
+          error: confirmError
+        } = await stripe.confirmCardPayment(result.data.client_secret, {
+          payment_method: {
+            type: "card",
+            card: {
+              token: ev.token.id
+            }
+          }
+        });
 
-            console.log(paymentIntent, "PAYMENT INTENT");
+        // console.log(paymentIntent, "PAYMENT INTENT");
 
-            if (confirmError) {
-              /////////////////
-              // TODO /////////
-              // Report to the browser that the payment failed, prompting it to
-              // re-show the payment interface, or show an error message and close
-              // the payment interface.
-              ev.complete("fail");
+        if (confirmError) {
+          /////////////////
+          // TODO /////////
+          // Report to the browser that the payment failed, prompting it to
+          // re-show the payment interface, or show an error message and close
+          // the payment interface.
+          ev.complete("fail");
+        } else {
+          ev.complete("success");
+
+          if (paymentIntent.status === "requires_action") {
+            const { error } = await stripe.confirmCardPayment(
+              result.data.client_secret
+            );
+
+            if (error) {
+              ///////////////
+              //// TODO /////
+              // The payment failed -- ask your customer for a new payment method.
             } else {
-              ev.complete("success");
-
-              if (paymentIntent.status === "requires_action") {
-                const { error } = await stripe.confirmCardPayment(
-                  result.data.client_secret
-                );
-
-                if (error) {
-                  ///////////////
-                  //// TODO /////
-                  // The payment failed -- ask your customer for a new payment method.
-                } else {
-                  const shippingDetails = {
-                    name: ev.payerName,
-                    address: {
-                      line1: ev.shippingAddress.addressLine,
-                      postal_code: ev.shippingAddress.postalCode,
-                      city: ev.shippingAddress.city,
-                      state: ev.shippingAddress.region,
-                      country: ev.shippingAddress.country
-                    }
-                  };
-
-                  let expressCheckoutPurchasedProducts = [];
-                  products.map(product => {
-                    const productId = product[0].product.id;
-                    const productPrice = product[0].product.price;
-                    const title = product[0].product.title;
-                    const quantity = product[4].quantity;
-                    const productColor = product[2].color;
-                    const productSize = product[1].size;
-                    expressCheckoutPurchasedProducts.push({
-                      productId,
-                      title,
-                      productPrice,
-                      quantity,
-                      productColor,
-                      productSize
-                    });
-                  });
-
-                  const data = {
-                    payment_method: paymentIntent,
-                    currency: "usd",
-                    status: "new",
-                    shipping_details: shippingDetails,
-                    products: expressCheckoutPurchasedProducts,
-                    contact_info: {
-                      email: ev.payerEmail,
-                      phone: ev.payerPhone
-                    },
-                    expressCheckoutPurchase: true,
-                    user: firebase.auth().currentUser.uid
-                  };
-
-                  firebase
-                    .firestore()
-                    .collection("stripe_customers")
-                    .doc(userUID)
-                    .collection("payments")
-                    .add(data)
-                    .then(docRef => {
-                      // SUCCESS PUSH TO DASHBOARD
-                      console.log("SUCCESS PUSH TO DASHBOARD");
-                    })
-                    .catch(err => {
-                      alert(err);
-                    });
-                  // The payment has succeeded.
+              const shippingDetails = {
+                name: ev.payerName,
+                address: {
+                  line1: ev.shippingAddress.addressLine,
+                  postal_code: ev.shippingAddress.postalCode,
+                  city: ev.shippingAddress.city,
+                  state: ev.shippingAddress.region,
+                  country: ev.shippingAddress.country
                 }
-                // console.log('REQUIRED ACTION')
-              } else {
-                const shippingDetails = {
-                  name: ev.payerName,
-                  address: {
-                    line1: ev.shippingAddress.addressLine,
-                    postal_code: ev.shippingAddress.postalCode,
-                    city: ev.shippingAddress.city,
-                    state: ev.shippingAddress.region,
-                    country: ev.shippingAddress.country
-                  }
-                };
+              };
 
-                let expressCheckoutPurchasedProducts = [];
-                products.map(product => {
-                  const productId = product[0].product.id;
-                  const productPrice = product[0].product.price;
-                  const title = product[0].product.title;
-                  const quantity = product[4].quantity;
-                  const productColor = product[2].color;
-                  const productSize = product[1].size;
-                  expressCheckoutPurchasedProducts.push({
-                    productId,
-                    title,
-                    productPrice,
-                    quantity,
-                    productColor,
-                    productSize
-                  });
+              let expressCheckoutPurchasedProducts = [];
+              products.map(product => {
+                const productId = product[0].product.id;
+                const productPrice = product[0].product.price;
+                const title = product[0].product.title;
+                const quantity = product[4].quantity;
+                const productColor = product[2].color;
+                const productSize = product[1].size;
+                expressCheckoutPurchasedProducts.push({
+                  productId,
+                  title,
+                  productPrice,
+                  quantity,
+                  productColor,
+                  productSize
                 });
+              });
 
-                const data = {
-                  payment_method: paymentIntent,
-                  currency: "usd",
-                  status: "new",
-                  shipping_details: shippingDetails,
-                  products: expressCheckoutPurchasedProducts,
-                  contact_info: {
-                    email: ev.payerEmail,
-                    phone: ev.payerPhone
-                  },
-                  expressCheckoutPurchase: true,
-                  user: firebase.auth().currentUser.uid
-                };
+              const data = {
+                payment_method: paymentIntent,
+                currency: "usd",
+                status: "new",
+                shipping_details: shippingDetails,
+                products: expressCheckoutPurchasedProducts,
+                contact_info: {
+                  email: ev.payerEmail,
+                  phone: ev.payerPhone
+                },
+                expressCheckoutPurchase: true,
+                user: firebase.auth().currentUser.uid
+              };
 
-                firebase
-                  .firestore()
-                  .collection("stripe_customers")
-                  .doc(userUID)
-                  .collection("payments")
-                  .add(data)
-                  .then(docRef => {
-                    //////////////
-                    //// TODO ////
-                    // SUCCESS PUSH TO DASHBOARD
-                    console.log("SUCCESS PUSH TO DASHBOARD");
-                  })
-                  .catch(err => {
-                    alert(err);
-                  });
+              firebase
+                .firestore()
+                .collection("stripe_customers")
+                .doc(userUID)
+                .collection("payments")
+                .add(data)
+                .then(docRef => {
+                  // SUCCESS PUSH TO DASHBOARD
+                  console.log("SUCCESS PUSH TO DASHBOARD");
+                })
+                .catch(err => {
+                  alert(err);
+                });
+                  // The payment has succeeded.
+              }
+                // console.log('REQUIRED ACTION')
+            } else {
+              const shippingDetails = {
+                name: ev.payerName,
+                address: {
+                  line1: ev.shippingAddress.addressLine,
+                  postal_code: ev.shippingAddress.postalCode,
+                  city: ev.shippingAddress.city,
+                  state: ev.shippingAddress.region,
+                  country: ev.shippingAddress.country
+                }
+              };
+
+              let expressCheckoutPurchasedProducts = [];
+              products.map(product => {
+                const productId = product[0].product.id;
+                const productPrice = product[0].product.price;
+                const title = product[0].product.title;
+                const quantity = product[4].quantity;
+                const productColor = product[2].color;
+                const productSize = product[1].size;
+                expressCheckoutPurchasedProducts.push({
+                  productId,
+                  title,
+                  productPrice,
+                  quantity,
+                  productColor,
+                  productSize
+                });
+              });
+
+              const data = {
+                payment_method: paymentIntent,
+                currency: "usd",
+                status: "new",
+                shipping_details: shippingDetails,
+                products: expressCheckoutPurchasedProducts,
+                contact_info: {
+                  email: ev.payerEmail,
+                  phone: ev.payerPhone
+                },
+                expressCheckoutPurchase: true,
+                user: firebase.auth().currentUser.uid
+              };
+
+              firebase
+                .firestore()
+                .collection("stripe_customers")
+                .doc(userUID)
+                .collection("payments")
+                .add(data)
+                .then(docRef => {
+                  //////////////
+                  //// TODO ////
+                  // SUCCESS PUSH TO DASHBOARD
+                  console.log("SUCCESS PUSH TO DASHBOARD");
+                })
+                .catch(err => {
+                  alert(err);
+                });
               }
             }
             setExpressCheckoutPaymentSubmitting(false);
-          })
-          .catch(err => {
-            //////////////
-            //// TODO ////
-            console.log(err);
-            setExpressCheckoutPaymentSubmitting(false);
-          });
+            // tester = false
+
+          // })
+          // .catch(err => {
+          //   //////////////
+          //   //// TODO ////
+          //   console.log(err);
+          // });
       });
     }
-  }, [stripe, paymentRequest, activeDiscount, products, expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting]);
+  }, [ activeDiscount, stripe, products, expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting]);
 
+
+  // console.log(discountTester)
   const { products } = useContext(CartContext);
 
   if (products.length < 1) {
@@ -1379,6 +1407,8 @@ export default () => {
 
           if (usable) {
             // console.log(result.data)
+            // discountTester = result.data
+            setTesterState(true)
             setActiveDiscount(result.data);
           } else {
             console.log(error);
