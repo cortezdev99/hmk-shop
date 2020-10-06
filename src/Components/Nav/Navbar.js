@@ -35,6 +35,28 @@ export default () => {
       }
     }, false);
   }, [])
+
+  if (window.document.body.clientWidth < 1023) {
+    return (
+      <div className="navbar-wrapper" id="navbar-wrapper-id" style={{ padding: "0 40px", display: "flex", alignItems: "center" }}>
+        <div style={{ width: "10%", display: "flex", justifyContent: "flex-end" }}>
+          Left
+        </div>
+
+        <div className="navbar-logo-wrapper" style={{ width: "80%" }}>
+          HMK Shop
+        </div>
+
+        <div
+          className="navbar-link"
+          onClick={handleCartToggle}
+          style={{ width: "10%" }}
+        >
+          Cart {handleGettingProductAmount()}
+        </div>
+      </div>
+    )
+  }
     
   return (
     <div className="navbar-wrapper" id="navbar-wrapper-id">

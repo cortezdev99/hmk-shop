@@ -371,7 +371,7 @@ export default () => {
           // });
       });
     }
-  }, [ activeDiscount, stripe, products, expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting]);
+  }, [ activeDiscount, stripe, expressCheckoutPaymentSubmitting, setExpressCheckoutPaymentSubmitting]);
 
 
   // console.log(discountTester)
