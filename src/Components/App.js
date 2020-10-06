@@ -17,6 +17,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CreateAccount from './Checkout/CreateAccount';
 import TotalsLogicProvider from '../Providers/TotalsLogicProvider'
+import MobileSideNav from './Nav/MobileSideNav';
+import MobileSideNavProvider from '../Providers/MobileSideNavProvider';
 
 function App() {
   Icons()
@@ -45,21 +47,24 @@ function App() {
       <Elements stripe={stripePromise}> 
         <CartProvider>
           <TotalsLogicProvider>
-            <Router>
-              <Navbar />
-              <Cart />
-              <div className="app-container" id="app-container">
-                <Switch>
-                  <Route exact path='/' component={NewArrivals} />
-                  <Route exact path='/best-sellers' component={BestSellers} />
-                  <Route exact path='/all-apparel' component={AllApparel} />
-                  <Route exact path='/sale' component={Sale} />
-                  <Route exact path='/products/:slug' component={ProductDetails} />
-                  <Route exact path='/checkout' component={Checkout} />
-                  <Route exact path='/create-account' component={CreateAccount} />
-                </Switch>
-              </div>
-            </Router>
+            <MobileSideNavProvider>
+              <Router>
+                <Navbar />
+                <MobileSideNav />
+                <Cart />
+                <div className="app-container" id="app-container">
+                  <Switch>
+                    <Route exact path='/' component={NewArrivals} />
+                    <Route exact path='/best-sellers' component={BestSellers} />
+                    <Route exact path='/all-apparel' component={AllApparel} />
+                    <Route exact path='/sale' component={Sale} />
+                    <Route exact path='/products/:slug' component={ProductDetails} />
+                    <Route exact path='/checkout' component={Checkout} />
+                    <Route exact path='/create-account' component={CreateAccount} />
+                  </Switch>
+                </div>
+              </Router>
+            </MobileSideNavProvider>
           </TotalsLogicProvider>
         </CartProvider>
       </Elements>

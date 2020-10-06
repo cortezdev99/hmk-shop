@@ -2,9 +2,11 @@ import React, { useEffect, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import CartContext from "../../Contexts/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MobileSideNavContext from "../../Contexts/MobileSideNavContext";
 
 export default () => {
   const { setIsCartOpen, products } = useContext(CartContext);
+  const { setIsSideNavOpen } = useContext(MobileSideNavContext);
 
   const handleCartToggle = () => {
     const htmlElement = document.getElementById("html");
@@ -19,6 +21,11 @@ export default () => {
 
     return `${itemsTotal}`;
   };
+
+  const handleOpeningHiddenNav = () => {
+    // console.log('hit')
+    setIsSideNavOpen(true)
+  }
 
   useEffect(() => {
     const permElmnt = document.getElementById("navbar-wrapper-id");
@@ -44,7 +51,10 @@ export default () => {
         id="navbar-wrapper-id"
         style={{ padding: "0 40px", display: "flex", alignItems: "center" }}
       >
-        <div style={{ width: "10%", fontSize: "20px" }}>
+        <div 
+          style={{ width: "10%", fontSize: "20px" }}
+          onClick={handleOpeningHiddenNav}
+        >
           <FontAwesomeIcon icon={["fas", "bars"]} />
         </div>
 
