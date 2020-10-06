@@ -6,8 +6,8 @@ export default () => {
   const { isSideNavOpen, setIsSideNavOpen } = useContext(MobileSideNavContext);
 
   const handleCloseMobileSideNav = () => {
-    setIsSideNavOpen(false)
-  }
+    setIsSideNavOpen(false);
+  };
 
   if (!isSideNavOpen) {
     return <></>;
@@ -32,29 +32,104 @@ export default () => {
         style={{
           height: "100%",
           minHeight: "100vh",
-          background: "#fff",
+          background: "#1c1b1b",
+          color: "#fff",
           width: "80%",
           maxWidth: "570px",
           display: "flex",
           flexDirection: "column",
-          // transform: "translateX(570px)",
           transition: "height 0.5s, transform 0.5s"
         }}
       >
         <div
           style={{
-            height: "80px",
-            padding: "0 40px",
+            height: "60px",
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
-            borderBottom: "1px solid #CCC"
+            padding: "28px 40px 0px"
           }}
         >
-          <div style={{ fontSize: "20px" }}>HMK shop</div>
-
           <div style={{ fontSize: "24px" }} onClick={handleCloseMobileSideNav}>
             <FontAwesomeIcon icon="times" />
+          </div>
+        </div>
+
+        <div style={{ padding: "0 40px", fontSize: "14px" }}>
+          <div style={{ fontWeight: "400", letterSpacing: "0.2em" }}>
+            <div
+              style={{
+                padding: "20px 0",
+                borderBottom: "1px solid rgba(255,255,255,0.25)",
+              }}
+            >
+              New Arrivals
+            </div>
+
+            <div
+              style={{
+                padding: "20px 0",
+                borderBottom: "1px solid rgba(255,255,255,0.25)",
+              }}
+            >
+              Best Sellers
+            </div>
+
+            <div
+              style={{
+                padding: "20px 0",
+                borderBottom: "1px solid rgba(255,255,255,0.25)",
+              }}
+            >
+              All Apparel
+            </div>
+
+            <div
+              style={{
+                padding: "20px 0",
+                borderBottom: "1px solid rgba(255,255,255,0.25)",
+              }}
+            >
+              Sale
+            </div>
+          </div>
+
+          <div style={{
+            marginTop: "20px",
+          }}>
+            <div style={{ 
+              color: "rgba(255,255,255,0.5)",
+              paddingBottom: "20px"
+             }}>
+              FAQ & Shipping/Returns
+            </div>
+
+            <div style={{ 
+              color: "rgba(255,255,255,0.5)",
+              paddingBottom: "20px"
+             }}>
+              Privacy Policy
+            </div>
+
+            <div style={{ 
+              color: "rgba(255,255,255,0.5)",
+              paddingBottom: "20px"
+             }}>
+              Accessability
+            </div>
+
+            <div style={{ 
+              color: "rgba(255,255,255,0.5)",
+              paddingBottom: "20px"
+             }}>
+              Wholesale Inquires
+            </div>
+
+            <div style={{ 
+              color: "rgba(255,255,255,0.5)",
+              paddingBottom: "20px"
+             }}>
+              Account
+            </div>
           </div>
         </div>
       </div>
