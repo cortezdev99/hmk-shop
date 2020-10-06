@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import CartContext from '../../Contexts/CartContext'
-import TotalsLogicProvider from '../../Providers/TotalsLogicProvider'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default () => {
   const {
@@ -39,8 +39,8 @@ export default () => {
   if (window.document.body.clientWidth < 1023) {
     return (
       <div className="navbar-wrapper" id="navbar-wrapper-id" style={{ padding: "0 40px", display: "flex", alignItems: "center" }}>
-        <div style={{ width: "10%", display: "flex", justifyContent: "flex-end" }}>
-          Left
+        <div style={{ width: "10%", display: "flex", justifyContent: "flex-end", fontSize: "20px" }}>
+          <FontAwesomeIcon icon={["fas", "bars"]} />
         </div>
 
         <div className="navbar-logo-wrapper" style={{ width: "80%" }}>
@@ -50,9 +50,13 @@ export default () => {
         <div
           className="navbar-link"
           onClick={handleCartToggle}
-          style={{ width: "10%" }}
+          style={{ width: "10%", display: "flex", alignItems: "center" }}
         >
-          Cart {handleGettingProductAmount()}
+          <span style={{ fontSize: "20px", marginRight: "5px" }}>
+            <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
+          </span>
+
+            ({handleGettingProductAmount()})
         </div>
       </div>
     )
