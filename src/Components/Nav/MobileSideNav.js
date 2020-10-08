@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import MobileSideNavContext from "../../Contexts/MobileSideNavContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NavLink } from 'react-router-dom'
 
 export default () => {
   const { isSideNavOpen, setIsSideNavOpen } = useContext(MobileSideNavContext);
@@ -16,6 +17,10 @@ export default () => {
     el.classList.toggle('open-content')
     el2.classList.toggle('spin')
     el3.classList.toggle('spin')
+  }
+
+  const handleCloseNav = () => {
+    setIsSideNavOpen(false)
   }
 
   if (!isSideNavOpen) {
@@ -47,7 +52,8 @@ export default () => {
           maxWidth: "570px",
           display: "flex",
           flexDirection: "column",
-          transition: "height 0.5s, transform 0.5s"
+          transition: "height 0.5s, transform 0.5s",
+          overflowX: "hidden"
         }}
       >
         <div
@@ -55,38 +61,46 @@ export default () => {
             height: "60px",
             display: "flex",
             alignItems: "center",
-            padding: "28px 40px 0px", 
-            height: "10%"
+            padding: "20px 40px 0px",
+            boxShadow: "rgba(28,27,27,1) 0px 19px 16px 6px",
+            zIndex: 1
           }}
         >
           <div
-            style={{ fontSize: "24px" }}
+            style={{ width: "20px", height: "20px" }}
             onClick={handleCloseMobileSideNav}
           >
-            <FontAwesomeIcon icon="times" />
+            {/* <FontAwesomeIcon icon="times" /> */}
+            <svg style={{ width: "100%", height: "100%" }} xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </div>
         </div>
 
-        <div style={{ padding: "0 40px", fontSize: "14px", height: "80%", overflowY: "auto", overflowX: "hidden" }}>
+        <div style={{ padding: "0 40px", fontSize: "14px", height: "calc(90% - 40px)", overflowY: "auto", overflowX: "hidden", paddingTop: "20px" }}>
           <div style={{ fontWeight: "400", letterSpacing: "0.2em" }}>
-            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)" }}>
-              <div
+            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)", padding: "20px 0" }}>
+              <NavLink
                 style={{
-                  padding: "20px 0",
+                  textDecoration: "none",
+                  color: "#fff"
                 }}
+                exact to="/"
+                onClick={handleCloseNav}
               >
                 New Arrivals
-              </div>
+              </NavLink>
             </div>
 
-            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)" }}>
-              <div
+            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)", padding: "20px 0" }}>
+              <NavLink
                 style={{
-                  padding: "20px 0",
+                  textDecoration: "none",
+                  color: "#fff"
                 }}
+                to="/best-sellers"
+                onClick={handleCloseNav}
               >
                 Best Sellers
-              </div>
+              </NavLink>
             </div>
 
             <div id="all-apparel-wrapper" className="all-apparel-wrapper" style={{ borderBottom: "1px solid rgba(255,255,255,0.25)", maxHeight: "58px", overflow: "hidden", transition: "max-height 0.7s" }}>
@@ -104,7 +118,7 @@ export default () => {
                 </div>
 
                 <div style={{ position: "relative", width: "12px" }}>
-                  <div id="all-apparel-spinner-1" className="all-apparel-spinner-1" style={{ transition: "0.7s", position: "absolute", right: "2px", transform: "rotate(90deg)" }}>
+                  <div id="all-apparel-spinner-1" className="all-apparel-spinner-1" style={{ transition: "0.7s", position: "absolute", right: "2px", bottom: "0px", transform: "rotate(90deg)" }}>
                     |
                   </div>
 
@@ -145,14 +159,17 @@ export default () => {
               </div>
             </div>
 
-            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)" }}>
-              <div
+            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)", padding: "20px 0", }}>
+              <NavLink
                 style={{
-                  padding: "20px 0",
+                  textDecoration: "none",
+                  color: "#fff"
                 }}
+                to="/sale"
+                onClick={handleCloseNav}
               >
                 Sale
-              </div>
+              </NavLink>
             </div>
           </div>
 
