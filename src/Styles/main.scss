@@ -90,3 +90,10 @@ code {
 .open-content {
   max-height: 316px !important;
 }
+
+.spin {
+  transform: rotate(450deg) !important;
+  opacity: 0.85;
+  right: 2px !important;
+  bottom: 1px !important;
+}

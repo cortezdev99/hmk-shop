@@ -9,9 +9,13 @@ export default () => {
     setIsSideNavOpen(false);
   };
 
-  const handleClick = () => {
-    const el = document.getElementById('test')
+  const handleClick = (innerContentId, spinElem1, spinElem2) => {
+    const el = document.getElementById(innerContentId)
+    const el2 = document.getElementById(spinElem1)
+    const el3 = document.getElementById(spinElem2)
     el.classList.toggle('open-content')
+    el2.classList.toggle('spin')
+    el3.classList.toggle('spin')
   }
 
   if (!isSideNavOpen) {
@@ -63,9 +67,29 @@ export default () => {
           </div>
         </div>
 
-        <div style={{ padding: "0 40px", fontSize: "14px", height: "80%" }}>
+        <div style={{ padding: "0 40px", fontSize: "14px", height: "80%", overflowY: "auto", overflowX: "hidden" }}>
           <div style={{ fontWeight: "400", letterSpacing: "0.2em" }}>
-            <div id="test" class="test" style={{ borderBottom: "1px solid rgba(255,255,255,0.25)", maxHeight: "58px", overflow: "hidden" }}>
+            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)" }}>
+              <div
+                style={{
+                  padding: "20px 0",
+                }}
+              >
+                New Arrivals
+              </div>
+            </div>
+
+            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)" }}>
+              <div
+                style={{
+                  padding: "20px 0",
+                }}
+              >
+                Best Sellers
+              </div>
+            </div>
+
+            <div id="all-apparel-wrapper" className="all-apparel-wrapper" style={{ borderBottom: "1px solid rgba(255,255,255,0.25)", maxHeight: "58px", overflow: "hidden", transition: "max-height 0.7s" }}>
               <div
                 style={{
                   padding: "20px 0",
@@ -73,18 +97,18 @@ export default () => {
                   justifyContent: "space-between"
                 }}
 
-                onClick={handleClick}
+                onClick={() => handleClick('all-apparel-wrapper', 'all-apparel-spinner-1', 'all-apparel-spinner-2')}
               >
                 <div>
-                  New Arrivals
+                  All Apparel
                 </div>
 
                 <div style={{ position: "relative", width: "12px" }}>
-                  <div style={{ transition: "0.7s", position: "absolute", right: "2px", transform: "rotate(90deg)" }}>
+                  <div id="all-apparel-spinner-1" className="all-apparel-spinner-1" style={{ transition: "0.7s", position: "absolute", right: "2px", transform: "rotate(90deg)" }}>
                     |
                   </div>
 
-                  <div style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
+                  <div id="all-apparel-spinner-2" className="all-apparel-spinner-2" style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
                     |
                   </div>
                 </div>
@@ -121,78 +145,13 @@ export default () => {
               </div>
             </div>
 
-            <div>
+            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.25)" }}>
               <div
                 style={{
                   padding: "20px 0",
-                  borderBottom: "1px solid rgba(255,255,255,0.25)",
-                  display: "flex",
-                  justifyContent: "space-between"
                 }}
               >
-                <div>
-                  Best Sellers
-                </div>
-
-                <div style={{ position: "relative", width: "12px" }}>
-                  <div style={{ transition: "0.7s", position: "absolute", right: "2px", transform: "rotate(90deg)" }}>
-                    |
-                  </div>
-
-                  <div style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
-                    |
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div
-                style={{
-                  padding: "20px 0",
-                  borderBottom: "1px solid rgba(255,255,255,0.25)",
-                  display: "flex",
-                  justifyContent: "space-between"
-                }}
-              >
-                <div>
-                  All Apparel
-                </div>
-
-                <div style={{ position: "relative", width: "12px" }}>
-                  <div style={{ transition: "0.7s", position: "absolute", right: "2px", transform: "rotate(90deg)" }}>
-                    |
-                  </div>
-
-                  <div style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
-                    |
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div
-                style={{
-                  padding: "20px 0",
-                  borderBottom: "1px solid rgba(255,255,255,0.25)",
-                  display: "flex",
-                  justifyContent: "space-between"
-                }}
-              >
-                <div>
-                  Sale
-                </div>
-
-                <div style={{ position: "relative", width: "12px" }}>
-                  <div style={{ transition: "0.7s", position: "absolute", right: "2px", transform: "rotate(90deg)" }}>
-                    |
-                  </div>
-
-                  <div style={{ transition: "0.7s", position: "absolute", transform: "rotate(180deg)" }}>
-                    |
-                  </div>
-                </div>
+                Sale
               </div>
             </div>
           </div>
