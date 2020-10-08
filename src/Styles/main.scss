@@ -97,3 +97,23 @@ code {
   right: 2px !important;
   bottom: 1px !important;
 }
+
+.side-nav-slide {
+  transform: translateX(0px) !important;
+}
+
+.mobileSideNavMainContent::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+.mobileSideNavMainContent::-webkit-scrollbar-track {
+  background: rgb(28, 27, 27);
+}
+
+/* Handle */
+.mobileSideNavMainContent::-webkit-scrollbar-thumb {
+  // background: rgba(255, 255, 255, 0.5);
+  background: #fff;
+  border-radius: 10px;
+}

@@ -23,7 +23,8 @@ export default () => {
   };
 
   const handleOpeningHiddenNav = () => {
-    // console.log('hit')
+    const htmlElement = document.getElementById("html");
+    htmlElement.classList.toggle("html-overflow-hidden");
     setIsSideNavOpen(true)
   }
 
@@ -49,7 +50,7 @@ export default () => {
       <div
         className="navbar-wrapper"
         id="navbar-wrapper-id"
-        style={{ padding: "0 40px", display: "flex", alignItems: "center" }}
+        style={{ height: "50px", padding: "0 40px", display: "flex", alignItems: "center" }}
       >
         <div 
           style={{ width: "10%", fontSize: "20px" }}
@@ -58,7 +59,7 @@ export default () => {
           <FontAwesomeIcon icon={["fas", "bars"]} />
         </div>
 
-        <div className="navbar-logo-wrapper" style={{ width: "80%" }}>
+        <div className="navbar-logo-wrapper" style={{ width: "80%", height: "50px" }}>
           HMK Shop
         </div>
 
@@ -69,13 +70,11 @@ export default () => {
             width: "10%",
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end"
+            justifyContent: "flex-end",
+            fontSize: "20px"
           }}
         >
-          <span style={{ fontSize: "20px", marginRight: "5px" }}>
-            <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
-          </span>
-          ({handleGettingProductAmount()})
+          <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
         </div>
       </div>
     );
