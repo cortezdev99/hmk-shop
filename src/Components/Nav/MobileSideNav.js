@@ -83,7 +83,7 @@ export default () => {
           }}
         >
           <div
-            style={{ width: "25px", height: "25px", marginLeft: "-4px" }}
+            style={{ width: "25px", height: "25px", marginLeft: "-4px", cursor: "pointer" }}
             onClick={handleCloseMobileSideNav}
           >
             <svg
@@ -253,7 +253,9 @@ export default () => {
                 paddingBottom: "20px"
               }}
             >
-              FAQ & Shipping/Returns
+              <div style={{ cursor: "pointer", display: "inline-block" }}>
+                FAQ & Shipping/Returns
+              </div>
             </div>
 
             <div
@@ -262,7 +264,9 @@ export default () => {
                 paddingBottom: "20px"
               }}
             >
-              Privacy Policy
+              <div style={{ cursor: "pointer", display: "inline-block" }}>
+                Privacy Policy
+              </div>
             </div>
 
             <div
@@ -271,7 +275,9 @@ export default () => {
                 paddingBottom: "20px"
               }}
             >
-              Accessability
+              <div style={{ cursor: "pointer", display: "inline-block" }}>
+                Accessability
+              </div>
             </div>
 
             <div
@@ -280,7 +286,9 @@ export default () => {
                 paddingBottom: "20px"
               }}
             >
-              Wholesale Inquires
+              <div style={{ cursor: "pointer", display: "inline-block" }}>
+                Wholesale Inquires
+              </div>
             </div>
 
             <div
@@ -289,7 +297,10 @@ export default () => {
                 paddingBottom: "20px"
               }}
             >
-              Account
+
+              <div style={{ cursor: "pointer", display: "inline-block" }}>
+                Account
+              </div>
             </div>
           </div>
         </div>
@@ -306,15 +317,15 @@ export default () => {
             alignItems: "center"
           }}
         >
-          <div>
+          <div style={{ cursor: "pointer" }}>
             <FontAwesomeIcon icon={["fab", "instagram"]} />
           </div>
 
-          <div>
+          <div style={{ cursor: "pointer" }}>
             <FontAwesomeIcon icon={["fab", "facebook-f"]} />
           </div>
 
-          <div>
+          <div style={{ cursor: "pointer" }}>
             <FontAwesomeIcon icon={["fab", "twitter"]} />
           </div>
         </div>
