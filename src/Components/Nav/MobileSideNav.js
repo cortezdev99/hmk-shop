@@ -19,7 +19,16 @@ export default () => {
   });
 
   const handleCloseMobileSideNav = () => {
-    setIsSideNavOpen(false);
+    const htmlElement = document.getElementById('html')
+    const mobileSideNavWrapperElement = document.getElementById(
+      "mobile-side-nav-wrapper"
+    );
+    mobileSideNavWrapperElement.classList.toggle("side-nav-slide")
+
+    setTimeout(() => {
+      htmlElement.classList.toggle('html-overflow-hidden')
+      setIsSideNavOpen(false);
+    }, 700)
   };
 
   const handleClick = (innerContentId, spinElem1, spinElem2) => {
@@ -29,10 +38,6 @@ export default () => {
     el.classList.toggle("open-content");
     el2.classList.toggle("spin");
     el3.classList.toggle("spin");
-  };
-
-  const handleCloseNav = () => {
-    setIsSideNavOpen(false);
   };
 
   if (!isSideNavOpen) {
@@ -126,7 +131,7 @@ export default () => {
                 }}
                 exact
                 to="/"
-                onClick={handleCloseNav}
+                onClick={handleCloseMobileSideNav}
               >
                 New Arrivals
               </NavLink>
@@ -144,7 +149,7 @@ export default () => {
                   color: "#fff"
                 }}
                 to="/best-sellers"
-                onClick={handleCloseNav}
+                onClick={handleCloseMobileSideNav}
               >
                 Best Sellers
               </NavLink>
@@ -234,7 +239,7 @@ export default () => {
                   color: "#fff"
                 }}
                 to="/sale"
-                onClick={handleCloseNav}
+                onClick={handleCloseMobileSideNav}
               >
                 Sale
               </NavLink>
