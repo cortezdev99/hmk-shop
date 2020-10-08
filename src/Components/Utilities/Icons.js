@@ -14,6 +14,7 @@ import {
   faBars
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircle as farFaCircle } from "@fortawesome/free-regular-svg-icons";
+import { faInstagram, faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons' 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 const Icons = () => {
@@ -31,7 +32,10 @@ const Icons = () => {
     faDizzy,
     faCircleNotch,
     faShoppingCart,
-    faBars
+    faBars,
+    faInstagram,
+    faFacebookF,
+    faTwitter
   );
 };
 

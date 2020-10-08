@@ -54,8 +54,7 @@ export default () => {
 
   useEffect(() => {
     const cartWrapperElement = document.getElementById('cart-wrapper')
-    const cartSlideAnimElement = document.getElementsByClassName('cart-slide')
-    if (isCartOpen && cartSlideAnimElement.length === 0) {
+    if (isCartOpen) {
       cartWrapperElement.classList.toggle('cart-slide')
     }
 

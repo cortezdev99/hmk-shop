@@ -10,25 +10,22 @@ export default () => {
     const mobileSideNavWrapperElement = document.getElementById(
       "mobile-side-nav-wrapper"
     );
-    const mobileSideNavSlideAnimElement = document.getElementsByClassName(
-      "side-nav-slide"
-    );
-    if (isSideNavOpen && mobileSideNavSlideAnimElement.length === 0) {
+    if (isSideNavOpen) {
       mobileSideNavWrapperElement.classList.toggle("side-nav-slide");
     }
   });
 
   const handleCloseMobileSideNav = () => {
-    const htmlElement = document.getElementById('html')
+    const htmlElement = document.getElementById("html");
     const mobileSideNavWrapperElement = document.getElementById(
       "mobile-side-nav-wrapper"
     );
-    mobileSideNavWrapperElement.classList.toggle("side-nav-slide")
+    mobileSideNavWrapperElement.classList.toggle("side-nav-slide");
 
     setTimeout(() => {
-      htmlElement.classList.toggle('html-overflow-hidden')
+      htmlElement.classList.toggle("html-overflow-hidden");
       setIsSideNavOpen(false);
-    }, 700)
+    }, 700);
   };
 
   const handleClick = (innerContentId, spinElem1, spinElem2) => {
@@ -86,7 +83,7 @@ export default () => {
           }}
         >
           <div
-            style={{ width: "25px", height: "25px" }}
+            style={{ width: "25px", height: "25px", marginLeft: "-4px" }}
             onClick={handleCloseMobileSideNav}
           >
             <svg
@@ -109,12 +106,11 @@ export default () => {
         <div
           className="mobileSideNavMainContent"
           style={{
-            padding: "0 40px",
+            padding: "20px 40px",
             fontSize: "14px",
-            height: "calc(90% - 45px)",
+            height: "calc(100% - 45px - 45px)",
             overflowY: "auto",
-            overflowX: "hidden",
-            paddingTop: "20px"
+            overflowX: "hidden"
           }}
         >
           <div style={{ fontWeight: "400", letterSpacing: "0.2em" }}>
@@ -298,7 +294,30 @@ export default () => {
           </div>
         </div>
 
-        <div style={{ height: "10%" }}>test</div>
+        <div
+          style={{
+            height: "45px",
+            fontSize: "20px",
+            paddingBottom: "25px",
+            boxShadow: "rgb(28, 27, 27) 0px -19px 16px 6px",
+            zIndex: 1,
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center"
+          }}
+        >
+          <div>
+            <FontAwesomeIcon icon={["fab", "instagram"]} />
+          </div>
+
+          <div>
+            <FontAwesomeIcon icon={["fab", "facebook-f"]} />
+          </div>
+
+          <div>
+            <FontAwesomeIcon icon={["fab", "twitter"]} />
+          </div>
+        </div>
       </div>
     </div>
   );
