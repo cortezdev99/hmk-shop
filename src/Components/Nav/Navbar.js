@@ -53,7 +53,7 @@ export default () => {
         style={{ height: "50px", padding: "0 40px", display: "flex", alignItems: "center" }}
       >
         <div 
-          style={{ width: "10%", fontSize: "20px" }}
+          style={{ width: "10%", fontSize: "20px", cursor: "pointer" }}
           onClick={handleOpeningHiddenNav}
         >
           <FontAwesomeIcon icon={["fas", "bars"]} />
@@ -71,7 +71,8 @@ export default () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
-            fontSize: "20px"
+            fontSize: "20px",
+            cursor: "pointer"
           }}
         >
           <FontAwesomeIcon icon={["fas", "shopping-cart"]} />

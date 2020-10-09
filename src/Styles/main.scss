@@ -121,3 +121,9 @@ code {
 .side-nav-main-content-slide, .side-nav-footer-slide {
   transform: translateX(0px) !important;
 }
+
+@media (max-width: 1023px) {
+  .app-container {
+    margin-top: 50px !important;
+  }
+}
