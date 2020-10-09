@@ -62,7 +62,7 @@ export default () => {
     if (products.length === 0 && checkoutBtnElm !== null) {
       checkoutBtnElm.classList.toggle('checkout-btn-no-show')
     }
-  })
+  }, [ isCartOpen, products ])
 
   if (isCartOpen !== true) {
     return <></>
