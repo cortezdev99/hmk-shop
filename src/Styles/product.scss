@@ -17,3 +17,17 @@
   color: #1d1d1d;
   text-decoration-line: underline;
 }
+
+@media (max-width: 640px) {
+  .product-container {
+    .product-image-wrapper {
+      width: 150px;
+      height: 150px;
+
+      img {
+        width: 150px;
+        height: 150px;
+      }
+    }
+  }
+}

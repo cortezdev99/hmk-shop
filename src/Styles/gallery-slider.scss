@@ -21,6 +21,8 @@
 
 .gallery-right-toggle {
   justify-content: flex-end;
+  padding-left: 5px;
+  padding-right: 0px;
 }
 
 .gallary-images-image {
@@ -35,5 +37,25 @@
 
   &:hover {
     border: 1px solid #1d1d1d;
+  }
+}
+
+@media (max-width: 640px) {
+  // .gallary-container {
+  //   width: 150px;
+  // }
+
+  .gallery-images-container {
+    width: 120px;
+  }
+
+  .gallary-images-image {
+    width: 30px;
+    height: 30px;
+  }
+
+  .gallery-toggle {
+    width: 15px;
+    font-size: 20px;
   }
 }
