@@ -10,8 +10,16 @@ export default () => {
     const mobileSideNavWrapperElement = document.getElementById(
       "mobile-side-nav-wrapper"
     );
+    const mobileSideNavMainContentWrapperElement = document.getElementById(
+      "mobile-side-nav-main-content"
+    );
+    const mobileSideNavFooterWrapperElement = document.getElementById(
+      "mobile-side-nav-footer-wrapper"
+    );
     if (isSideNavOpen) {
       mobileSideNavWrapperElement.classList.toggle("side-nav-slide");
+      mobileSideNavMainContentWrapperElement.classList.toggle("side-nav-main-content-slide");
+      mobileSideNavFooterWrapperElement.classList.toggle("side-nav-footer-slide")
     }
   });
 
@@ -28,7 +36,7 @@ export default () => {
     }, 700);
   };
 
-  const handleClick = (innerContentId, spinElem1, spinElem2) => {
+  const handleCollapsableLinkClick = (innerContentId, spinElem1, spinElem2) => {
     const el = document.getElementById(innerContentId);
     const el2 = document.getElementById(spinElem1);
     const el3 = document.getElementById(spinElem2);
@@ -58,7 +66,7 @@ export default () => {
     >
       <div
         id="mobile-side-nav-wrapper"
-        class="mobile-side-nav-wrapper"
+        className="mobile-side-nav-wrapper"
         style={{
           height: "100%",
           minHeight: "100vh",
@@ -70,6 +78,7 @@ export default () => {
           flexDirection: "column",
           transition: "height 0.5s, transform 0.5s",
           overflowX: "hidden",
+          overflowY: "hidden",
           transform: "translateX(-570px)"
         }}
       >
@@ -104,13 +113,16 @@ export default () => {
         </div>
 
         <div
-          className="mobileSideNavMainContent"
+          id="mobile-side-nav-main-content"
+          className="mobile-side-nav-main-content"
           style={{
             padding: "20px 40px",
             fontSize: "14px",
             height: "calc(100% - 45px - 45px)",
             overflowY: "auto",
-            overflowX: "hidden"
+            overflowX: "hidden",
+            transform: "translateX(-570px)",
+            transition: "transform 0.7s"
           }}
         >
           <div style={{ fontWeight: "400", letterSpacing: "0.2em" }}>
@@ -165,10 +177,11 @@ export default () => {
                 style={{
                   padding: "20px 0",
                   display: "flex",
-                  justifyContent: "space-between"
+                  justifyContent: "space-between",
+                  cursor: "pointer"
                 }}
                 onClick={() =>
-                  handleClick(
+                  handleCollapsableLinkClick(
                     "all-apparel-wrapper",
                     "all-apparel-spinner-1",
                     "all-apparel-spinner-2"
@@ -306,12 +319,16 @@ export default () => {
         </div>
 
         <div
+          id="mobile-side-nav-footer-wrapper"
+          class="mobile-side-nav-footer-wrapper"
           style={{
             height: "45px",
             fontSize: "20px",
             paddingBottom: "25px",
             boxShadow: "rgb(28, 27, 27) 0px -19px 16px 6px",
             zIndex: 1,
+            transform: "translateY(145px)",
+            transition: "transform 0.7s",
             display: "flex",
             justifyContent: "space-evenly",
             alignItems: "center"
