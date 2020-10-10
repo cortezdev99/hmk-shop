@@ -52,7 +52,14 @@
 
   .gallery-toggle {
     width: 15px;
-    font-size: 20px;
+    font-size: 25px;
+    margin-right: 2.5px;
+    padding-right: 0px;
+  }
+
+  .gallery-right-toggle {
+    margin-left: 2.5px;
+    padding-left: 0px;
   }
 }
 
