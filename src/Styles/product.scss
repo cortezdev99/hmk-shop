@@ -20,6 +20,8 @@
 
 @media (max-width: 640px) {
   .product-container {
+    padding: 0 10px;
+
     .product-image-wrapper {
       width: 150px;
       height: 150px;
@@ -27,6 +29,36 @@
       img {
         width: 150px;
         height: 150px;
+      }
+    }
+  }
+}
+
+@media (max-width: 375px) {
+  .product-container {
+    .product-image-wrapper {
+      width: 125px;
+      height: 125px;
+  
+      img {
+        width: 125px;
+        height: 125px;
+      }
+    }
+  }
+}
+
+@media (max-width: 325px) {
+  .product-container {
+    padding: 0 5px;
+    
+    .product-image-wrapper {
+      width: 100px;
+      height: 100px;
+  
+      img {
+        width: 100px;
+        height: 100px;
       }
     }
   }
