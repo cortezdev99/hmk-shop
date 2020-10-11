@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default (props) => {
@@ -6,40 +6,49 @@ export default (props) => {
   const [activeGalloryIdx, setActiveGalloryIdx] = useState(2)
   // let windowWidth
   const [windowWidth, setWindowWidth] = useState(null)
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
+  // const [prevWindowWidth, setPrevWindowWidth] = useState(null)
 
   const handleTranslatingImages = (direction) => {
-    if (direction === 'Left' && activeGalloryIdx !== 2 && windowWidth > 640) {
+    if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth > 640) {
       setActiveGalloryIdx(activeGalloryIdx - 1)
       return setTranslatePxls(translatePxls + 60)
-    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length - 1 && windowWidth > 640) {
+    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length - 1 && window.document.body.clientWidth > 640) {
       setActiveGalloryIdx(activeGalloryIdx + 1)
       setTranslatePxls(translatePxls - 60)
-    } else if (direction === 'Left' && activeGalloryIdx !== 2 && windowWidth <= 640) {
+    } else if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth <= 640) {
       setActiveGalloryIdx(activeGalloryIdx - 1)
       return setTranslatePxls(translatePxls + 55)
-    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length && windowWidth <= 640) {
+    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length && window.document.body.clientWidth <= 640) {
       setActiveGalloryIdx(activeGalloryIdx + 1)
       setTranslatePxls(translatePxls - 55)
     }
   }
 
-  console.log(windowWidth)
+  // console.log(windowWidth)
+  console.log(window.document.body.clientWidth)
 
-  useEffect(() => {
-    setWindowWidth(window.document.body.clientWidth)
-  }, [ window.document.body.clientWidth ])
+
+  // useEffect(() => {
+    window.onresize = () => {
+        // setWindowWidth(window.document.body.clientWidth)
+      setActiveGalloryIdx(2)
+      setTranslatePxls(0)
+    }
+  // })
 
   return (
     <div className="gallery-container">
       {
-        windowWidth > 640 && props.product.images.length > 3 ? (
+        window.document.body.clientWidth > 640 && props.product.images.length > 3 ? (
           <div
             className="gallery-left-toggle gallery-toggle"
             onClick={() => handleTranslatingImages('Left')}
           >
             <FontAwesomeIcon icon="angle-left" />
           </div>
-        ) : windowWidth < 640 && props.product.images.length > 2 ? (
+        ) : window.document.body.clientWidth < 640 && props.product.images.length > 2 ? (
           <div
           className="gallery-left-toggle gallery-toggle"
           onClick={() => handleTranslatingImages('Left')}
@@ -70,14 +79,14 @@ export default (props) => {
       </div>
 
       {
-         windowWidth > 640 && props.product.images.length > 3 ? (
+         window.document.body.clientWidth > 640 && props.product.images.length > 3 ? (
           <div
             className="gallery-right-toggle gallery-toggle"
             onClick={() => handleTranslatingImages('Right')}
           >
             <FontAwesomeIcon icon="angle-right" />
           </div>
-        ) : windowWidth < 640 && props.product.images.length > 2 ? (
+        ) : window.document.body.clientWidth < 640 && props.product.images.length > 2 ? (
           <div
             className="gallery-right-toggle gallery-toggle"
             onClick={() => handleTranslatingImages('Right')}
