@@ -74,11 +74,16 @@
 
 @media (max-width: 325px) {
   .gallery-images-container {
-    max-width: 73.6px;
+    max-width: 76.38px;
   }
 
   .gallary-images-image {
-    width: 33.2px;
-    height: 33.2px;
+    width: 33.19px;
+    height: 33.19px;
+  }
+
+  .gallery-toggle {
+    width: 9.31px;
+    font-size: 21px;
   }
 }
