@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .product-image-wrapper {
@@ -51,7 +50,7 @@
 @media (max-width: 325px) {
   .product-container {
     padding: 0 5px;
-    
+
     .product-image-wrapper {
       width: 100px;
       height: 100px;
