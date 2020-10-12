@@ -4,11 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default (props) => {
   const [translatePxls, setTranslatePxls] = useState(0)
   const [activeGalloryIdx, setActiveGalloryIdx] = useState(2)
-  // let windowWidth
-  const [windowWidth, setWindowWidth] = useState(null)
+  const [prevWindowWidth, setPrevWindowWidth] = useState(window.document.body.clientWidth)
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-
-  // const [prevWindowWidth, setPrevWindowWidth] = useState(null)
 
   const handleTranslatingImages = (direction) => {
     if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth > 640) {
@@ -26,31 +23,21 @@ export default (props) => {
     }
   }
 
-  // console.log(windowWidth)
-  if (window.document.body.clientWidth > 640 && props.product.images.length > 3) {
-    console.log('RENDER TOGGLE', window.document.body.clientWidth, props.product)
-  } else if (window.document.body.clientWidth < 640 && props.product.images.length > 2) {
-    console.log('RENDER TOGGLE', window.document.body.clientWidth, props.product)
-  } else {
-    console.log('DO NOT RENDER TOGGLE', window.document.body.clientWidth, props.product)
-  }
-
-
-  // useEffect(() => {
-    // window.onresize = () => {
-    //     // setWindowWidth(window.document.body.clientWidth)
-      // setActiveGalloryIdx(2)
-      // setTranslatePxls(0)
-      // forceUpdate()
-    // }
     useEffect(() => {
-      window.addEventListener('resize', () => {
-        setActiveGalloryIdx(2)
-        setTranslatePxls(0)
-        forceUpdate()
+      window.addEventListener('resize', (event) => {
+        if (window.document.body.clientWidth > 640 && prevWindowWidth < 640) {
+          setPrevWindowWidth(window.document.body.clientWidth)
+          setActiveGalloryIdx(2)
+          setTranslatePxls(0)
+          forceUpdate()
+        } else if (window.document.body.clientWidth < 640 && prevWindowWidth > 640) {
+          setPrevWindowWidth(window.document.body.clientWidth)
+          setActiveGalloryIdx(2)
+          setTranslatePxls(0)
+          forceUpdate()
+        }
       })
     })
-  // })
 
   return (
     <div className="gallery-container">
