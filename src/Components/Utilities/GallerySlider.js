@@ -14,12 +14,18 @@ export default (props) => {
     } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length - 1 && window.document.body.clientWidth > 640) {
       setActiveGalloryIdx(activeGalloryIdx + 1)
       setTranslatePxls(translatePxls - 60)
-    } else if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth <= 640) {
+    } else if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth <= 640 && window.document.body.clientWidth > 375) {
       setActiveGalloryIdx(activeGalloryIdx - 1)
       return setTranslatePxls(translatePxls + 55)
-    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length && window.document.body.clientWidth <= 640) {
+    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length && window.document.body.clientWidth <= 640 && window.document.body.clientWidth > 375) {
       setActiveGalloryIdx(activeGalloryIdx + 1)
       setTranslatePxls(translatePxls - 55)
+    } else if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth <= 375) {
+      setActiveGalloryIdx(activeGalloryIdx - 1)
+      return setTranslatePxls(translatePxls + 46.5)
+    } else if (direction === 'Right' && activeGalloryIdx < props.product.images.length && window.document.body.clientWidth <= 375) {
+      setActiveGalloryIdx(activeGalloryIdx + 1)
+      setTranslatePxls(translatePxls - 46.5)
     }
   }
 
