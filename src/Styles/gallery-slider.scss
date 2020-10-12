@@ -56,6 +56,22 @@
   }
 }
 
+@media (max-width: 375px) {
+  .gallery-images-container {
+    max-width: 92px;
+  }
+
+  .gallery-toggle {
+    width: 14px;
+    font-size: 28px;
+  }
+
+  .gallary-images-image {
+    width: 41.5px;
+    height: 41.5px;
+  }
+}
+
 // @media (max-width: 640px) {
 //   .gallery-images-container {
 //     max-width: 120px;
