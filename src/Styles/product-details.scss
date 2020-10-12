@@ -125,3 +125,16 @@
     border: none;
   }
 }
+
+@media (max-width: 1023px) {
+  .product-details-container {
+    flex-direction: column;
+
+    .product-details-right-column-wrapper {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0px;
+    }
+  }
+}
