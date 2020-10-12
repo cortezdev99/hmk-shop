@@ -27,15 +27,29 @@ export default (props) => {
   }
 
   // console.log(windowWidth)
-  console.log(window.document.body.clientWidth)
+  if (window.document.body.clientWidth > 640 && props.product.images.length > 3) {
+    console.log('RENDER TOGGLE', window.document.body.clientWidth, props.product)
+  } else if (window.document.body.clientWidth < 640 && props.product.images.length > 2) {
+    console.log('RENDER TOGGLE', window.document.body.clientWidth, props.product)
+  } else {
+    console.log('DO NOT RENDER TOGGLE', window.document.body.clientWidth, props.product)
+  }
 
 
   // useEffect(() => {
-    window.onresize = () => {
-        // setWindowWidth(window.document.body.clientWidth)
-      setActiveGalloryIdx(2)
-      setTranslatePxls(0)
-    }
+    // window.onresize = () => {
+    //     // setWindowWidth(window.document.body.clientWidth)
+      // setActiveGalloryIdx(2)
+      // setTranslatePxls(0)
+      // forceUpdate()
+    // }
+    useEffect(() => {
+      window.addEventListener('resize', () => {
+        setActiveGalloryIdx(2)
+        setTranslatePxls(0)
+        forceUpdate()
+      })
+    })
   // })
 
   return (
