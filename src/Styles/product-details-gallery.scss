@@ -40,3 +40,22 @@
   padding-right: 0px;
   justify-content: flex-end;
 }
+
+@media (max-width: 579px) {
+  .product-details-gallery-container {
+    height: 95px;
+
+    .product-details-gallery-images-wrapper {
+      width: 285px;
+  
+      .product-details-gallery-image {
+        width: 75px;
+        height: 75px;
+      }
+    }
+
+    .product-details-gallery-toggle {
+      width: 57.5px;
+    }
+  }
+}
