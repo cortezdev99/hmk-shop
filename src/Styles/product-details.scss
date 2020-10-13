@@ -135,6 +135,25 @@
       max-width: 500px;
       margin: 0 auto;
       padding: 0px;
+
+      .product-details-product-title-wrapper {
+        padding-top: 40px;
+      }
+    }
+  }
+}
+
+@media (max-width: 579px) {
+  .product-details-container {
+    .product-details-left-column-wrapper {
+      .product-details-left-column-image {
+        width: 400px;
+        height: 400px;
+      }
+    }
+
+    .product-details-right-column-wrapper {
+      max-width: 400px;
     }
   }
 }
