@@ -161,6 +161,7 @@
 @media (max-width: 479px) {
   .product-details-container {
     padding-bottom: 40px;
+    font-size: 14px;
 
     .product-details-left-column-wrapper {
       padding-top: 40px;
@@ -180,30 +181,62 @@
         padding-top: 40px;
 
         .product-details-product-colors-wrapper {
+          // padding-top: 40px;
+  
           .product-details-product-color-wrapper {
-            width: 95px;
-
+            width: 60px !important;
+            padding-right: 10px;
+            padding-bottom: 10px;
+  
             .product-details-product-color-image {
-              width: 75px;
-              height: 75px;
+              width: 50px !important;
+              height: 50px !important;
             }
           }
         }
       }
 
       .product-details-product-sizes-container {
-        padding-top: 20px;
+        padding-top: 30px;
 
-        .product-details-product-sizes-wrapper {
+        .product-details-product-sizes-wrapper {          
           .product-details-product-size-wrapper {
-            width: 75px;
-            height: 75px;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            margin-bottom: 10px;
           }
         }
       }
 
+      // .product-details-product-colors-container {
+        // padding-top: 40px;
+
+      //   .product-details-product-colors-wrapper {
+      //     .product-details-product-color-wrapper {
+      //       width: 95px;
+
+      //       .product-details-product-color-image {
+      //         width: 75px;
+      //         height: 75px;
+      //       }
+      //     }
+      //   }
+      // }
+
+      // .product-details-product-sizes-container {
+      //   padding-top: 20px;
+
+      //   .product-details-product-sizes-wrapper {
+      //     .product-details-product-size-wrapper {
+      //       width: 75px;
+      //       height: 75px;
+      //     }
+      //   }
+      // }
+
       .product-details-product-details-container {
-        padding-top: 20px;
+        padding-top: 30px;
       }
 
       .product-details-product-cart-btn-container {
@@ -213,6 +246,25 @@
       .product-details-shipping-wrapper {
         .shipping-container {
           padding-top: 40px;
+        }
+      }
+
+      .product-details-product-cart-btn {
+        padding: 0px;
+        height: 40px;
+      }
+
+      .product-details-shipping-wrapper {
+        .shipping-wrapper {
+          max-height: 44px;
+
+          .shipping-toggle-wrapper {
+            padding: 12.5px 10px;
+          }
+          
+          .shipping-inner-content-heading {
+            font-size: 16px;
+          }
         }
       }
     }
