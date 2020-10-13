@@ -218,3 +218,38 @@
     }
   }
 }
+
+@media (max-width: 339px) {
+  .product-details-container {
+    .product-details-left-column-wrapper {
+      .product-details-left-column-image {
+        width: 225px;
+        height: 225px;
+      }
+    }
+
+    .product-details-right-column-wrapper {
+      max-width: 225px;
+
+      .product-details-product-colors-wrapper {
+        .product-details-product-color-wrapper {
+          width: 75px !important;
+
+          .product-details-product-color-image {
+            width: 50px !important;
+            height: 50px !important;
+          }
+        }
+      }
+
+      .product-details-product-sizes-container {
+        .product-details-product-sizes-wrapper {
+          .product-details-product-size-wrapper {
+            width: 50px;
+            height: 50px;
+          }
+        }
+      }
+    }
+  }
+}
