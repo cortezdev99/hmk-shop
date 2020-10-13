@@ -180,7 +180,9 @@ export default (props) => {
             </button>
           </div>
 
-          <Shipping />
+          <div className="product-details-shipping-wrapper">
+            <Shipping />
+          </div>
         </div>
       </div>
     )
