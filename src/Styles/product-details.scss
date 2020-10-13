@@ -53,13 +53,13 @@
 
 .product-details-product-color-wrapper {
   padding-right: 20px;
-  width: 120px;
+  width: 95px;
   padding-bottom: 20px;
 }
 
 .product-details-product-color-image {
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
   cursor: pointer;
 
   &:hover {
@@ -84,8 +84,8 @@
 .product-details-product-size-wrapper {
   margin-right: 20px;
   margin-bottom: 20px;
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,7 +137,11 @@
       padding: 0px;
 
       .product-details-product-title-wrapper {
-        padding-top: 40px;
+        padding-top: 80px;
+      }
+
+      .product-details-product-sizes-container {
+        padding-top: 80px;
       }
     }
   }
