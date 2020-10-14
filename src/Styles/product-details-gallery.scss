@@ -83,6 +83,35 @@
 
     .toggle-right {
       padding-left: 5px;
+      padding-right: 0px;
+    }
+  }
+}
+
+@media (max-width: 339px) {
+  .product-details-gallery-container {
+    height: 70px;
+    width: 225px;
+
+    .product-details-gallery-images-wrapper {
+      width: 180px;
+  
+      .product-details-gallery-image {
+        width: 50px;
+        height: 50px;
+        margin: 0 5px;
+      }
+    }
+
+    .product-details-gallery-toggle {
+      width: 22.5px;
+      padding-right: 5px;
+      font-size: 35px;
+    }
+
+    .toggle-right {
+      padding-left: 5px;
+      padding-right: 0px;
     }
   }
 }
