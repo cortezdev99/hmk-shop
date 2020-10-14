@@ -12,12 +12,30 @@ export default (props) => {
   } = props
 
   const handleImageTransition = (direction) => {
-    if (direction === 'Left' && activeGalloryIdx !== 2) {
+    if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth > 579) {
       setActiveGalloryIdx(activeGalloryIdx - 1)
       return setTranslatePxls(translatePxls + 120)
-    } else if (direction === 'Right' && activeGalloryIdx < Object.values(images[activeImageSet])[0].length - 1) {
+    } else if (direction === 'Right' && activeGalloryIdx < Object.values(images[activeImageSet])[0].length - 1  && window.document.body.clientWidth > 579) {
       setActiveGalloryIdx(activeGalloryIdx + 1)
       setTranslatePxls(translatePxls - 120)
+    } else if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth < 579 && window.document.body.clientWidth > 479) {
+      setActiveGalloryIdx(activeGalloryIdx - 1)
+      return setTranslatePxls(translatePxls + 95)
+    } else if (direction === 'Right' && activeGalloryIdx < Object.values(images[activeImageSet])[0].length - 1  && window.document.body.clientWidth < 579 && window.document.body.clientWidth > 479) {
+      setActiveGalloryIdx(activeGalloryIdx + 1)
+      setTranslatePxls(translatePxls - 95)
+    } else if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth < 479 && window.document.body.clientWidth > 339) {
+      setActiveGalloryIdx(activeGalloryIdx - 1)
+      return setTranslatePxls(translatePxls + 70)
+    } else if (direction === 'Right' && activeGalloryIdx < Object.values(images[activeImageSet])[0].length - 1  && window.document.body.clientWidth < 479 && window.document.body.clientWidth > 339) {
+      setActiveGalloryIdx(activeGalloryIdx + 1)
+      setTranslatePxls(translatePxls - 70)
+    } else if (direction === 'Left' && activeGalloryIdx !== 2 && window.document.body.clientWidth < 339) {
+      setActiveGalloryIdx(activeGalloryIdx - 1)
+      return setTranslatePxls(translatePxls + 60)
+    } else if (direction === 'Right' && activeGalloryIdx < Object.values(images[activeImageSet])[0].length - 1  && window.document.body.clientWidth < 339) {
+      setActiveGalloryIdx(activeGalloryIdx + 1)
+      setTranslatePxls(translatePxls - 60)
     }
   }
 
