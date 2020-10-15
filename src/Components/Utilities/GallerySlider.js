@@ -73,12 +73,10 @@ export default props => {
     }
   };
 
- 
-
   useEffect(() => {
     window.addEventListener("resize", event => {
       if (activeGalleryIdx === 2 || translatePxls === 0) {
-        return
+        return;
       }
 
       if (window.document.body.clientWidth > 640 && prevWindowWidth < 640) {
@@ -94,22 +92,34 @@ export default props => {
         setActiveGalleryIdx(2);
         setTranslatePxls(0);
         forceUpdate();
-      } else if (window.document.body.clientWidth > 375 && prevWindowWidth <= 375) {
+      } else if (
+        window.document.body.clientWidth > 375 &&
+        prevWindowWidth <= 375
+      ) {
         setPrevWindowWidth(window.document.body.clientWidth);
         setActiveGalleryIdx(2);
         setTranslatePxls(0);
         forceUpdate();
-      } else if (window.document.body.clientWidth <= 375 && prevWindowWidth > 375) {
+      } else if (
+        window.document.body.clientWidth <= 375 &&
+        prevWindowWidth > 375
+      ) {
         setPrevWindowWidth(window.document.body.clientWidth);
         setActiveGalleryIdx(2);
         setTranslatePxls(0);
         forceUpdate();
-      } else if (window.document.body.clientWidth > 325 && prevWindowWidth <= 325) {
+      } else if (
+        window.document.body.clientWidth > 325 &&
+        prevWindowWidth <= 325
+      ) {
         setPrevWindowWidth(window.document.body.clientWidth);
         setActiveGalleryIdx(2);
         setTranslatePxls(0);
         forceUpdate();
-      } else if (window.document.body.clientWidth <= 325 && prevWindowWidth > 325) {
+      } else if (
+        window.document.body.clientWidth <= 325 &&
+        prevWindowWidth > 325
+      ) {
         setPrevWindowWidth(window.document.body.clientWidth);
         setActiveGalleryIdx(2);
         setTranslatePxls(0);
@@ -118,8 +128,8 @@ export default props => {
     });
 
     return () => {
-      window.removeEventListener("resize", null)
-    }
+      window.removeEventListener("resize", null);
+    };
   });
 
   return (
