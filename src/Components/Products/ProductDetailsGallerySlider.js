@@ -13,6 +13,10 @@ export default props => {
 
   useEffect(() => {
     window.addEventListener("resize", event => {
+      if (activeGalloryIdx === 2 || translatePxls === 0) {
+        return
+      }
+
       if (window.document.body.clientWidth > 579 && prevWindowWidth < 579) {
         setPrevWindowWidth(window.document.body.clientWidth);
         setActiveGalloryIdx(2);
