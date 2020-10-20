@@ -5,7 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MobileSideNavContext from "../../Contexts/MobileSideNavContext";
 
 export default () => {
-  const [ prevWindowWidth, setPrevWindowWidth ] = useState(window.document.body.clientWidth)
+  const [prevWindowWidth, setPrevWindowWidth] = useState(
+    window.document.body.clientWidth
+  );
   const { setIsCartOpen, products } = useContext(CartContext);
   const { setIsSideNavOpen } = useContext(MobileSideNavContext);
 
@@ -26,8 +28,8 @@ export default () => {
   const handleOpeningHiddenNav = () => {
     const htmlElement = document.getElementById("html");
     htmlElement.classList.toggle("html-overflow-hidden");
-    setIsSideNavOpen(true)
-  }
+    setIsSideNavOpen(true);
+  };
 
   useEffect(() => {
     const permElmnt = document.getElementById("navbar-wrapper-id");
@@ -50,10 +52,16 @@ export default () => {
     window.addEventListener(
       "resize",
       function() {
-        if (window.document.body.clientWidth >= 1023 && prevWindowWidth < 1023) {
-          setPrevWindowWidth(window.document.body.clientWidth)
-        } else if (window.document.body.clientWidth < 1023 && prevWindowWidth >= 1023) {
-          setPrevWindowWidth(window.document.body.clientWidth)
+        if (
+          window.document.body.clientWidth >= 1023 &&
+          prevWindowWidth < 1023
+        ) {
+          setPrevWindowWidth(window.document.body.clientWidth);
+        } else if (
+          window.document.body.clientWidth < 1023 &&
+          prevWindowWidth >= 1023
+        ) {
+          setPrevWindowWidth(window.document.body.clientWidth);
         }
       },
       false
@@ -61,26 +69,34 @@ export default () => {
 
     return () => {
       window.removeEventListener("resize", function() {
-        return
-      })
-    }
-  })
+        return;
+      });
+    };
+  });
 
   if (window.document.body.clientWidth < 1023) {
     return (
       <div
         className="navbar-wrapper"
         id="navbar-wrapper-id"
-        style={{ height: "50px", padding: "0 40px", display: "flex", alignItems: "center" }}
+        style={{
+          height: "50px",
+          padding: "0 40px",
+          display: "flex",
+          alignItems: "center"
+        }}
       >
-        <div 
+        <div
           style={{ width: "10%", fontSize: "20px", cursor: "pointer" }}
           onClick={handleOpeningHiddenNav}
         >
           <FontAwesomeIcon icon={["fas", "bars"]} />
         </div>
 
-        <div className="navbar-logo-wrapper" style={{ width: "80%", height: "50px" }}>
+        <div
+          className="navbar-logo-wrapper"
+          style={{ width: "80%", height: "50px" }}
+        >
           HMK Shop
         </div>
 
