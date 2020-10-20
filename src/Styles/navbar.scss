@@ -48,3 +48,9 @@
 .box-shadow {
   box-shadow: 0px 10px 25px 8px rgba(0,0,0,0.29);
 }
+
+@media (max-width: 300px) {
+  .navbar-wrapper {
+    padding: 0 20px;
+  }
+}
