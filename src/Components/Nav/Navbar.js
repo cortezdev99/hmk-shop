@@ -1,10 +1,11 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import CartContext from "../../Contexts/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MobileSideNavContext from "../../Contexts/MobileSideNavContext";
 
 export default () => {
+  const [ prevWindowWidth, setPrevWindowWidth ] = useState(window.document.body.clientWidth)
   const { setIsCartOpen, products } = useContext(CartContext);
   const { setIsSideNavOpen } = useContext(MobileSideNavContext);
 
@@ -44,6 +45,26 @@ export default () => {
       false
     );
   }, []);
+
+  useEffect(() => {
+    window.addEventListener(
+      "resize",
+      function() {
+        if (window.document.body.clientWidth >= 1023 && prevWindowWidth < 1023) {
+          setPrevWindowWidth(window.document.body.clientWidth)
+        } else if (window.document.body.clientWidth < 1023 && prevWindowWidth >= 1023) {
+          setPrevWindowWidth(window.document.body.clientWidth)
+        }
+      },
+      false
+    );
+
+    return () => {
+      window.removeEventListener("resize", function() {
+        return
+      })
+    }
+  })
 
   if (window.document.body.clientWidth < 1023) {
     return (
