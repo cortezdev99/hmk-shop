@@ -1,10 +1,13 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useReducer, useContext, useEffect } from "react";
 import MobileSideNavContext from "../../Contexts/MobileSideNavContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 
 export default () => {
+  const [ prevWindowHeight, setPrevWindowHeight ] = useState(window.innerHeight)
+  const [ footerMargin, setFooterMargin ] = useState(0)
   const { isSideNavOpen, setIsSideNavOpen } = useContext(MobileSideNavContext);
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
     const mobileSideNavWrapperElement = document.getElementById(
@@ -21,7 +24,60 @@ export default () => {
       mobileSideNavMainContentWrapperElement.classList.toggle("side-nav-main-content-slide");
       mobileSideNavFooterWrapperElement.classList.toggle("side-nav-footer-slide")
     }
-  });
+  }, [isSideNavOpen]);
+
+  useEffect(() => {
+    if (window.outerHeight - window.innerHeight > 44) {
+      const margin = (window.outerHeight - window.innerHeight) - 44
+      setFooterMargin(margin)
+      // forceUpdate()
+    } else if (window.outerHeight - window.innerHeight > 20) {
+      const margin = (window.outerHeight - window.innerHeight) - 20
+      setFooterMargin(margin)
+      // forceUpdate()
+    }
+
+    window.addEventListener("resize", () => {
+      // console.log(window.document.body.clientHeight, window.innerHeight)
+      // const test = prevWindowHeight + 50
+      // if (window.innerHeight < prevWindowHeight) {
+      //   setFooterMargin(window.innerHeight - prevWindowHeight)
+      //   forceUpdate()
+      // } else if (window.innerHeight > prevWindowHeight) {
+      //   setFooterMargin(footerMargin + (window.innerHeight - prevWindowHeight))
+      //   forceUpdate()
+      // }
+
+      // if (window.innerHeight > prevWindowHeight && footerMargin < 50) {
+      //   setFooterMargin(window.innerHeight - prevWindowHeight)
+      //   forceUpdate()
+      // } else if (window.innerHeight < prevWindowHeight && footerMargin > 0) {
+      //   setFooterMargin(prevWindowHeight - window.innerHeight)
+      //   forceUpdate()
+      // }
+
+      if (window.outerHeight - window.innerHeight > 44) {
+        const margin = (window.outerHeight - window.innerHeight) - 44
+        setFooterMargin(margin)
+        forceUpdate()
+      } else if (window.outerHeight - window.innerHeight > 20) {
+        const margin = (window.outerHeight - window.innerHeight) - 20
+        setFooterMargin(margin)
+        forceUpdate()
+      } else {
+        setFooterMargin(0);
+        forceUpdate();
+      }
+
+      console.log(window.outerHeight)
+    })
+
+    return () => {
+      window.removeEventListener("resize", () => {
+        return
+      })
+    }
+  })
 
   const handleCloseMobileSideNav = () => {
     const htmlElement = document.getElementById("html");
@@ -118,7 +174,7 @@ export default () => {
           style={{
             padding: "20px 40px",
             fontSize: "14px",
-            height: "calc(100% - 45px - 45px)",
+            height: `calc(100% - 90px`,
             overflowY: "auto",
             overflowX: "hidden",
             transform: "translateX(-570px)",
@@ -320,11 +376,12 @@ export default () => {
 
         <div
           id="mobile-side-nav-footer-wrapper"
-          class="mobile-side-nav-footer-wrapper"
+          className="mobile-side-nav-footer-wrapper"
           style={{
             height: "45px",
             fontSize: "20px",
-            paddingBottom: "25px",
+            paddingBottom: "15px",
+            marginBottom: `${footerMargin}px`,
             boxShadow: "rgb(28, 27, 27) 0px -19px 16px 6px",
             zIndex: 1,
             transform: "translateY(145px)",
