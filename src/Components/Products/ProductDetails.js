@@ -174,11 +174,16 @@ export default (props) => {
             </div>
           </div>
 
-          <div className="product-details-product-cart-btn-container">
-            <button type="button" onClick={handleAddToCart} className="product-details-product-cart-btn">
-              Add to Cart
-            </button>
-          </div>
+          {
+            window.document.body.clientWidth > 1023 ? (
+              <div className="product-details-product-cart-btn-container">
+                <button type="button" onClick={handleAddToCart} className="product-details-product-cart-btn">
+                  Add to Cart
+                </button>
+              </div>
+            ) : null
+          }
+
 
           <div className="product-details-shipping-wrapper">
             <Shipping />
