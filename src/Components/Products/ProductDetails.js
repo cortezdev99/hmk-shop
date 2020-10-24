@@ -191,10 +191,10 @@ export default (props) => {
 
           {
             window.document.body.clientWidth < 1023 ? (
-              <div style={{
+              <div className="product-details-product-cart-floating-btn-container" style={{
                 position: "fixed",
                 bottom: "0",
-                width: "80%",
+                width: "100%",
                 height: "60px",
                 paddingBottom: "20px",
                 backgroundColor: "#fff",
