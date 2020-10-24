@@ -188,6 +188,29 @@ export default (props) => {
           <div className="product-details-shipping-wrapper">
             <Shipping />
           </div>
+
+          {
+            window.document.body.clientWidth < 1023 ? (
+              <div style={{
+                position: "fixed",
+                bottom: "0",
+                width: "80%",
+                height: "60px",
+                paddingBottom: "20px",
+                backgroundColor: "#fff",
+                boxShadow: "#fff 0px -19px 16px 6px"
+              }}>
+                <button className="product-details-product-cart-btn" style={{
+                  width: "100%",
+                  height: "100%",
+                  padding: "0px",
+                  boxShadow: "#fff 0px 21px 0px 6px"
+                }} type="button" onClick={handleAddToCart}>
+                  Add to Cart
+                </button>
+              </div>
+            ) : null
+          }
         </div>
       </div>
     )
