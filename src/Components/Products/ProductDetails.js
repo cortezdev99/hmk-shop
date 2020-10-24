@@ -181,23 +181,19 @@ export default (props) => {
                   Add to Cart
                 </button>
               </div>
-            ) : null
+            ) : (
+              <div className="product-details-product-cart-floating-btn-container">
+                <button className="product-details-product-cart-btn" type="button" onClick={handleAddToCart}>
+                  Add to Cart
+                </button>
+              </div>
+            )
           }
 
 
           <div className="product-details-shipping-wrapper">
             <Shipping />
           </div>
-
-          {
-            window.document.body.clientWidth < 1023 ? (
-              <div className="product-details-product-cart-floating-btn-container">
-                <button className="product-details-product-cart-btn" type="button" onClick={handleAddToCart}>
-                  Add to Cart
-                </button>
-              </div>
-            ) : null
-          }
         </div>
       </div>
     )
