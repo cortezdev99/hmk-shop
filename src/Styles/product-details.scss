@@ -135,6 +135,7 @@
   background-color: #fff;
   box-shadow: #fff 0px -19px 16px 6px;
   max-width: 500px;
+  z-index: 1;
 }
 
 .product-details-product-cart-btn {
@@ -161,11 +162,11 @@
       .product-details-product-sizes-container {
         padding-top: 80px;
       }
-    }
 
-    // .product-details-product-cart-floating-btn-container {
-    //   max-width: 500px;
-    // }
+      .product-details-shipping-wrapper {
+        padding-bottom: 55px;
+      }
+    }
   }
 }
 
