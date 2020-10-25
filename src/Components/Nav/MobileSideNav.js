@@ -77,7 +77,7 @@ export default () => {
         return
       })
     }
-  })
+  }, [])
 
   const handleCloseMobileSideNav = () => {
     const htmlElement = document.getElementById("html");
@@ -148,7 +148,12 @@ export default () => {
           }}
         >
           <div
-            style={{ width: "25px", height: "25px", marginLeft: "-4px", cursor: "pointer" }}
+            style={{
+              width: "25px",
+              height: "25px",
+              marginLeft: "-4px",
+              cursor: "pointer"
+            }}
             onClick={handleCloseMobileSideNav}
           >
             <svg
@@ -366,7 +371,6 @@ export default () => {
                 paddingBottom: "20px"
               }}
             >
-
               <div style={{ cursor: "pointer", display: "inline-block" }}>
                 Account
               </div>

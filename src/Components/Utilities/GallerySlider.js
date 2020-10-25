@@ -130,7 +130,7 @@ export default props => {
     return () => {
       window.removeEventListener("resize", null);
     };
-  });
+  }, []);
 
   return (
     <div className="gallery-container">
