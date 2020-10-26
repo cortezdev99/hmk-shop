@@ -104,24 +104,24 @@
     .product-details-product-cart-btn-container {
       padding-top: 80px;
       width: 100%;
+    }
     
-      .product-details-product-cart-btn {
-        width: 100%;
-        padding: 1rem;
-        border-radius: 5px;
-        border: 1px solid transparent;
-        background: #45b3e0;
-        cursor: pointer;
-      
-        &:active {
-          transform: scale(0.95)
-        }
-      
-        &:focus {
-          outline: none;
-          text-decoration: none;
-          border: none;
-        }
+    .product-details-product-cart-btn {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 5px;
+      border: 1px solid transparent;
+      background: #45b3e0;
+      cursor: pointer;
+    
+      &:active {
+        transform: scale(0.95)
+      }
+    
+      &:focus {
+        outline: none;
+        text-decoration: none;
+        border: none;
       }
     }
   }

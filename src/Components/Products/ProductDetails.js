@@ -183,7 +183,12 @@ export default (props) => {
               </div>
             ) : (
               <div className="product-details-product-cart-floating-btn-container">
-                <button className="product-details-product-cart-btn" type="button" onClick={handleAddToCart}>
+                <button className="product-details-product-cart-btn" style={{
+                  width: "100%",
+                  height: "100%",
+                  padding: "0px",
+                  boxShadow: "#fff 0px 21px 0px 6px"
+                }} type="button" onClick={handleAddToCart}>
                   Add to Cart
                 </button>
               </div>

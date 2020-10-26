@@ -8,6 +8,7 @@ export default () => {
   const [ footerMargin, setFooterMargin ] = useState(0)
   const { isSideNavOpen, setIsSideNavOpen } = useContext(MobileSideNavContext);
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  const [ios, setIOS] = useState(null);
 
   useEffect(() => {
     const mobileSideNavWrapperElement = document.getElementById(
@@ -27,14 +28,33 @@ export default () => {
   }, [isSideNavOpen]);
 
   useEffect(() => {
-    if (window.outerHeight - window.innerHeight > 44) {
-      const margin = (window.outerHeight - window.innerHeight) - 44
+    function isIOS() {
+      return [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+      ].includes(navigator.platform)
+      // iPad on iOS 13 detection
+      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    }
+
+    setIOS(isIOS());
+  })
+
+  useEffect(() => {
+    if ((window.outerHeight - window.innerHeight) > 44 && ios) {
+      const margin = (window.outerHeight - window.innerHeight && ios) - 44
       setFooterMargin(margin)
       // forceUpdate()
-    } else if (window.outerHeight - window.innerHeight > 20) {
+    } else if ((window.outerHeight - window.innerHeight) > 20 && ios) {
       const margin = (window.outerHeight - window.innerHeight) - 20
       setFooterMargin(margin)
       // forceUpdate()
+    } else {
+      setFooterMargin(0)
     }
 
     window.addEventListener("resize", () => {
@@ -56,11 +76,11 @@ export default () => {
       //   forceUpdate()
       // }
 
-      if (window.outerHeight - window.innerHeight > 44) {
+      if ((window.outerHeight - window.innerHeight) > 44 && ios) {
         const margin = (window.outerHeight - window.innerHeight) - 44
         setFooterMargin(margin)
         forceUpdate()
-      } else if (window.outerHeight - window.innerHeight > 20) {
+      } else if ((window.outerHeight - window.innerHeight) > 20 && ios) {
         const margin = (window.outerHeight - window.innerHeight) - 20
         setFooterMargin(margin)
         forceUpdate()
@@ -113,8 +133,8 @@ export default () => {
         zIndex: "1000",
         top: 0,
         bottom: 0,
-        minHeight: "100vh",
-        height: "100%",
+        // minHeight: "100vh",
+        // height: "100%",
         width: "100%",
         display: "flex",
         justifyContent: "flex-start"
@@ -124,8 +144,8 @@ export default () => {
         id="mobile-side-nav-wrapper"
         className="mobile-side-nav-wrapper"
         style={{
-          height: "100%",
-          minHeight: "100vh",
+          // height: "100%",
+          // minHeight: "100vh",
           background: "#1c1b1b",
           color: "#fff",
           width: "80%",
@@ -378,36 +398,44 @@ export default () => {
           </div>
         </div>
 
-        <div
-          id="mobile-side-nav-footer-wrapper"
-          className="mobile-side-nav-footer-wrapper"
-          style={{
-            height: "45px",
-            fontSize: "20px",
-            paddingBottom: "15px",
-            marginBottom: `${footerMargin}px`,
-            boxShadow: "rgb(28, 27, 27) 0px -19px 16px 6px",
-            zIndex: 1,
-            transform: "translateY(145px)",
-            transition: "transform 0.7s",
-            display: "flex",
-            justifyContent: "space-evenly",
-            alignItems: "center"
-          }}
-        >
-          <div style={{ cursor: "pointer" }}>
-            <FontAwesomeIcon icon={["fab", "instagram"]} />
-          </div>
+        {/* <div style={{ transform: "translate3d(0, 0, 0)", overflow: }}> */}
 
-          <div style={{ cursor: "pointer" }}>
-            <FontAwesomeIcon icon={["fab", "facebook-f"]} />
-          </div>
+          <div
+            id="mobile-side-nav-footer-wrapper"
+            className="mobile-side-nav-footer-wrapper"
+            style={{
+              height: "45px",
+              fontSize: "20px",
+              paddingBottom: "15px",
+              // marginBottom: `${footerMargin}px`,
+              position: "fixed",
+              bottom: "0",
+              width: "100%",
+              boxShadow: "rgb(28, 27, 27) 0px -19px 16px 6px",
+              zIndex: 1,
+              transform: "translateY(145px)",
+              transition: "transform 0.7s",
+              display: "flex",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              overflow: "hidden"
+            }}
+          >
 
-          <div style={{ cursor: "pointer" }}>
-            <FontAwesomeIcon icon={["fab", "twitter"]} />
+            <div style={{ cursor: "pointer" }}>
+              <FontAwesomeIcon icon={["fab", "instagram"]} />
+            </div>
+
+            <div style={{ cursor: "pointer" }}>
+              <FontAwesomeIcon icon={["fab", "facebook-f"]} />
+            </div>
+
+            <div style={{ cursor: "pointer" }}>
+              <FontAwesomeIcon icon={["fab", "twitter"]} />
+            </div>
           </div>
         </div>
-      </div>
+      {/* </div> */}
     </div>
   );
 };
