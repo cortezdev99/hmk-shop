@@ -298,16 +298,16 @@
 
     .cart-products-container {
       padding: 20px;
-      font-size: 14px;
+      font-size: 12px;
       
       .cart-product-wrapper {
         display: flex;
         column-gap: 0px;
 
         .cart-product-left-column-wrapper {
-          width: 125px;
-          min-width: 125px;
-          height: 125px;
+          width: 100px;
+          min-width: 100px;
+          height: 100px;
         }
   
         .cart-product-right-column-wrapper {
@@ -319,14 +319,76 @@
             justify-content: space-between;
 
             .cart-product-quantity-left-column-wrapper {
-              width: 70px;
+              width: 60px;
 
               .cart-product-quantity-toggle {
                 padding: 0px;
+                font-size: 10px;
               }
+            }
+
+            .cart-product-remove-product-btn {
+              font-size: 11px;
             }
           }
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 350px) {
+  .cart-wrapper {
+    .cart-heading-wrapper {
+      height: 65px;
+    }
+
+    .cart-products-container {
+      padding: 10px;
+      font-size: 10px;
+      gap: 10px;
+      
+      .cart-product-wrapper {
+        display: flex;
+        column-gap: 0px;
+
+        .cart-product-left-column-wrapper {
+          width: 90px;
+          min-width: 90px;
+          height: 90px;
+        }
+  
+        .cart-product-right-column-wrapper {
+          padding-left: 10px;
+          width: calc(100% - 80px);
+
+          .cart-product-quantity-container {
+            display: flex;
+            justify-content: space-between;
+
+            .cart-product-quantity-left-column-wrapper {
+              width: 45px;
+
+              .cart-product-quantity-toggle {
+                padding: 0px;
+                font-size: 7px;
+              }
+            }
+
+            .cart-product-remove-product-btn {
+              font-size: 9px;
+            }
+          }
+        }
+      }
+    }
+
+    .cart-product-checkout-wrapper {
+      padding: 0 10px;
+      padding-bottom: 10px;
+
+      button {
+        padding: 0.7rem;
       }
     }
   }
