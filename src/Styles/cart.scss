@@ -205,7 +205,7 @@
   opacity: 0;
 }
 
-@media (max-width: 712px) {
+@media (max-width: 4000px) {
   .cart-wrapper {
     .cart-heading-wrapper {
       height: 65px;
@@ -285,6 +285,15 @@
             }
           }
         }
+      }
+    }
+
+    .cart-product-checkout-wrapper {
+      padding: 0 20px;
+      padding-bottom: 20px;
+
+      button {
+        padding: 0.782rem;
       }
     }
   }
@@ -385,10 +394,10 @@
 
     .cart-product-checkout-wrapper {
       padding: 0 10px;
-      padding-bottom: 10px;
+      padding-bottom: 20px;
 
       button {
-        padding: 0.7rem;
+        padding: 0.625rem;
       }
     }
   }
