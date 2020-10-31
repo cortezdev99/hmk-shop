@@ -71,12 +71,14 @@ export default () => {
   return (
     <div className="cart-container">
       <div className="cart-wrapper" id="cart-wrapper" style={{
-        overflowX: "hidden",
+        // overflow: "hidden",
         background: "linear-gradient(90deg,#fff,#fbfbfb,#ccc)",
       }}>
         <div className="cart-heading-wrapper" style={{
           borderBottom: "1px solid transparent",
-          background: "#fff"
+          background: "#fff",
+          minHeight: "50px",
+          maxHeight: "50px"
         }}>
           <div className="cart-heading" style={{ transform: "scaleX(-1)" }}>
             {/* <FontAwesomeIcon icon={["fas", "shopping-cart"]} /> */}
@@ -109,10 +111,7 @@ export default () => {
 
         {
           products.length > 0 ? (
-            <div className="cart-products-container" style={{
-              // background: "linear-gradient(90deg,#fff,#fbfbfb,#ccc)",
-              // zIndex: 2
-            }}>
+            <div className="cart-products-container">
               {
                 products.map((product, productIdx) => {
                   return (
