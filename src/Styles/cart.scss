@@ -310,6 +310,14 @@
   }
 }
 
+@media (max-width: 490px) {
+  .cart-product-checkout-wrapper {
+    button {
+      padding: 0.625rem !important;
+    }
+  }
+}
+
 @media (max-width: 440px) {
   .cart-wrapper {
     .cart-heading-wrapper {
@@ -407,9 +415,9 @@
       padding: 0 10px;
       padding-bottom: 20px;
 
-      button {
-        padding: 0.625rem;
-      }
+      // button {
+      //   padding: 0.625rem;
+      // }
     }
   }
 }
