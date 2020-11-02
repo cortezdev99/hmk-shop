@@ -54,12 +54,11 @@ export default () => {
 
   useEffect(() => {
     const cartWrapperElement = document.getElementById('cart-wrapper')
+    const checkoutBtnElm = document.getElementById('cart-product-checkout-wrapper')
     if (isCartOpen) {
       cartWrapperElement.classList.toggle('cart-slide')
-    }
-
-    const checkoutBtnElm = document.getElementById('cart-product-checkout-wrapper')
-    if (products.length === 0 && checkoutBtnElm !== null) {
+      checkoutBtnElm.classList.toggle('checkout-btn-slide-in')
+    } else if (products.length === 0 && checkoutBtnElm !== null) {
       checkoutBtnElm.classList.toggle('checkout-btn-no-show')
     }
   }, [ isCartOpen, products ])

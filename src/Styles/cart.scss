@@ -126,6 +126,7 @@
                 cursor: pointer;
                 font-weight: 500;
                 text-decoration-line: underline;
+                padding-right: 0px !important;
 
                 &:hover {
                   color: #ff0000;
@@ -149,6 +150,8 @@
       position: absolute;
       bottom: 0px;
       width: 100%;
+      transform: translateY(120px);
+      transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms;
 
       .cart-product-checkout-btn {
         padding: 0.782rem;
@@ -195,17 +198,21 @@
   transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms;
 }
 
-// No Products Checkout Btn Slide Out Animation
-.checkout-btn-translate-out {
-  transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms;
-  transform: translateY(120px);
-  opacity: 0;
-}
-
 // No Products When Opened Btn No Show
 .checkout-btn-no-show {
   transform: translateY(120px);
   opacity: 0;
+}
+
+// Slide the checkout buttin in Animation
+.checkout-btn-slide-in {
+  transform: translateY(0) !important;
+}
+
+// No Products Checkout Btn Slide Out Animation
+.checkout-btn-translate-out {
+  transform: translateY(120px) !important;
+  opacity: 0 !important;
 }
 
 @media (max-width: 580px) {
