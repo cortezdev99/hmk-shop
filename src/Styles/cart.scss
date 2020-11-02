@@ -284,6 +284,12 @@
           }
         }
       }
+
+      .cart-product-no-products-wrapper {
+        .cart-product-no-products-heading {
+          font-size: 14px;
+        }
+      }
     }
   }
 }
@@ -331,6 +337,12 @@
       .cart-product-checkout-wrapper {
         padding: 0 10px;
         padding-bottom: 20px;
+      }
+
+      .cart-product-no-products-wrapper {
+        .cart-product-no-products-heading {
+          font-size: 12px;
+        }
       }
     }
   }
