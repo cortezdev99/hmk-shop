@@ -57,10 +57,6 @@
           }
         }
 
-        .cart-product-wrapper:not(:last-child) {
-          padding-bottom: 40px;
-        }
-
         .cart-product-right-column-wrapper {
           padding-left: 20px;
           width: 100%;
@@ -143,6 +139,10 @@
             }
           }
         }
+      }
+
+      .cart-product-wrapper:not(:last-child) {
+        padding-bottom: 40px;
       }
     }
 
