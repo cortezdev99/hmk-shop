@@ -40,6 +40,8 @@
       height: 100%;
       overflow: hidden auto;
       height: calc(100% - 50px - 80px);
+      transform: translateX(570px);
+      transition: transform 0.7s ease 0s;
 
       .cart-product-wrapper {
         display: flex;
@@ -151,7 +153,7 @@
       bottom: 0px;
       width: 100%;
       transform: translateY(120px);
-      transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms;
+      transition: transform 0.7s ease 0s;
 
       .cart-product-checkout-btn {
         padding: 0.782rem;
@@ -195,7 +197,7 @@
   right: 0px;
   transform: scale(0);
   opacity: 0;
-  transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms;
+  transition: transform 560ms ease-in-out 0ms, opacity 560ms ease-in-out 0ms !important;
 }
 
 // No Products When Opened Btn No Show
@@ -204,7 +206,7 @@
   opacity: 0;
 }
 
-// Slide the checkout buttin in Animation
+// Slide the checkout butten in Animation
 .checkout-btn-slide-in {
   transform: translateY(0) !important;
 }
@@ -213,6 +215,11 @@
 .checkout-btn-translate-out {
   transform: translateY(120px) !important;
   opacity: 0 !important;
+}
+
+// Slide the products in Animation
+.slide-products-in {
+  transform: translateX(0px) !important;
 }
 
 @media (max-width: 580px) {

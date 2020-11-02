@@ -54,12 +54,21 @@ export default () => {
 
   useEffect(() => {
     const cartWrapperElement = document.getElementById('cart-wrapper')
-    const checkoutBtnElm = document.getElementById('cart-product-checkout-wrapper')
+    const checkoutBtnElement = document.getElementById('cart-product-checkout-wrapper')
+    const productContainerElement = document.getElementById('cart-products-container');
+    
     if (isCartOpen) {
       cartWrapperElement.classList.toggle('cart-slide')
-      checkoutBtnElm.classList.toggle('checkout-btn-slide-in')
-    } else if (products.length === 0 && checkoutBtnElm !== null) {
-      checkoutBtnElm.classList.toggle('checkout-btn-no-show')
+
+      if (products.length > 0) {
+        checkoutBtnElement.classList.toggle('checkout-btn-slide-in')
+      }
+
+      if (productContainerElement !== null) {
+        productContainerElement.classList.toggle('slide-products-in')
+      }
+    } else if (products.length === 0 && checkoutBtnElement !== null) {
+      checkoutBtnElement.classList.toggle('checkout-btn-no-show')
     }
   }, [ isCartOpen, products ])
 
@@ -110,7 +119,7 @@ export default () => {
 
         {
           products.length > 0 ? (
-            <div className="cart-products-container">
+            <div className="cart-products-container" id="cart-products-container">
               {
                 products.map((product, productIdx) => {
                   return (
