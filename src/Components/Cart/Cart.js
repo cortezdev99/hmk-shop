@@ -126,18 +126,7 @@ export default () => {
           </div>
         </div>
 
-        <div
-        className="cart-free-shipping-header"
-        style={{
-          background: "#f2ed7c",
-          height: "40px",
-          borderTop: "1px solid #CCC",
-          borderBottom: "1px solid #CCC",
-          color: "#1c1b1b",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}>
+        <div className="cart-free-shipping-header">
           {
             subtotal >= 100 ? "You are eligable for free shipping!".toUpperCase() : (100 - subtotal) === 100 ? `Spend $100 and recieve free shipping!`.toUpperCase() : `Spend $${100 - subtotal} more and recieve free shipping!`.toUpperCase()
           }
