@@ -19,7 +19,6 @@
 
     .cart-heading-wrapper {
       font-size: 20px;
-      // height: 80px;
       height: 65px;
       padding-left: 40px;
       padding-right: 40px;
@@ -246,10 +245,6 @@
         padding-right: 20px;
       }
 
-      .cart-free-shipping-header {
-        // font-size: 12px;
-      }
-
       .cart-products-container {
         padding: 20px;
         font-size: 14px;
@@ -299,10 +294,6 @@
 @media (max-width: 440px) {
   .cart-container {
     .cart-wrapper {
-      .cart-free-shipping-header {
-        // font-size: 10px;
-      }
-
       .cart-products-container {
         padding: 20px;
         font-size: 12px;
