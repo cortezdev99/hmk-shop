@@ -344,6 +344,11 @@
 @media (max-width: 350px) {
   .cart-container {
     .cart-wrapper {
+      .cart-heading-wrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
       .cart-free-shipping-header {
         font-size: 11px;
         padding-left: 10px;
