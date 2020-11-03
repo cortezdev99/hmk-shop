@@ -55,7 +55,7 @@
       padding: 40px;
       height: 100%;
       overflow: hidden auto;
-      height: calc(100% - 50px - 80px);
+      height: calc(100% - 50px - 80px - 50px);
       transform: translateX(570px);
       transition: transform 0.7s ease 0s;
 
@@ -253,7 +253,7 @@
       .cart-products-container {
         padding: 20px;
         font-size: 14px;
-        height: calc(100% - 50px - 60px);
+        height: calc(100% - 50px - 60px - 50px);
 
         .cart-product-wrapper:not(:last-child) {
           padding-bottom: 20px;
@@ -292,7 +292,7 @@
   }
 
   .cart-products-container {
-    height: calc(100% - 50px - 55px) !important;
+    height: calc(100% - 50px - 55px - 50px) !important;
   }
 }
 
