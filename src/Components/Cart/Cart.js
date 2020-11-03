@@ -11,7 +11,8 @@ export default () => {
   const {
     isCartOpen,
     setIsCartOpen,
-    products
+    products,
+    setProducts
   } = useContext(CartContext)
 
   const handleCloseModal = () => {
@@ -74,12 +75,13 @@ export default () => {
   }, [ isCartOpen, products ])
 
   useEffect(() => {
+    console.log('hit')
     const subTotal = products.reduce((accum, currentVal) => {
       return (accum += currentVal[4].quantity * currentVal[0].product.price);
     }, 0);
 
     setSubtotal(subTotal)
-  }, [products])
+  }, [products, triggerReRender])
 
   if (isCartOpen !== true) {
     return <></>
@@ -128,7 +130,7 @@ export default () => {
 
         <div className="cart-free-shipping-header">
           {
-            subtotal >= 100 ? "You are eligable for free shipping!".toUpperCase() : (100 - subtotal) === 100 ? `Spend $100 and recieve free shipping!`.toUpperCase() : `Spend $${100 - subtotal} more and recieve free shipping!`.toUpperCase()
+            subtotal >= 100 ? "You're eligable for free shipping!".toUpperCase() : (100 - subtotal) === 100 ? `Spend $100 and recieve free shipping!`.toUpperCase() : `Spend $${100 - subtotal} more and recieve free shipping!`.toUpperCase()
           }
         </div>
 
