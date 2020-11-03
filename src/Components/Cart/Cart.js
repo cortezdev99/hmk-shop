@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default () => {
   const [triggerReRender, setTriggerReRender] = useState(false)
+  const [subtotal, setSubtotal] = useState(null)
 
   const {
     isCartOpen,
@@ -56,7 +57,7 @@ export default () => {
     const cartWrapperElement = document.getElementById('cart-wrapper')
     const checkoutBtnElement = document.getElementById('cart-product-checkout-wrapper')
     const productContainerElement = document.getElementById('cart-products-container');
-    
+
     if (isCartOpen) {
       cartWrapperElement.classList.toggle('cart-slide')
 
@@ -72,6 +73,14 @@ export default () => {
     }
   }, [ isCartOpen, products ])
 
+  useEffect(() => {
+    const subTotal = products.reduce((accum, currentVal) => {
+      return (accum += currentVal[4].quantity * currentVal[0].product.price);
+    }, 0);
+
+    setSubtotal(subTotal)
+  }, [products])
+
   if (isCartOpen !== true) {
     return <></>
   }
@@ -80,7 +89,7 @@ export default () => {
     <div className="cart-container">
       <div className="cart-wrapper" id="cart-wrapper" style={{
         // overflow: "hidden",
-        background: "linear-gradient(90deg,#fff,#fbfbfb,#ccc)",
+        // background: "linear-gradient(90deg,#fff,#fbfbfb,#ccc)",
       }}>
         <div className="cart-heading-wrapper" style={{
           borderBottom: "1px solid transparent",
@@ -115,6 +124,23 @@ export default () => {
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </div>
+        </div>
+
+        <div
+        className="cart-free-shipping-header"
+        style={{
+          background: "#f2ed7c",
+          height: "40px",
+          borderTop: "1px solid #CCC",
+          borderBottom: "1px solid #CCC",
+          color: "#1c1b1b",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}>
+          {
+            subtotal >= 100 ? "You are eligable for free shipping!".toUpperCase() : (100 - subtotal) === 100 ? `Spend $100 and recieve free shipping!`.toUpperCase() : `Spend $${100 - subtotal} more and recieve free shipping!`.toUpperCase()
+          }
         </div>
 
         {
