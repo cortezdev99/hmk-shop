@@ -11,8 +11,7 @@ export default () => {
   const {
     isCartOpen,
     setIsCartOpen,
-    products,
-    setProducts
+    products
   } = useContext(CartContext)
 
   const handleCloseModal = () => {
@@ -75,7 +74,6 @@ export default () => {
   }, [ isCartOpen, products ])
 
   useEffect(() => {
-    console.log('hit')
     const subTotal = products.reduce((accum, currentVal) => {
       return (accum += currentVal[4].quantity * currentVal[0].product.price);
     }, 0);
@@ -89,18 +87,14 @@ export default () => {
 
   return (
     <div className="cart-container">
-      <div className="cart-wrapper" id="cart-wrapper" style={{
-        // overflow: "hidden",
-        // background: "linear-gradient(90deg,#fff,#fbfbfb,#ccc)",
-      }}>
+      <div className="cart-wrapper" id="cart-wrapper">
         <div className="cart-heading-wrapper" style={{
           borderBottom: "1px solid transparent",
           background: "#fff",
           minHeight: "50px",
           maxHeight: "50px"
         }}>
-          <div className="cart-heading" style={{ transform: "scaleX(-1)" }}>
-            {/* <FontAwesomeIcon icon={["fas", "shopping-cart"]} /> */}
+          <div className="cart-heading">
           </div>
 
           <div
