@@ -28,6 +28,7 @@
 .gallery-images-image {
   width: 50px;
   height: 50px;
+  min-width: 50px;
   margin: 0 5px;
   position: relative;
   top: 0;
@@ -68,6 +69,7 @@
 
   .gallery-images-image {
     width: 41.5px;
+    min-width: 41.5px;
     height: 41.5px;
   }
 }
@@ -79,6 +81,7 @@
 
   .gallery-images-image {
     width: 33.19px;
+    min-width: 33.19px;
     height: 33.19px;
   }
 
