@@ -306,3 +306,10 @@
 #checkout-payment-request-button-element {
   padding: 0px;
 }
+
+@media (max-width: 1024px) {
+  .checkout-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}

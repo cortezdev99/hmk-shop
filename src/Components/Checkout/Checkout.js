@@ -15,11 +15,13 @@ import {
   PaymentRequestButtonElement
 } from "@stripe/react-stripe-js";
 import PaypalBtn from "../paypal/PaypalBtn";
+import OrderSummary from "./OrderSummary";
 // import axios from 'axios'
 
 export default () => {
   // TODO Add Free Shipping Logic On Orders Over $100
   // Todo Add Logic To Add Discount
+  // TODO Remove Create Account Component and create an account simultaniously when creating an order
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -1968,112 +1970,7 @@ export default () => {
           </div>
         </div>
 
-        <div className="checkout-right-column-wrapper">
-          <div className="checkout-products-wrapper">
-            {products.map((product, productIdx) => {
-              return (
-                <div className="checkout-product-wrapper" key={productIdx}>
-                  <div className="checkout-product-image-container">
-                    <div className="checkout-product-image-wrapper">
-                      <img
-                        src={product[3].image}
-                        alt="productImage"
-                        className="checkout-product-image"
-                      />
-
-                      <div className="checkout-product-image-quantity-wrapper">
-                        <div className="checkout-product-image-quantity">
-                          {product[4].quantity}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="checkout-product-info-wrapper">
-                    <div className="checkout-product-title">
-                      {product[0].product.title}
-                    </div>
-
-                    <div className="checkout-product-color">
-                      {product[2].color} / {product[1].size.toUpperCase()}
-                    </div>
-                  </div>
-
-                  <div className="checkout-product-price">
-                    ${product[0].product.price * product[4].quantity}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="checkout-discount-code-wrapper">
-            <div className="checkout-discount-input-wrapper">
-              <input
-                className="checkout-input"
-                placeholder="Discount or promo code"
-                type="text"
-                onChange={e => setDiscount(e.target.value)}
-              />
-            </div>
-
-            <div className="checkout-discount-btn-wrapper">
-              <button
-                className="checkout-discount-btn"
-                onClick={handleAddDiscountClick}
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-
-          <div className="checkout-total-calculations-wrapper">
-            <div className="checkout-subtotal-wrapper">
-              <div className="checkout-subtotal-header">Subtotal</div>
-
-              <div className="checkout-subtotal-price">${subtotal}</div>
-            </div>
-
-            <div className="checkout-shipping-wrapper">
-              <div className="checkout-shipping-header">Shipping</div>
-
-              <div className="checkout-shipping-price">
-                {subtotal <= 100 ? "$6" : "FREE"}
-              </div>
-            </div>
-
-            {activeDiscount ? (
-              <div
-                className="checkout-shipping-wrapper"
-                style={{ paddingTop: "20px" }}
-              >
-                <div className="checkout-shipping-header">Discount</div>
-
-                <div className="checkout-shipping-price">
-                  {activeDiscount.displayable_discount}
-                </div>
-              </div>
-            ) : null}
-          </div>
-
-          <div className="checkout-total-wrapper">
-            <div className="checkout-total-header">Total</div>
-
-            <div className="checkout-total-price">
-              {subtotal < 100 && !activeDiscount
-                ? `$${subtotal + 6}`
-                : subtotal < 100 && activeDiscount
-                ? `$${subtotal + 6 - activeDiscount.discount_amount}`
-                : subtotal >= 100 && activeDiscount
-                ? "$" + (subtotal - activeDiscount.discount_amount)
-                : "$" + subtotal}
-            </div>
-          </div>
-
-          <div>
-            <Shipping paddingReAlign={true} />
-          </div>
-        </div>
+        <OrderSummary products={products} setDiscount={setDiscount} handleAddDiscountClick={handleAddDiscountClick} subtotal={subtotal} activeDiscount={activeDiscount} />
       </div>
     </div>
   );
