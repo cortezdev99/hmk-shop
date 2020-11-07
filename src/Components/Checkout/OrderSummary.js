@@ -105,9 +105,13 @@ export default (props) => {
         </div>
       </div>
 
-      <div>
-        <Shipping paddingReAlign={true} />
-      </div>
+      {
+        props.includeShipping ? (
+          <div>
+            <Shipping paddingReAlign={true} />
+          </div>
+        ) : null
+      }
     </div>
   )
 }

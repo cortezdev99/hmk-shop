@@ -1439,6 +1439,84 @@ export default () => {
       </div>
 
       <div className="checkout-wrapper">
+        {
+          window.document.body.clientWidth <= 1024 ? (
+            <div
+              // id="checkout-shipping-methods-wrapper"
+              // className="checkout-shipping-methods-wrapper"
+              style={{
+                height: "100%",
+                maxHeight: "101px",
+                marginTop: "40px",
+                overflow: "hidden",
+                padding: "0px 40px",
+                // paddingTop: "20px",
+                // paddingBottom: "20px",
+                borderTop: "1px solid #CCC",
+                borderBottom: "1px solid #CCC",
+                width: "100%",
+                transition: "max-height 0.7s"
+              }}
+            >
+              <div
+                // onClick={handleOpeningInnerContent}
+                style={{
+                  cursor: "pointer",
+                  fontSize: "18px",
+                  padding: "0px 20px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between"
+                }}
+              >
+                <div className="shipping-toggle-header" style={{ display: "flex" }}>
+                  Order Summary
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "relative",
+                    width: "12px"
+                  }}
+                >
+                  <div
+                    id="rotating-thinger-1"
+                    className="rotating-thing-1"
+                    style={{
+                      top: "-11px",
+                      position: "absolute",
+                      transform: "rotate(90deg)",
+                      transition: "0.7s"
+                    }}
+                  >
+                    |
+                  </div>
+
+                  <div
+                    id="rotating-thinger-2"
+                    className="rotating-thing-2"
+                    style={{
+                      left: "2px",
+                      top: "-10px",
+                      position: "absolute",
+                      transform: "rotate(180deg)",
+                      width: "5px",
+                      transition: "0.7s"
+                    }}
+                  >
+                    |
+                  </div>
+                </div>
+              </div>
+
+              <OrderSummary products={products} setDiscount={setDiscount} handleAddDiscountClick={handleAddDiscountClick} subtotal={subtotal} activeDiscount={activeDiscount} includeShipping={false} />
+            </div>
+          ) : null
+        }
+
         <div className="checkout-left-column">
           <div className="checkout-express-checkout-wrapper">
             <div className="checkout-express-checkout-header-wrapper">
@@ -1970,7 +2048,11 @@ export default () => {
           </div>
         </div>
 
-        <OrderSummary products={products} setDiscount={setDiscount} handleAddDiscountClick={handleAddDiscountClick} subtotal={subtotal} activeDiscount={activeDiscount} />
+        {
+          window.document.body.clientWidth > 1024 ? (
+            <OrderSummary products={products} setDiscount={setDiscount} handleAddDiscountClick={handleAddDiscountClick} subtotal={subtotal} activeDiscount={activeDiscount} includeShipping={true} />
+          ) : null
+        }
       </div>
     </div>
   );
