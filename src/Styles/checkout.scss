@@ -311,5 +311,7 @@
   .checkout-wrapper {
     display: flex;
     flex-direction: column;
+    grid-gap: 0px;
+    padding: 0px 40px;
   }
 }

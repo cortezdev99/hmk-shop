@@ -1430,7 +1430,7 @@ export default () => {
 
   return (
     <div className="checkout-container" id="checkout-container">
-      <div className="checkout-banner-image-wrapper">
+      <div className="checkout-banner-image-wrapper" style={{ maxHeight: "200px" }}>
         <img
           className="checkout-banner-image"
           src="https://via.placeholder.com/1900x646"
@@ -1447,12 +1447,12 @@ export default () => {
               style={{
                 height: "100%",
                 maxHeight: "101px",
-                marginTop: "40px",
+                // marginTop: "40px",
                 overflow: "hidden",
-                padding: "0px 40px",
+                padding: "40px 0px",
                 // paddingTop: "20px",
                 // paddingBottom: "20px",
-                borderTop: "1px solid #CCC",
+                // borderTop: "1px solid #CCC",
                 borderBottom: "1px solid #CCC",
                 width: "100%",
                 transition: "max-height 0.7s"
@@ -1473,42 +1473,8 @@ export default () => {
                   Order Summary
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    width: "12px"
-                  }}
-                >
-                  <div
-                    id="rotating-thinger-1"
-                    className="rotating-thing-1"
-                    style={{
-                      top: "-11px",
-                      position: "absolute",
-                      transform: "rotate(90deg)",
-                      transition: "0.7s"
-                    }}
-                  >
-                    |
-                  </div>
-
-                  <div
-                    id="rotating-thinger-2"
-                    className="rotating-thing-2"
-                    style={{
-                      left: "2px",
-                      top: "-10px",
-                      position: "absolute",
-                      transform: "rotate(180deg)",
-                      width: "5px",
-                      transition: "0.7s"
-                    }}
-                  >
-                    |
-                  </div>
+                <div>
+                  ${subtotal}
                 </div>
               </div>
 
