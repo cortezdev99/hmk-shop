@@ -307,6 +307,10 @@
   padding: 0px;
 }
 
+.checkout-order-summary-collapsable-container-show-content {
+  max-height: 649px !important;
+}
+
 @media (max-width: 1024px) {
   .checkout-wrapper {
     display: flex;

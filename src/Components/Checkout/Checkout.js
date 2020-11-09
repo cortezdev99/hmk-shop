@@ -1311,6 +1311,9 @@ export default () => {
       el.classList.toggle("transform-add-shipping-inner-content");
     } else if (wrapper === "checkout-contact-info-wrapper") {
       el.classList.toggle("transform-add-contact-info-inner-content");
+    } else if (wrapper === "checkout-order-summary-collapsable-container") {
+      el.classList.toggle("checkout-order-summary-collapsable-container-show-content")
+      return
     }
     el2.classList.toggle("rotating-plus-minus-rotated-tester");
     el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
@@ -1442,6 +1445,8 @@ export default () => {
         {
           window.document.body.clientWidth <= 1024 ? (
             <div
+              id="checkout-order-summary-collapsable-container"
+              className="checkout-order-summary-collapsable-container"
               // id="checkout-shipping-methods-wrapper"
               // className="checkout-shipping-methods-wrapper"
               style={{
@@ -1457,6 +1462,13 @@ export default () => {
                 width: "100%",
                 transition: "max-height 0.7s"
               }}
+
+              onClick={() =>
+                handleOpeningInnerContent(
+                  "checkout-order-summary-collapsable-container",
+                  null  
+                )
+              }
             >
               <div
                 // onClick={handleOpeningInnerContent}
