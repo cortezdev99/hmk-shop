@@ -72,6 +72,7 @@ export default () => {
   const [activeDiscount, setActiveDiscount] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+  const [ orderSummaryHidden, setOrderSummaryHidden ] = useState(true)
   const [ testerState, setTesterState ] = useState(false)
   let discountTester = false
 
@@ -1312,8 +1313,10 @@ export default () => {
     } else if (wrapper === "checkout-contact-info-wrapper") {
       el.classList.toggle("transform-add-contact-info-inner-content");
     } else if (wrapper === "checkout-order-summary-collapsable-container") {
+      const el4 = document.getElementById("order-summary-rotating-chevron")
       el.classList.toggle("checkout-order-summary-collapsable-container-show-content")
-      return
+      el4.classList.toggle("order-summary-rotating-chevron-rotated")
+      return setOrderSummaryHidden(!orderSummaryHidden)
     }
     el2.classList.toggle("rotating-plus-minus-rotated-tester");
     el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
@@ -1485,9 +1488,15 @@ export default () => {
                   <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
 
                   <div style={{ paddingLeft: "20px", display: "flex", alignItems: "center" }}>
-                    Show order summary
+                    {
+                      orderSummaryHidden ? (
+                        "Show order summary"
+                      ) : (
+                        "Hide order summary"
+                      )
+                    }
                     
-                    <div style={{ marginLeft: "10px", display: "flex" }}>
+                    <div style={{ marginLeft: "10px", display: "flex", transition: "transform 0.7s" }} id="order-summary-rotating-chevron" className="order-summary-rotating-chevron">
                      <FontAwesomeIcon icon={["fas", "chevron-down"]} />
                     </div>
                   </div>

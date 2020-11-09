@@ -311,11 +311,19 @@
   max-height: 649px !important;
 }
 
+.order-summary-rotating-chevron-rotated {
+  transform: rotate(-180deg);
+}
+
 @media (max-width: 1024px) {
   .checkout-wrapper {
     display: flex;
     flex-direction: column;
     grid-gap: 0px;
     padding: 0px 40px;
+  }
+
+  .checkout-right-column-wrapper {
+    padding-top: 12.5px;
   }
 }
