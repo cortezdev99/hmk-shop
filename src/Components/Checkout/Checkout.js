@@ -1469,8 +1469,16 @@ export default () => {
                   justifyContent: "space-between"
                 }}
               >
-                <div className="shipping-toggle-header" style={{ display: "flex" }}>
-                  Order Summary
+                <div style={{ display: "flex" }}>
+                  <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
+
+                  <div style={{ paddingLeft: "20px", display: "flex", alignItems: "center" }}>
+                    Show order summary
+                    
+                    <div style={{ marginLeft: "10px", display: "flex" }}>
+                     <FontAwesomeIcon icon={["fas", "chevron-down"]} />
+                    </div>
+                  </div>
                 </div>
 
                 <div>
