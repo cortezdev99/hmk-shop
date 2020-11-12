@@ -75,6 +75,8 @@ export default () => {
   const [ orderSummaryHidden, setOrderSummaryHidden ] = useState(true)
   const [ testerState, setTesterState ] = useState(false)
   let discountTester = false
+  const [ collapsableOrderSummaryOpen, setCollapsableOrderSummaryOpen ] = useState(false);
+  const [ collapsableOrderSummaryMaxHeight, setCollapsableOrderSummaryMaxHeight ] = useState(101);
 
   useEffect(() => {
     if (stripe) {
@@ -1434,6 +1436,29 @@ export default () => {
     }
   };
 
+  const handleCollapsableOrderSummaryClick = () => {
+    setCollapsableOrderSummaryOpen(!collapsableOrderSummaryOpen)
+    // handleOpeningInnerContent(
+    //   "checkout-order-summary-collapsable-container",
+    //   null  
+    // )
+  }
+
+  useEffect(() => {
+    if (!collapsableOrderSummaryOpen) {
+      setCollapsableOrderSummaryMaxHeight(101)
+    } else {
+      const newMaxHeight = 440.5 + (products.length * 181);
+      setCollapsableOrderSummaryMaxHeight(newMaxHeight)
+    }
+
+    // console.log(products.length)
+    // 181 pixels
+    // products.length * 181 = total hight to accumulate in max height
+    // base height 440.5 pixels
+    // 
+  }, [ collapsableOrderSummaryOpen ])
+
   // console.log(activeDiscount)
 
   const cardElementOptions = {
@@ -1467,7 +1492,7 @@ export default () => {
               // className="checkout-shipping-methods-wrapper"
               style={{
                 height: "100%",
-                maxHeight: "101px",
+                maxHeight: `${collapsableOrderSummaryMaxHeight}px`,
                 // marginTop: "40px",
                 overflow: "hidden",
                 padding: "40px 0px",
@@ -1478,15 +1503,10 @@ export default () => {
                 width: "100%",
                 transition: "max-height 0.7s"
               }}
-
-              onClick={() =>
-                handleOpeningInnerContent(
-                  "checkout-order-summary-collapsable-container",
-                  null  
-                )
-              }
-            >
+              >
               <div
+                onClick={handleCollapsableOrderSummaryClick}
+
                 style={{
                   cursor: "pointer",
                   fontSize: "18px",
