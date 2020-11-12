@@ -668,7 +668,7 @@ export default () => {
                       height: "50px",
                       display: "flex",
                       width: "100%",
-                      border: "1px solid #1d1d1d",
+                      border: "1px solid #CCC",
                       borderRadius: "5px",
                       background: "transparent",
                       padding: "0px",
@@ -682,7 +682,7 @@ export default () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRight: "1px solid #1d1d1d"
+                        borderRight: "1px solid #CCC"
                       }}
                     >
                       <div style={{ fontSize: "12px" }}>
@@ -699,6 +699,9 @@ export default () => {
                         height: "100%",
                         width: "90%",
                         display: "flex",
+                        backgroundColor: "#fbfbfb",
+                        borderTopRightRadius: "5px",
+                        borderBottomRightRadius: "5px",
                         justifyContent: "space-between",
                         alignItems: "center",
                         padding: "0 20px",
@@ -993,7 +996,7 @@ export default () => {
                       height: "50px",
                       display: "flex",
                       width: "100%",
-                      border: "1px solid #1d1d1d",
+                      border: "1px solid #CCC",
                       borderRadius: "5px",
                       background: "transparent",
                       padding: "0px",
@@ -1007,7 +1010,7 @@ export default () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRight: "1px solid #1d1d1d"
+                        borderRight: "1px solid #CCC"
                       }}
                     >
                       <div style={{ fontSize: "12px" }}>
@@ -1024,6 +1027,9 @@ export default () => {
                         height: "100%",
                         width: "90%",
                         display: "flex",
+                        backgroundColor: "#fbfbfb",
+                        borderTopRightRadius: "5px",
+                        borderBottomRightRadius: "5px",
                         justifyContent: "space-between",
                         alignItems: "center",
                         padding: "0 20px",
@@ -1431,7 +1437,14 @@ export default () => {
   // console.log(activeDiscount)
 
   const cardElementOptions = {
-    hidePostalCode: true
+    hidePostalCode: true,
+    style: {
+      base: {   
+        '::placeholder': {
+          color: "#7c7979"
+        }
+      }
+    }
   };
 
   return (
@@ -1474,7 +1487,6 @@ export default () => {
               }
             >
               <div
-                // onClick={handleOpeningInnerContent}
                 style={{
                   cursor: "pointer",
                   fontSize: "18px",
@@ -1751,10 +1763,11 @@ export default () => {
               <button
                 onClick={handleAddShippingAddress}
                 style={{
-                  padding: "1rem 2rem",
+                  padding: "0 2rem",
+                  height: "45px",
                   border: "none",
-                  backgroundColor: "#45b3e0",
-                  color: "#1d1d1d",
+                  backgroundColor: "#1c1b1b",
+                  color: "#fff",
                   borderRadius: "5px",
                   cursor: "pointer"
                 }}
@@ -1840,7 +1853,7 @@ export default () => {
                 style={{
                   height: "50px",
                   width: "100%",
-                  border: "1px solid #1d1d1d",
+                  border: "1px solid #CCC",
                   borderRadius: "5px"
                 }}
                 type="text"
@@ -1856,7 +1869,8 @@ export default () => {
                 marginTop: "20px",
                 height: "50px",
                 width: "100%",
-                border: "1px solid #1d1d1d",
+                border: "1px solid #CCC",
+                backgroundColor: "#fbfbfb",
                 borderRadius: "5px",
                 display: "flex",
                 justifyContent: "center",
@@ -1870,10 +1884,11 @@ export default () => {
               <button
                 onClick={handleAddPaymentMethod}
                 style={{
-                  padding: "1rem 2rem",
+                  padding: "0 2rem",
+                  height: "45px",
                   border: "none",
-                  backgroundColor: "#45b3e0",
-                  color: "#1d1d1d",
+                  backgroundColor: "#1c1b1b",
+                  color: "#fff",
                   borderRadius: "5px",
                   cursor: "pointer"
                 }}

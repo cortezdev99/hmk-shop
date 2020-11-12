@@ -1,5 +1,21 @@
 .checkout-container {
   padding-bottom: 80px;
+
+  input {
+    &:focus {
+      text-emphasis: none;
+      text-decoration: none;
+      outline: none;
+    }
+  }
+
+  button {
+    &:focus {
+      text-emphasis: none;
+      text-decoration: none;
+      outline: none;
+    }
+  }
 }
 
 .checkout-banner-image {
@@ -105,14 +121,20 @@
   width: 100%;
   height: 50px;
   border-radius: 5px;
-  border: 1px solid #1d1d1d;
-  padding-left: 15px;
+  border: 1px solid #CCC;
+  background: #fbfbfb;
+  padding: 0 15px;
   font-size: 14px;
   cursor: pointer;
 
   &:focus {
     text-decoration: none;
     outline: none;
+  }
+
+  &::placeholder {
+    color: #7c7979;
+    -webkit-font-smoothing: subpixel-antialiased;
   }
 }
 
