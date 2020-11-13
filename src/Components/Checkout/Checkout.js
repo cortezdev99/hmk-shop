@@ -1320,12 +1320,8 @@ export default () => {
       el.classList.toggle("transform-add-shipping-inner-content");
     } else if (wrapper === "checkout-contact-info-wrapper") {
       el.classList.toggle("transform-add-contact-info-inner-content");
-    } else if (wrapper === "checkout-order-summary-collapsable-container") {
-      const el4 = document.getElementById("order-summary-rotating-chevron")
-      el.classList.toggle("checkout-order-summary-collapsable-container-show-content")
-      el4.classList.toggle("order-summary-rotating-chevron-rotated")
-      return setOrderSummaryHidden(!orderSummaryHidden)
     }
+
     el2.classList.toggle("rotating-plus-minus-rotated-tester");
     el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
   };
@@ -1445,13 +1441,28 @@ export default () => {
   }
 
   useEffect(() => {
-    if (!collapsableOrderSummaryOpen) {
-      setCollapsableOrderSummaryMaxHeight(101)
-    } else {
-      const newMaxHeight = 440.5 + (products.length * 181);
-      setCollapsableOrderSummaryMaxHeight(newMaxHeight)
-    }
-
+    const el4 = document.getElementById("order-summary-rotating-chevron")
+      // el.classList.toggle("checkout-order-summary-collapsable-container-show-content")
+      if (!collapsableOrderSummaryOpen) {
+        if (el4.classList.contains("order-summary-rotating-chevron-rotated")) {
+          el4.classList.toggle("order-summary-rotating-chevron-rotated")
+          setOrderSummaryHidden(!orderSummaryHidden)
+        }
+        setCollapsableOrderSummaryMaxHeight(101)
+      } else {
+        const newMaxHeight = 440.5 + (products.length * 181);
+        if (!el4.classList.contains("order-summary-rotating-chevron-rotated")) {
+          el4.classList.toggle("order-summary-rotating-chevron-rotated")
+          setOrderSummaryHidden(!orderSummaryHidden)
+        }
+        setCollapsableOrderSummaryMaxHeight(newMaxHeight)
+      }
+      
+      console.log()
+   
+      // if ()
+      // el4.classList.toggle("order-summary-rotating-chevron-rotated")
+      // setOrderSummaryHidden(!orderSummaryHidden)
     // console.log(products.length)
     // 181 pixels
     // products.length * 181 = total hight to accumulate in max height
