@@ -1418,8 +1418,6 @@ export default () => {
           const { usable, error } = result.data;
 
           if (usable) {
-            // console.log(result.data)
-            // discountTester = result.data
             setTesterState(true)
             setActiveDiscount(result.data);
           } else {
@@ -1434,15 +1432,10 @@ export default () => {
 
   const handleCollapsableOrderSummaryClick = () => {
     setCollapsableOrderSummaryOpen(!collapsableOrderSummaryOpen)
-    // handleOpeningInnerContent(
-    //   "checkout-order-summary-collapsable-container",
-    //   null  
-    // )
   }
 
   useEffect(() => {
     const el4 = document.getElementById("order-summary-rotating-chevron")
-      // el.classList.toggle("checkout-order-summary-collapsable-container-show-content")
       if (!collapsableOrderSummaryOpen) {
         if (el4.classList.contains("order-summary-rotating-chevron-rotated")) {
           el4.classList.toggle("order-summary-rotating-chevron-rotated")
@@ -1457,20 +1450,7 @@ export default () => {
         }
         setCollapsableOrderSummaryMaxHeight(newMaxHeight)
       }
-      
-      console.log()
-   
-      // if ()
-      // el4.classList.toggle("order-summary-rotating-chevron-rotated")
-      // setOrderSummaryHidden(!orderSummaryHidden)
-    // console.log(products.length)
-    // 181 pixels
-    // products.length * 181 = total hight to accumulate in max height
-    // base height 440.5 pixels
-    // 
   }, [ collapsableOrderSummaryOpen ])
-
-  // console.log(activeDiscount)
 
   const cardElementOptions = {
     hidePostalCode: true,
