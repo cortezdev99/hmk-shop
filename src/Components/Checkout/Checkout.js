@@ -1437,14 +1437,14 @@ export default () => {
   useEffect(() => {
     const el4 = document.getElementById("order-summary-rotating-chevron")
       if (!collapsableOrderSummaryOpen) {
-        if (el4.classList.contains("order-summary-rotating-chevron-rotated")) {
+        if (el4 !== null && el4.classList.contains("order-summary-rotating-chevron-rotated")) {
           el4.classList.toggle("order-summary-rotating-chevron-rotated")
           setOrderSummaryHidden(!orderSummaryHidden)
         }
         setCollapsableOrderSummaryMaxHeight(101)
       } else {
         const newMaxHeight = 440.5 + (products.length * 181);
-        if (!el4.classList.contains("order-summary-rotating-chevron-rotated")) {
+        if (el4 !== null && !el4.classList.contains("order-summary-rotating-chevron-rotated")) {
           el4.classList.toggle("order-summary-rotating-chevron-rotated")
           setOrderSummaryHidden(!orderSummaryHidden)
         }
@@ -1510,7 +1510,7 @@ export default () => {
                 <div style={{ display: "flex" }}>
                   <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
 
-                  <div style={{ paddingLeft: "20px", display: "flex", alignItems: "center" }}>
+                  <div className="checkout-collapsable-order-summary-heading" style={{ paddingLeft: "20px", display: "flex", alignItems: "center" }}>
                     {
                       orderSummaryHidden ? (
                         "Show order summary"
@@ -2056,7 +2056,8 @@ export default () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-evenly",
-                  padding: "0 3rem",
+                  height: "45px",
+                  padding: "0 2rem",
                   border: "none",
                   cursor: "pointer"
                 }}
