@@ -667,7 +667,7 @@ export default () => {
                     }
                     style={{
                       marginTop: "20px",
-                      height: "50px",
+                      height: "45px",
                       display: "flex",
                       width: "100%",
                       border: "1px solid #CCC",
@@ -995,7 +995,7 @@ export default () => {
                     }
                     style={{
                       marginTop: "20px",
-                      height: "50px",
+                      height: "45px",
                       display: "flex",
                       width: "100%",
                       border: "1px solid #CCC",
