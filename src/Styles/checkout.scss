@@ -118,6 +118,10 @@
 }
 
 .checkout-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
   width: 100%;
   height: 45px;
   border-radius: 5px;
@@ -362,6 +366,10 @@
     padding-bottom: 40px;
   }
 
+  .checkout-express-checkout-btns-wrapper {
+    flex-direction: column;
+  }
+
   .checkout-express-checkout-wrapper {
     padding-top: 40px;
   }
@@ -412,6 +420,7 @@
 
   .checkout-input {
     font-size: 13px;
+    padding: 0 7px;
   }
 
   .checkout-wrapper {

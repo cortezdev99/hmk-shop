@@ -1525,7 +1525,7 @@ export default () => {
                   </div>
                 </div>
 
-                <div>
+                <div style={{ fontWeight: "500" }}>
                   ${subtotal}
                 </div>
               </div>
