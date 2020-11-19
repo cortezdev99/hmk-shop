@@ -370,6 +370,11 @@
     flex-direction: column;
   }
 
+  .checkout-express-checkout-header {
+    font-size: 13px;
+    padding: 0 5px;
+  }
+
   .checkout-express-checkout-wrapper {
     padding-top: 40px;
   }
@@ -410,6 +415,14 @@
 
   .checkout-product-price {
     font-size: 15px;
+  }
+
+  .checkout-express-checkout-btn-wrapper:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  .checkout-express-checkout-header-border {
+    margin-top: 15px;
   }
 
   .checkout-product-image-wrapper {

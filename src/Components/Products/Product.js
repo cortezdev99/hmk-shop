@@ -4,7 +4,20 @@ import GallerySlider from '../Utilities/GallerySlider'
 
 export default (props) => {
   const [image, setImage] = useState(Object.values(Object.values(props.product.images[0])[0][0])[0])
-
+  // let xmlhttp
+  // if (window.XMLHttpRequest) {
+    // code for modern browsers
+    // xmlhttp = new XMLHttpRequest();
+    // console.log()
+    // xmlhttp.open('GET', `${Object.values(Object.values(props.product.images[0])[0][0])[0]}`, true);
+    // xmlhttp.overrideMimeType('text/plain; charset=x-user-defined');
+    // xmlhttp.send(null);
+//   } else {
+//     // code for old IE browsers
+//     xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+//  }
+//  console.log(xmlhttp)
+    // xmlhttp.onprogress = (event) => console.log(event)
   return (
     <div className="product-container">
       <Link

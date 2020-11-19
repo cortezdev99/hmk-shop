@@ -1558,7 +1558,7 @@ export default () => {
               <div className="checkout-express-checkout-btn-wrapper checkout-express-checkout-btn-wrapper-paypal">
                 <PaypalBtn
                   options={{
-                    disableFunding: "credit,card",
+                    disableFunding: "credit,card,venmo",
                     clientId:
                       "Ad5t87C5PSZBkusJGq_zTh83uFWQDc9-FPzrxh13HNVTqgCAy6vYA76v4DkjrBeWFNxnI2pOXaMDcTEx"
                   }}
@@ -1862,7 +1862,7 @@ export default () => {
             <div>
               <input
                 style={{
-                  height: "50px",
+                  height: "45px",
                   width: "100%",
                   border: "1px solid #CCC",
                   borderRadius: "5px"
@@ -1878,7 +1878,7 @@ export default () => {
             <div
               style={{
                 marginTop: "20px",
-                height: "50px",
+                height: "45px",
                 width: "100%",
                 border: "1px solid #CCC",
                 backgroundColor: "#fbfbfb",
