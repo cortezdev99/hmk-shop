@@ -458,3 +458,61 @@
     font-size: 15px;
   }
 }
+
+@media (max-width: 375px) {
+  .checkout-collapsable-order-summary-header-wrapper {
+    font-size: 16px !important;
+  }
+
+  .checkout-collapsable-order-summary-heading {
+    font-size: 13px;
+    padding-left: 10px !important;
+  }
+
+  .checkout-right-column-wrapper {
+    padding-top: 14.5px;
+  }
+
+  .checkout-input {
+    font-size: 11px;
+  }
+
+  .checkout-discount-btn {
+    font-size: 11px !important;
+  }
+
+  .checkout-total-calculations-wrapper {
+    font-size: 12px;
+  }
+
+  .checkout-shipping-price {
+    font-size: 14px;
+  }
+
+  .checkout-subtotal-header {
+    font-size: 13px;
+  }
+
+  .checkout-shipping-header {
+    font-size: 13px;
+  }
+
+  .checkout-total-wrapper {
+    font-size: 14px;
+  }
+
+  .checkout-subtotal-price {
+    font-size: 14px;
+  }
+
+  .checkout-product-price {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 300px) {
+  .checkout-collapsable-order-summary-header-wrapper {
+    padding: 0 10px !important;
+    font-size: 15px !important;
+  }
+}

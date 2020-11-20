@@ -1497,7 +1497,7 @@ export default () => {
               >
               <div
                 onClick={handleCollapsableOrderSummaryClick}
-
+                className="checkout-collapsable-order-summary-header-wrapper"
                 style={{
                   cursor: "pointer",
                   fontSize: "18px",
