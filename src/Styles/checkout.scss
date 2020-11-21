@@ -457,6 +457,16 @@
   .checkout-subtotal-price {
     font-size: 15px;
   }
+
+  .checkout-shipping-info-region-state-city-wrapper {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
+
+  .checkout-discount-code-wrapper {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
 }
 
 @media (max-width: 375px) {

@@ -1443,7 +1443,8 @@ export default () => {
         }
         setCollapsableOrderSummaryMaxHeight(101)
       } else {
-        const newMaxHeight = 440.5 + (products.length * 181);
+        let mobileDiscountHeight = window.document.body.clientWidth <= 450 ? 65 : 0 
+        const newMaxHeight = (mobileDiscountHeight + 440.5) + (products.length * 181);
         if (el4 !== null && !el4.classList.contains("order-summary-rotating-chevron-rotated")) {
           el4.classList.toggle("order-summary-rotating-chevron-rotated")
           setOrderSummaryHidden(!orderSummaryHidden)
