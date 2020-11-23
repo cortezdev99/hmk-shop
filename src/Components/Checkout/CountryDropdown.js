@@ -2,11 +2,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 export default (props) => {
+  const handleCollapsableContent = () => {
+    const el = document.getElementById("country-dropdown-collapsable-content-wrapper")
+    if (el !== null) {
+      el.classList.toggle('country-dropdown-collapsable-content-showing')
+    }
+  }
+
   return (
     <div style={{
       zIndex: 1,
       height: "100%",
-      maxHeight: "45px",
       border: "1px solid #CCC",
       background: "#fbfbfb",
       fontSize: "13px",
@@ -16,12 +22,16 @@ export default (props) => {
       "-webkit-font-smoothing": "auto",
       letterSpacing: "0.75px",
       overflow: "hidden"
-    }}>
-
+    }}
+      onClick={
+        handleCollapsableContent
+      }
+    >
         <div style={{
           width: "100%",
           height: "45px",
           padding: "0 7px",
+          boxShadow: "#0f0f0f 1px 0px 12px -4px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center"
@@ -37,7 +47,16 @@ export default (props) => {
           </div>
         </div>
 
-        <div>
+        <div
+          id="country-dropdown-collapsable-content-wrapper"
+          className="country-dropdown-collapsable-content-wrapper"
+          style={{
+            height: "100%",
+            maxHeight: "0px",
+            overflow: "hidden auto",
+            transition: "max-height 0.7s"
+          }}
+        >
           <div style={{
             height: "45px",
             borderTop: "1px solid #CCC",
