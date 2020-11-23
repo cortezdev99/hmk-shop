@@ -151,15 +151,5 @@ export default (props) => {
           }
         </div>
     </div>
-      // {["Australia", "AU"]}
-      // {["Brazil", "BR"]}
-      // {["Canada", "CA"]}
-      // {["France", "FR"]}
-      // {["Germany", "DE"]}
-      // {["Italy", "IT"]}
-      // {["Spain", "ES"]}
-      // {["Sweden", "SE"]}
-      // {["United Kingdom", "GB"]}
-      // {["United States of America", "US"]}
   )
 }
