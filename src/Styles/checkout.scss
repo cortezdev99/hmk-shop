@@ -532,3 +532,7 @@
 .country-dropdown-collapsable-content-showing {
   max-height: 180px !important;
 }
+
+.country-dropdown-chevron-rotated {
+  transform: rotate(-180deg);
+}
