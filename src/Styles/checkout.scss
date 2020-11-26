@@ -170,7 +170,7 @@
 
 .checkout-shipping-info-region-state-city-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   column-gap: 20px;
 }
 
@@ -485,9 +485,9 @@
     padding-top: 14.5px;
   }
 
-  .checkout-input {
-    font-size: 11px;
-  }
+  // .checkout-input {
+  //   font-size: 12px;
+  // }
 
   .checkout-discount-btn {
     font-size: 11px !important;

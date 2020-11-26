@@ -1317,6 +1317,14 @@ export default () => {
     if (wrapper === "checkout-add-payment-wrapper") {
       el.classList.toggle("transform-add-payment-inner-content");
     } else if (wrapper === "checkout-shipping-info-wrapper") {
+      if (el.classList.contains("transform-add-shipping-inner-content" !== true)) {
+        el.classList.toggle("transform-add-shipping-inner-content");
+      }
+
+      if (el.classList.contains('transform-add-shipping-inner-content-maximum')) {
+        el.classList.toggle("transform-add-shipping-inner-content-maximum")
+      }
+
       el.classList.toggle("transform-add-shipping-inner-content");
     } else if (wrapper === "checkout-contact-info-wrapper") {
       el.classList.toggle("transform-add-contact-info-inner-content");
@@ -1429,8 +1437,8 @@ export default () => {
         });
     }
   };
-
-  const handleCollapsableOrderSummaryClick = () => {
+  
+    const handleCollapsableOrderSummaryClick = () => {
     setCollapsableOrderSummaryOpen(!collapsableOrderSummaryOpen)
   }
 
@@ -1662,8 +1670,8 @@ export default () => {
                 />
 
                 {noFirstNameErr && firstName.length === 0 ? (
-                  <div style={{ paddingTop: "10px", color: "#FF0000" }}>
-                    * Required
+                  <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
+                    Required
                   </div>
                 ) : null}
               </div>
@@ -1678,8 +1686,8 @@ export default () => {
                 />
 
                 {noLastNameErr && lastName.length === 0 ? (
-                  <div style={{ paddingTop: "10px", color: "#FF0000" }}>
-                    * Required
+                  <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
+                    Required
                   </div>
                 ) : null}
               </div>
@@ -1695,8 +1703,8 @@ export default () => {
               />
 
               {noAddressErr && address.length === 0 ? (
-                <div style={{ paddingTop: "10px", color: "#FF0000" }}>
-                  * Required
+                <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
+                  Required
                 </div>
               ) : null}
             </div>
@@ -1721,23 +1729,23 @@ export default () => {
               />
 
               {noCityErr && city.length === 0 ? (
-                <div style={{ paddingTop: "10px", color: "#FF0000" }}>
-                  * Required
+                <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
+                  Required
+                </div>
+              ) : null}
+            </div>
+
+            <div style={{ paddingTop: "20px" }}>
+              <CountryDropdown setRegion={country => setRegion(country)} />
+
+              {noRegionErr && region.length === 0 ? (
+                <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
+                  Required
                 </div>
               ) : null}
             </div>
 
             <div className="checkout-shipping-info-region-state-city-wrapper checkout-input-padding">
-              <div>
-                <CountryDropdown setRegion={country => setRegion(country)} />
-
-                {noRegionErr && region.length === 0 ? (
-                  <div style={{ paddingTop: "10px", color: "#FF0000" }}>
-                    * Required
-                  </div>
-                ) : null}
-              </div>
-
               <div>
                 <input
                   className="checkout-input"
@@ -1748,8 +1756,8 @@ export default () => {
                 />
 
                 {noStateErr && state.length === 0 ? (
-                  <div style={{ paddingTop: "10px", color: "#FF0000" }}>
-                    * Required
+                  <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
+                    Required
                   </div>
                 ) : null}
               </div>
@@ -1764,8 +1772,8 @@ export default () => {
                 />
 
                 {noZipErr && zip.length === 0 ? (
-                  <div style={{ paddingTop: "10px", color: "#FF0000" }}>
-                    * Required
+                  <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
+                    Required
                   </div>
                 ) : null}
               </div>
