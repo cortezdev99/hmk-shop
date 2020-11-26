@@ -1322,6 +1322,11 @@ export default () => {
       }
 
       if (el.classList.contains('transform-add-shipping-inner-content-maximum')) {
+        const el4 = document.getElementById("country-dropdown-collapsable-content-wrapper")
+        const el5 = document.getElementById("country-dropdown-chevron")
+
+        el4.classList.toggle('country-dropdown-collapsable-content-showing')
+        el5.classList.toggle('country-dropdown-chevron-rotated')
         el.classList.toggle("transform-add-shipping-inner-content-maximum")
       }
 
