@@ -43,7 +43,6 @@ export default (props) => {
   ])
 
   const el = document.getElementById("country-dropdown-collapsable-content-wrapper")
-  const el2 = document.getElementById("checkout-shipping-info-wrapper")
   const el3 = document.getElementById("country-dropdown-chevron")
 
   const handleSettingSelectedCountry = (idxOfCountry) => {
@@ -53,8 +52,7 @@ export default (props) => {
       countries[idxOfCountry].alpha_2_country_code
     ])
     
-    if (el !== null && el2 !== null && el3 !== null) {
-      // el2.classList.toggle("transform-add-shipping-inner-content-maximum")
+    if (el !== null && el3 !== null) {
       props.setAddShippingMaxHeight(props.addShippingMaxHeight - 180)
       el.classList.toggle('country-dropdown-collapsable-content-showing')
       el3.classList.toggle('country-dropdown-chevron-rotated')
@@ -62,14 +60,13 @@ export default (props) => {
   }
 
   const handleCollapsableContent = () => {
-    if (el !== null && el2 !== null && el3 !== null) {
+    if (el !== null && el3 !== null) {
       if (el.classList.contains('country-dropdown-collapsable-content-showing')) {
         props.setAddShippingMaxHeight(props.addShippingMaxHeight - 180)
       } else {
         props.setAddShippingMaxHeight(props.addShippingMaxHeight + 180)
       }
 
-      // el2.classList.toggle("transform-add-shipping-inner-content-maximum")
       el.classList.toggle('country-dropdown-collapsable-content-showing')
       el3.classList.toggle('country-dropdown-chevron-rotated')
     }
