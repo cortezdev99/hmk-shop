@@ -54,7 +54,8 @@ export default (props) => {
     ])
     
     if (el !== null && el2 !== null && el3 !== null) {
-      el2.classList.toggle("transform-add-shipping-inner-content-maximum")
+      // el2.classList.toggle("transform-add-shipping-inner-content-maximum")
+      props.setAddShippingMaxHeight(props.addShippingMaxHeight - 180)
       el.classList.toggle('country-dropdown-collapsable-content-showing')
       el3.classList.toggle('country-dropdown-chevron-rotated')
     }
@@ -97,7 +98,8 @@ export default (props) => {
           boxShadow: "-157px 5px 25px -14px rgba(50, 50, 50, 0.75), 147px 5px 25px -14px rgba(50, 50, 50, 0.75)",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
+          cursor: "pointer"
           }}
 
           onClick={
@@ -143,7 +145,8 @@ export default (props) => {
                   borderTop: "1px solid #CCC",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
+                  cursor: "pointer"
                 }} 
 
                 onClick={ () => handleSettingSelectedCountry(idxOfCountry) }
