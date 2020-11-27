@@ -465,6 +465,11 @@
     row-gap: 20px;
   }
 
+  .checkout-shipping-info-name-wrapper {
+    grid-template-columns: 1fr;
+    row-gap: 20px;
+  }
+
   .checkout-discount-code-wrapper {
     grid-template-columns: 1fr;
     row-gap: 20px;

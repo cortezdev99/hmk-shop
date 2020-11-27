@@ -62,7 +62,13 @@ export default (props) => {
 
   const handleCollapsableContent = () => {
     if (el !== null && el2 !== null && el3 !== null) {
-      el2.classList.toggle("transform-add-shipping-inner-content-maximum")
+      if (el.classList.contains('country-dropdown-collapsable-content-showing')) {
+        props.setAddShippingMaxHeight(props.addShippingMaxHeight - 180)
+      } else {
+        props.setAddShippingMaxHeight(props.addShippingMaxHeight + 180)
+      }
+
+      // el2.classList.toggle("transform-add-shipping-inner-content-maximum")
       el.classList.toggle('country-dropdown-collapsable-content-showing')
       el3.classList.toggle('country-dropdown-chevron-rotated')
     }
