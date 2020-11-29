@@ -23,6 +23,7 @@ export default (props) => {
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
   const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(62)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (!collapsableContentShowing) {
@@ -38,7 +39,7 @@ export default (props) => {
         el2.classList.toggle('rotating-plus-minus-rotated-tester')
       }
       
-      const errorsHeight = errors.length * 38;
+      const errorsHeight = errors.length * 26;
       const baseHeight = window.document.body.clientWidth > 450 ? 539 : 690;
       const el = document.getElementById("country-dropdown-collapsable-content-wrapper")
       const collapsableCountryDropdownHeight = el.classList.contains('country-dropdown-collapsable-content-showing') ? 180 : 0
@@ -46,89 +47,97 @@ export default (props) => {
     }
   }, [ errors, collapsableContentShowing ])
 
-  const handleAddShippingAddress = () => {
-    setNoFirstNameErr(false);
-    setNoLastNameErr(false);
-    setNoAddressErr(false);
-    setNoCityErr(false);
-    setNoRegionErr(false);
-    setNoStateErr(false);
-    setNoZipErr(false);
-
-    const errors = [];
-    if (address.length === 0) {
-      errors.push(setNoAddressErr);
-    }
-
-    if (city.length === 0) {
-      errors.push(setNoCityErr);
-    }
-
-    if (region.length === 0) {
-      errors.push(setNoRegionErr);
-    }
-
-    if (zip.length === 0) {
-      errors.push(setNoZipErr);
-    }
-
-    if (state.length === 0) {
-      errors.push(setNoStateErr);
-    }
-
-    if (firstName.length === 0) {
-      errors.push(setNoFirstNameErr);
-    }
-
-    if (lastName.length === 0) {
-      errors.push(setNoLastNameErr);
-    }
-
-    if (errors.length > 0) {
-      setErrors(errors)
-
-      errors.map(err => {
-        return err(true);
-      });
-    } else {
-      firebase
-        .firestore()
-        .collection("stripe_customers")
-        .doc(firebase.auth().currentUser.uid)
-        .collection("billing_addresses")
-        .add({
-          name: `${firstName} ${lastName}`,
-          address: {
-            line1: address,
-            line2: address2,
-            postal_code: zip,
-            city,
-            state,
-            country: region
-          }
-        })
-        .then(resp => {
-          resp.onSnapshot(
-            {
-              // Listen for document metadata changes
-              includeMetadataChanges: true
-            },
-            doc => {
-              if (props.noBillingAddresses) {
-                props.setNoBillingAddresses(false);
-              }
-
-              const currentState = props.billingAddresses;
-              currentState.push(doc.data());
-              props.setBillingAddresses([...currentState]);
-            }
-          );
-        })
-        .catch(err => {
-          alert(err);
+  useEffect(() => {
+    if (submitting) {
+      setNoFirstNameErr(false);
+      setNoLastNameErr(false);
+      setNoAddressErr(false);
+      setNoCityErr(false);
+      setNoRegionErr(false);
+      setNoStateErr(false);
+      setNoZipErr(false);
+      
+      const errors = [];
+      if (firstName.length === 0) {
+        errors.push(setNoFirstNameErr);
+      }
+  
+      if (lastName.length === 0) {
+        errors.push(setNoLastNameErr);
+      }
+  
+      if (address.length === 0) {
+        errors.push(setNoAddressErr);
+      }
+  
+      if (city.length === 0) {
+        errors.push(setNoCityErr);
+      }
+  
+      if (region.length === 0) {
+        errors.push(setNoRegionErr);
+      }
+  
+      if (state.length === 0) {
+        errors.push(setNoStateErr);
+      }
+  
+      if (zip.length === 0) {
+        errors.push(setNoZipErr);
+      }
+  
+      if (errors.length > 0) {
+        setErrors(errors)
+  
+        errors.map((err, idx) => {
+          setTimeout(() => {
+            return err(true);
+          }, 40 * idx)
         });
+        // console.log('hit 2')
+        // setSubmitting(false)
+      } else {
+        firebase
+          .firestore()
+          .collection("stripe_customers")
+          .doc(firebase.auth().currentUser.uid)
+          .collection("billing_addresses")
+          .add({
+            name: `${firstName} ${lastName}`,
+            address: {
+              line1: address,
+              line2: address2,
+              postal_code: zip,
+              city,
+              state,
+              country: region
+            }
+          })
+          .then(resp => {
+            resp.onSnapshot(
+              {
+                // Listen for document metadata changes
+                includeMetadataChanges: true
+              },
+              doc => {
+                if (props.noBillingAddresses) {
+                  props.setNoBillingAddresses(false);
+                }
+  
+                const currentState = props.billingAddresses;
+                currentState.push(doc.data());
+                props.setBillingAddresses([...currentState]);
+              }
+            );
+          })
+          .catch(err => {
+            alert(err);
+          });
+      }
+  
+      setSubmitting(false);
     }
-  };
+  }, [submitting])
 
   return (
     <div
@@ -328,20 +337,39 @@ export default (props) => {
     </div>
 
     <div style={{ marginTop: "20px" }}>
-      <button
-        onClick={handleAddShippingAddress}
-        style={{
-          padding: "0 2rem",
-          height: "45px",
-          border: "none",
-          backgroundColor: "#1c1b1b",
-          color: "#fff",
-          borderRadius: "5px",
-          cursor: "pointer"
-        }}
-      >
-        Add this address
-      </button>
+      {
+        !submitting ? (
+          <button
+            onClick={() => setSubmitting(true)}
+            style={{
+              width: "100%",
+              height: "45px",
+              border: "none",
+              backgroundColor: "#1c1b1b",
+              color: "#fff",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Add this address
+          </button>
+        ) : (
+          <button
+            style={{
+              width: "100%",
+              height: "45px",
+              border: "none",
+              backgroundColor: "#1c1b1b",
+              color: "#fff",
+              borderRadius: "5px",
+              cursor: "pointer"
+            }}
+          >
+            Submitting...
+          </button>
+        )
+      }
+      
     </div>
   </div>
   )
