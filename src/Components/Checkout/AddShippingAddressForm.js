@@ -3,6 +3,8 @@ import firebase from 'firebase'
 import CountryDropdown from './CountryDropdown';
 
 export default (props) => {
+  const el2 = document.getElementById('shipping-address-rotating-thinger-1');
+  const el3 = document.getElementById('shipping-address-rotating-thinger-2');
   const [errors, setErrors] = useState([])
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false)
   const [noFirstNameErr, setNoFirstNameErr] = useState(false);
@@ -24,8 +26,18 @@ export default (props) => {
 
   useEffect(() => {
     if (!collapsableContentShowing) {
+      if (el2 !== null && el3 !== null && el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
+        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      }
+
       setAddShippingMaxHeight(62);
     } else {
+      if (el2 !== null && el3 !== null && !el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
+        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      }
+      
       const errorsHeight = errors.length * 38;
       const baseHeight = window.document.body.clientWidth > 450 ? 539 : 690;
       const el = document.getElementById("country-dropdown-collapsable-content-wrapper")
@@ -137,7 +149,7 @@ export default (props) => {
       onClick={() =>
         setCollapsableContentShowing(!collapsableContentShowing)
       }
-      
+
       style={{
         cursor: "pointer",
         fontSize: "18px",
@@ -202,8 +214,8 @@ export default (props) => {
         />
 
         {noFirstNameErr && firstName.length === 0 ? (
-          <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
-            Required
+          <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+            The field above is required.
           </div>
         ) : null}
       </div>
@@ -218,8 +230,8 @@ export default (props) => {
         />
 
         {noLastNameErr && lastName.length === 0 ? (
-          <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
-            Required
+          <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+            The field above is required
           </div>
         ) : null}
       </div>
@@ -235,8 +247,8 @@ export default (props) => {
       />
 
       {noAddressErr && address.length === 0 ? (
-        <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
-          Required
+        <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+          The field above is required
         </div>
       ) : null}
     </div>
@@ -261,8 +273,8 @@ export default (props) => {
       />
 
       {noCityErr && city.length === 0 ? (
-        <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
-          Required
+        <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+          The field above is required
         </div>
       ) : null}
     </div>
@@ -275,8 +287,8 @@ export default (props) => {
       />
 
       {noRegionErr && region.length === 0 ? (
-        <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
-          Required
+        <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+          The field above is required
         </div>
       ) : null}
     </div>
@@ -292,8 +304,8 @@ export default (props) => {
         />
 
         {noStateErr && state.length === 0 ? (
-          <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
-            Required
+          <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+            The field above is required
           </div>
         ) : null}
       </div>
@@ -308,8 +320,8 @@ export default (props) => {
         />
 
         {noZipErr && zip.length === 0 ? (
-          <div style={{ paddingTop: "20px", color: "#FF0000", textAlign: "center" }}>
-            Required
+          <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+            The field above is required
           </div>
         ) : null}
       </div>
