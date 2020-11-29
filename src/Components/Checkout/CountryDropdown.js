@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default (props) => {
-  const [ selectedCountry, setSelectedCountry ] = useState(null)
   const [ countries, setCountries ] = useState([
     {
       "country": "Australia",
@@ -46,7 +45,6 @@ export default (props) => {
   const el3 = document.getElementById("country-dropdown-chevron")
 
   const handleSettingSelectedCountry = (idxOfCountry) => {
-    setSelectedCountry(countries[idxOfCountry].country)
     props.setRegion([
       countries[idxOfCountry].country,
       countries[idxOfCountry].alpha_2_country_code
@@ -77,7 +75,7 @@ export default (props) => {
       zIndex: 1,
       height: "100%",
       // border: "1px solid #CCC",
-      border: `${props.noRegionErr && selectedCountry == null ? "1px solid #FF0000" : "1px solid #CCC"}`,
+      border: `${props.noRegionErr && props.region.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`,
       background: "#fbfbfb",
       fontSize: "13px",
       color: "#7c7979",
@@ -108,7 +106,7 @@ export default (props) => {
             paddingRight: "10px"
           }}>
             {
-              selectedCountry === null ? "Country or Region" : <span style={{ color: "#1d1d1d" }}>{selectedCountry}</span>
+              props.region.length === 0 ? "Country or Region" : <span style={{ color: "#1d1d1d" }}>{props.region[0]}</span>
             }
           </div>
 

@@ -25,6 +25,17 @@ export default (props) => {
   const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(62)
   const [submitting, setSubmitting] = useState(false)
 
+  const handleSuccessfulFormSubmittion = () => {
+    setFirstName("");
+    setLastName("");
+    setAddress("");
+    setAddress2("");
+    setCity("");
+    setRegion([]);
+    setState("");
+    setZip("");
+  }
+
   useEffect(() => {
     if (!collapsableContentShowing) {
       if (el2 !== null && el3 !== null && el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
@@ -94,8 +105,6 @@ export default (props) => {
             return err(true);
           }, 40 * idx)
         });
-        // console.log('hit 2')
-        // setSubmitting(false)
       } else {
         firebase
           .firestore()
@@ -127,7 +136,9 @@ export default (props) => {
                 const currentState = props.billingAddresses;
                 currentState.push(doc.data());
                 props.setBillingAddresses([...currentState]);
-              }
+
+                handleSuccessfulFormSubmittion()
+              } 
             );
           })
           .catch(err => {
@@ -303,6 +314,7 @@ export default (props) => {
     <div style={{ paddingTop: "20px" }}>
       <CountryDropdown
         setRegion={country => setRegion(country)} 
+        region={region}
         addShippingMaxHeight={addShippingMaxHeight}
         setAddShippingMaxHeight={(val) => setAddShippingMaxHeight(val)}
         noRegionErr={noRegionErr}
