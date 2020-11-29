@@ -216,6 +216,9 @@ export default (props) => {
       <div>
         <input
           className="checkout-input"
+          style={{
+            border: `${noFirstNameErr && firstName.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`
+          }}
           placeholder="First name"
           type="text"
           value={firstName}
@@ -232,6 +235,9 @@ export default (props) => {
       <div>
         <input
           className="checkout-input"
+          style={{
+            border: `${noLastNameErr && lastName.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`
+          }}
           placeholder="Last name"
           type="text"
           value={lastName}
@@ -249,6 +255,9 @@ export default (props) => {
     <div className="checkout-shipping-info-address-one-wrapper  checkout-input-padding">
       <input
         className="checkout-input"
+        style={{
+          border: `${noAddressErr && address.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`
+        }}
         placeholder="Address"
         type="text"
         value={address}
@@ -275,6 +284,9 @@ export default (props) => {
     <div className="checkout-shipping-info-city-wrapper checkout-input-padding">
       <input
         className="checkout-input"
+        style={{
+          border: `${noCityErr && city.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`
+        }}
         placeholder="City"
         type="text"
         value={city}
@@ -293,6 +305,7 @@ export default (props) => {
         setRegion={country => setRegion(country)} 
         addShippingMaxHeight={addShippingMaxHeight}
         setAddShippingMaxHeight={(val) => setAddShippingMaxHeight(val)}
+        noRegionErr={noRegionErr}
       />
 
       {noRegionErr && region.length === 0 ? (
@@ -307,6 +320,9 @@ export default (props) => {
         <input
           className="checkout-input"
           placeholder="State"
+          style={{
+            border: `${noStateErr && state.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`
+          }}
           type="text"
           value={state}
           onChange={e => setState(e.target.value)}
@@ -323,6 +339,9 @@ export default (props) => {
         <input
           className="checkout-input"
           placeholder="Zip code"
+          style={{
+            border: `${noZipErr && zip.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`
+          }}
           type="text"
           value={zip}
           onChange={e => setZip(e.target.value)}

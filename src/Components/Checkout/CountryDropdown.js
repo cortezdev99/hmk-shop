@@ -76,7 +76,8 @@ export default (props) => {
     <div style={{
       zIndex: 1,
       height: "100%",
-      border: "1px solid #CCC",
+      // border: "1px solid #CCC",
+      border: `${props.noRegionErr && selectedCountry == null ? "1px solid #FF0000" : "1px solid #CCC"}`,
       background: "#fbfbfb",
       fontSize: "13px",
       color: "#7c7979",
@@ -107,7 +108,7 @@ export default (props) => {
             paddingRight: "10px"
           }}>
             {
-              selectedCountry === null ? "Country or Region" : selectedCountry
+              selectedCountry === null ? "Country or Region" : <span style={{ color: "#1d1d1d" }}>{selectedCountry}</span>
             }
           </div>
 
