@@ -28,7 +28,7 @@ export default () => {
   
   const [phone, setPhone] = useState("");
   const [subtotal, setSubtotal] = useState(0);
-  const [customerData, setCustomerData] = useState({});
+  // const [customerData, setCustomerData] = useState({});
   const [billingAddresses, setBillingAddresses] = useState([]);
   const [billingAddress, setBillingAddress] = useState(false);
   const [activeBillingAddress, setActiveBillingAddress] = useState(false);
@@ -397,19 +397,6 @@ export default () => {
     }, 0);
 
     setSubtotal(subtotal);
-
-    if (firebase.auth().currentUser.uid) {
-      firestore
-        .collection("stripe_customers")
-        .doc(firebase.auth().currentUser.uid)
-        .get()
-        .then(resp => {
-          setCustomerData(resp.data());
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
   }, [products]);
 
   const handleGettingPaymentMethods = () => {
@@ -1438,12 +1425,10 @@ export default () => {
           />
 
           <AddPaymentMethodForm 
-            customerData={customerData}
             noPaymentMethods={noPaymentMethods}
             setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
             paymentMethods={paymentMethods}
             setPaymentMethods={(val) => setPaymentMethods(val)}
-            handleOpeningInnerContent={(val) => handleOpeningInnerContent(val)}
           />
 
           <div style={{ paddingTop: "40px" }}>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
+import 'firebase/firestore'
 import {
   CardElement,
   useStripe,
@@ -10,10 +11,26 @@ export default (props) => {
   const [cardholderName, setCardholderName] = useState("");
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62);
+  const [customerData, setCustomerData] = useState({});
   const el2 = window.document.getElementById('add-payment-rotating-thinger-1')
   const el3 = window.document.getElementById('add-payment-rotating-thinger-2')
   const stripe = useStripe();
   const elements = useElements();
+
+  useEffect(() => {
+    if (firebase.auth().currentUser.uid) {
+      firebase.firestore()
+        .collection("stripe_customers")
+        .doc(firebase.auth().currentUser.uid)
+        .get()
+        .then(resp => {
+          setCustomerData(resp.data());
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [])
 
   useEffect(() => {
     if (!collapsableContentShowing) {
@@ -37,7 +54,7 @@ export default (props) => {
     ev.preventDefault();
 
     const { setupIntent, error } = await stripe.confirmCardSetup(
-      props.customerData.setup_secret,
+      customerData.setup_secret,
       {
         payment_method: {
           card: elements.getElement(CardElement),
