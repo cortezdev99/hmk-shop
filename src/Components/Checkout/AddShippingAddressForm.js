@@ -267,7 +267,7 @@ export default (props) => {
         <input
           className="checkout-input"
           style={{
-            border: `${noLastNameErr && lastName.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`
+            border: `${noLastNameErr && lastName.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`,
           }}
           placeholder="Last name"
           type="text"

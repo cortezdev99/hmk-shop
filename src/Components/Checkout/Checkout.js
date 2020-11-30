@@ -9,7 +9,6 @@ import "firebase/auth";
 import firebase from "firebase/app";
 import "firebase/functions";
 import {
-  CardElement,
   useElements,
   useStripe,
   PaymentRequestButtonElement
@@ -17,6 +16,7 @@ import {
 import PaypalBtn from "../paypal/PaypalBtn";
 import OrderSummary from "./OrderSummary";
 import AddShippingAddressForm from "./AddShippingAddressForm";
+import AddPaymentMethodForm from "./AddPaymentMethodForm";
 // import axios from 'axios'
 
 export default () => {
@@ -28,7 +28,6 @@ export default () => {
   
   const [phone, setPhone] = useState("");
   const [subtotal, setSubtotal] = useState(0);
-  const [cardholderName, setCardholderName] = useState("");
   const [customerData, setCustomerData] = useState({});
   const [billingAddresses, setBillingAddresses] = useState([]);
   const [billingAddress, setBillingAddress] = useState(false);
@@ -412,53 +411,6 @@ export default () => {
         });
     }
   }, [products]);
-
-  const handleAddPaymentMethod = async ev => {
-    ev.preventDefault();
-
-    const { setupIntent, error } = await stripe.confirmCardSetup(
-      customerData.setup_secret,
-      {
-        payment_method: {
-          card: elements.getElement(CardElement),
-          billing_details: {
-            name: cardholderName
-          }
-        }
-      }
-    );
-
-    if (error) {
-      console.log(error);
-      return;
-    }
-
-    firebase
-      .firestore()
-      .collection("stripe_customers")
-      .doc(userUID)
-      .collection("payment_methods")
-      .add({ id: setupIntent.payment_method })
-      .then(resp => {
-        resp.onSnapshot(
-          {
-            // Listen for document metadata changes
-            includeMetadataChanges: true
-          },
-          doc => {
-            if (doc.data().card) {
-              if (noPaymentMethods) {
-                setNoPaymentMethods(false);
-              }
-
-              const currentState = paymentMethods;
-              currentState.push(doc.data());
-              setPaymentMethods([...currentState]);
-            }
-          }
-        );
-      });
-  };
 
   const handleGettingPaymentMethods = () => {
     firestore
@@ -1249,8 +1201,10 @@ export default () => {
       el.classList.toggle("transform-add-contact-info-inner-content");
     }
 
-    el2.classList.toggle("rotating-plus-minus-rotated-tester");
-    el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
+    if (el2 !== null && el3 !== null) {
+      el2.classList.toggle("rotating-plus-minus-rotated-tester");
+      el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
+    }
   };
 
   const handleSuccessfulPayPalPayment = async ev => {
@@ -1380,17 +1334,6 @@ export default () => {
       }
   }, [ collapsableOrderSummaryOpen ])
 
-  const cardElementOptions = {
-    hidePostalCode: true,
-    style: {
-      base: {   
-        '::placeholder': {
-          color: "#7c7979"
-        }
-      }
-    }
-  };
-
   return (
     <div className="checkout-container" id="checkout-container">
       <div className="checkout-banner-image-wrapper" style={{ maxHeight: "200px" }}>
@@ -1511,126 +1454,14 @@ export default () => {
             setBillingAddresses={(val) => setBillingAddresses(val)}
           />
 
-          <div
-            id="checkout-add-payment-wrapper"
-            style={{
-              marginTop: "40px",
-              height: "100%",
-              maxHeight: "62px",
-              overflow: "hidden",
-              paddingBottom: "40px",
-              borderBottom: "1px solid #CCC",
-              width: "100%",
-              transition: "max-height 0.7s"
-            }}
-          >
-            <div
-              onClick={() =>
-                handleOpeningInnerContent(
-                  "checkout-add-payment-wrapper",
-                  "add-payment-rotating-thinger-"
-                )
-              }
-              style={{
-                cursor: "pointer",
-                fontSize: "18px",
-                padding: "0px 20px",
-                paddingBottom: "40px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between"
-              }}
-            >
-              <div className="shipping-toggle-header">Add a payment method</div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "relative",
-                  width: "12px"
-                }}
-              >
-                <div
-                  id="add-payment-rotating-thinger-1"
-                  className="rotating-thing-1"
-                  style={{
-                    top: "-11px",
-                    position: "absolute",
-                    transform: "rotate(90deg)",
-                    transition: "0.7s"
-                  }}
-                >
-                  |
-                </div>
-
-                <div
-                  id="add-payment-rotating-thinger-2"
-                  className="rotating-thing-2"
-                  style={{
-                    left: "2px",
-                    top: "-10px",
-                    position: "absolute",
-                    transform: "rotate(180deg)",
-                    width: "5px",
-                    transition: "0.7s"
-                  }}
-                >
-                  |
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <input
-                style={{
-                  height: "45px",
-                  width: "100%",
-                  border: "1px solid #CCC",
-                  borderRadius: "5px"
-                }}
-                type="text"
-                className="checkout-input"
-                value={cardholderName}
-                placeholder="Card holder name"
-                onChange={e => setCardholderName(e.target.value)}
-              />
-            </div>
-
-            <div
-              style={{
-                marginTop: "20px",
-                height: "45px",
-                width: "100%",
-                border: "1px solid #CCC",
-                backgroundColor: "#fbfbfb",
-                borderRadius: "5px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <CardElement options={cardElementOptions} />
-            </div>
-
-            <div style={{ marginTop: "20px" }}>
-              <button
-                onClick={handleAddPaymentMethod}
-                style={{
-                  padding: "0 2rem",
-                  height: "45px",
-                  border: "none",
-                  backgroundColor: "#1c1b1b",
-                  color: "#fff",
-                  borderRadius: "5px",
-                  cursor: "pointer"
-                }}
-              >
-                Add this card
-              </button>
-            </div>
-          </div>
+          <AddPaymentMethodForm 
+            customerData={customerData}
+            noPaymentMethods={noPaymentMethods}
+            setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
+            paymentMethods={paymentMethods}
+            setPaymentMethods={(val) => setPaymentMethods(val)}
+            handleOpeningInnerContent={(val) => handleOpeningInnerContent(val)}
+          />
 
           <div style={{ paddingTop: "40px" }}>
             {handleGettingPaymentMethods()}
