@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
 import {
   CardElement,
@@ -8,8 +8,30 @@ import {
 
 export default (props) => {
   const [cardholderName, setCardholderName] = useState("");
+  const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62);
+  const el2 = window.document.getElementById('add-payment-rotating-thinger-1')
+  const el3 = window.document.getElementById('add-payment-rotating-thinger-2')
   const stripe = useStripe();
   const elements = useElements();
+
+  useEffect(() => {
+    if (!collapsableContentShowing) {
+      if (el2 !== null && el3 !== null && el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
+        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      }
+
+      setCollapsableContentMaxHeight(62);
+    } else {
+      if (el2 !== null && el3 !== null && !el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
+        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      }
+
+      setCollapsableContentMaxHeight(277)
+    }
+  }, [collapsableContentShowing])
 
   const handleAddPaymentMethod = async ev => {
     ev.preventDefault();
@@ -77,7 +99,7 @@ export default (props) => {
       style={{
         marginTop: "40px",
         height: "100%",
-        maxHeight: "62px",
+        maxHeight: `${collapsableContentMaxHeight}px`,
         overflow: "hidden",
         paddingBottom: "40px",
         borderBottom: "1px solid #CCC",
@@ -86,12 +108,7 @@ export default (props) => {
       }}
     >
       <div
-        onClick={() =>
-          props.handleOpeningInnerContent(
-            "checkout-add-payment-wrapper",
-            "add-payment-rotating-thinger-"
-          )
-        }
+        onClick={() => setCollapsableContentShowing(!collapsableContentShowing)} 
         style={{
           cursor: "pointer",
           fontSize: "18px",
