@@ -12,7 +12,8 @@ import {
   faCircleNotch,
   faShoppingCart,
   faBars,
-  faChevronDown
+  faChevronDown,
+  faCheck
 } from "@fortawesome/free-solid-svg-icons";
 import { faCircle as farFaCircle } from "@fortawesome/free-regular-svg-icons";
 import { faInstagram, faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons' 
@@ -37,7 +38,8 @@ const Icons = () => {
     faInstagram,
     faFacebookF,
     faTwitter,
-    faChevronDown
+    faChevronDown,
+    faCheck
   );
 };
 

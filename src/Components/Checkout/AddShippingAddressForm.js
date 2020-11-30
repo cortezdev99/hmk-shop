@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
 import CountryDropdown from './CountryDropdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default (props) => {
   const el2 = document.getElementById('shipping-address-rotating-thinger-1');
@@ -24,6 +25,7 @@ export default (props) => {
   const [zip, setZip] = useState("");
   const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(62)
   const [submitting, setSubmitting] = useState(false)
+  const [successfulFormSubmission, setSuccessfulSubmission] = useState(false)
 
   const handleSuccessfulFormSubmittion = () => {
     setFirstName("");
@@ -34,6 +36,8 @@ export default (props) => {
     setRegion([]);
     setState("");
     setZip("");
+    setSuccessfulSubmission(true)
+    setCollapsableContentShowing(false)
   }
 
   useEffect(() => {
@@ -56,7 +60,7 @@ export default (props) => {
       const collapsableCountryDropdownHeight = el.classList.contains('country-dropdown-collapsable-content-showing') ? 180 : 0
       setAddShippingMaxHeight((baseHeight + errorsHeight) + collapsableCountryDropdownHeight)
     }
-  }, [ errors, collapsableContentShowing ])
+  }, [ errors, collapsableContentShowing, successfulFormSubmission ])
 
   useEffect(() => {
     if (submitting) {
@@ -67,6 +71,7 @@ export default (props) => {
       setNoRegionErr(false);
       setNoStateErr(false);
       setNoZipErr(false);
+      setSuccessfulSubmission(false);
       
       const errors = [];
       if (firstName.length === 0) {
@@ -180,8 +185,23 @@ export default (props) => {
         justifyContent: "space-between"
       }}
     >
-      <div className="shipping-toggle-header">
+      <div style={{
+        width: "calc(100% - 40px)",
+        display: "flex",
+        justifyContent: "space-between"
+      }}
+      className="shipping-toggle-header">
         Add a shipping address
+
+        {
+          successfulFormSubmission ? (
+            <span style={{
+              color: "#54b654"
+            }}>
+              <FontAwesomeIcon icon={["fas", "check"]} />
+            </span>
+          ) : null
+        }
       </div>
 
       <div
