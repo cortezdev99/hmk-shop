@@ -17,6 +17,7 @@ import PaypalBtn from "../paypal/PaypalBtn";
 import OrderSummary from "./OrderSummary";
 import AddShippingAddressForm from "./AddShippingAddressForm";
 import AddPaymentMethodForm from "./AddPaymentMethodForm";
+import ChoosePaymentMethod from "./ChoosePaymentMethod";
 // import axios from 'axios'
 
 export default () => {
@@ -32,9 +33,8 @@ export default () => {
   const [billingAddresses, setBillingAddresses] = useState([]);
   const [billingAddress, setBillingAddress] = useState(false);
   const [activeBillingAddress, setActiveBillingAddress] = useState(false);
-  const [loadingPaymentMethods, setLoadingPaymentMethods] = useState(true);
+  
   const [noBillingAddresses, setNoBillingAddresses] = useState(false);
-  const [getPaymentMethodsError, setGetPaymentMethodsError] = useState(false);
   const [userUID, setUserUID] = useState("");
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(false);
@@ -49,7 +49,7 @@ export default () => {
   const [noEmail, setNoEmail] = useState(false);
   const [noPhoneNumber, setNoPhoneNumber] = useState(false);
   const [noPaymentMethods, setNoPaymentMethods] = useState(false);
-  const [activePaymentMethod, setActivePaymentMethod] = useState(false);
+
   const [paymentRequest, setPaymentRequest] = useState(null);
   const [
     expressCheckoutPaymentSubmitting,
@@ -399,331 +399,7 @@ export default () => {
     setSubtotal(subtotal);
   }, [products]);
 
-  const handleGettingPaymentMethods = () => {
-    firestore
-      .collection("stripe_customers")
-      .doc(firebase.auth().currentUser.uid)
-      .collection("payment_methods")
-      .get()
-      .then(snapshot => {
-        if (snapshot.metadata.fromCache) {
-          setGetPaymentMethodsError(true);
-        } else {
-          if (snapshot.empty) {
-            setNoPaymentMethods(true);
-          } else if (paymentMethods.length !== snapshot.size) {
-            const currentState = paymentMethods;
-            snapshot.forEach(doc => {
-              currentState.push(doc.data());
-            });
 
-            setPaymentMethods([...currentState]);
-          }
-        }
-
-        setLoadingPaymentMethods(false);
-      });
-
-    // console.log(getPaymentMethodsError)
-
-    const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
-      return (
-        setPaymentMethod(paymentMethod.id),
-        setActivePaymentMethod(paymentMethodIdx)
-      );
-    };
-
-    const handleOpeningInnerContent = () => {
-      const el = document.getElementById("checkout-payment-methods-wrapper");
-      const el2 = document.getElementById("rotating-thing-1");
-      const el3 = document.getElementById("rotating-thing-2");
-
-      if (paymentMethods.length < 3) {
-        el.classList.toggle("transform-inner-content");
-      } else {
-        el.classList.toggle("transform-inner-content-large");
-      }
-      el2.classList.toggle("rotating-plus-minus-rotated-tester");
-      el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
-    };
-
-    const handleScrollToAddPaymentMethodSection = () => {
-      const addPaymentMethodElem = document.getElementById(
-        "checkout-add-payment-wrapper"
-      );
-      const addPaymentMethodPlusMinusOne = document.getElementById(
-        "add-payment-rotating-thinger-1"
-      );
-      const addPaymentMethodPlusMinusTwo = document.getElementById(
-        "add-payment-rotating-thinger-2"
-      );
-      addPaymentMethodElem.scrollIntoView({
-        block: "center",
-        behavior: "smooth"
-      });
-
-      setTimeout(() => {
-        if (
-          addPaymentMethodElem.classList.contains(
-            "transform-add-payment-inner-content"
-          ) === false
-        ) {
-          addPaymentMethodElem.classList.toggle(
-            "transform-add-payment-inner-content"
-          );
-          addPaymentMethodPlusMinusOne.classList.toggle(
-            "rotating-plus-minus-rotated-tester"
-          );
-          addPaymentMethodPlusMinusTwo.classList.toggle(
-            "rotating-plus-minus-rotated-tester-1"
-          );
-        }
-      }, 300);
-    };
-
-    const handleGetPaymentMethodsRetry = () => {
-      setLoadingPaymentMethods(true);
-
-      firestore
-        .collection("stripe_customers")
-        .doc(firebase.auth().currentUser.uid)
-        .collection("payment_methods")
-        .get()
-        .then(snapshot => {
-          if (snapshot.metadata.fromCache) {
-            setGetPaymentMethodsError(true);
-          } else {
-            if (snapshot.empty) {
-              setNoPaymentMethods(true);
-            } else if (paymentMethods.length !== snapshot.size) {
-              const currentState = paymentMethods;
-              snapshot.forEach(doc => {
-                currentState.push(doc.data());
-              });
-
-              setPaymentMethods([...currentState]);
-            }
-          }
-
-          setLoadingPaymentMethods(false);
-        });
-    };
-
-    return (
-      <div
-        id="checkout-payment-methods-wrapper"
-        style={{
-          height: "100%",
-          maxHeight: "62px",
-          overflow: "hidden",
-          paddingBottom: "40px",
-          borderBottom: "1px solid #CCC",
-          width: "100%",
-          transition: "max-height 0.7s"
-        }}
-      >
-        <div
-          onClick={handleOpeningInnerContent}
-          style={{
-            cursor: "pointer",
-            fontSize: "18px",
-            padding: "0px 20px",
-            paddingBottom: "20px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}
-        >
-          <div className="shipping-toggle-header" style={{ display: "flex" }}>
-            Choose from your payment methods
-            <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
-              {noPaymentMethodSelected && !paymentMethod ? "* Required" : null}
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              width: "12px"
-            }}
-          >
-            <div
-              id="rotating-thing-1"
-              className="rotating-thing-1"
-              style={{
-                top: "-11px",
-                position: "absolute",
-                transform: "rotate(90deg)",
-                transition: "0.7s"
-              }}
-            >
-              |
-            </div>
-
-            <div
-              id="rotating-thing-2"
-              className="rotating-thing-2"
-              style={{
-                left: "2px",
-                top: "-10px",
-                position: "absolute",
-                transform: "rotate(180deg)",
-                width: "5px",
-                transition: "0.7s"
-              }}
-            >
-              |
-            </div>
-          </div>
-        </div>
-
-        <div>
-          {!noPaymentMethods &&
-          paymentMethods.length > 0 &&
-          !loadingPaymentMethods ? (
-            <div>
-              {paymentMethods.map((paymentMethod, paymentMethodIdx) => {
-                return (
-                  <button
-                    key={paymentMethodIdx}
-                    onClick={() =>
-                      handleUsePaymentClick(paymentMethod, paymentMethodIdx)
-                    }
-                    style={{
-                      marginTop: "20px",
-                      height: "45px",
-                      display: "flex",
-                      width: "100%",
-                      border: "1px solid #CCC",
-                      borderRadius: "5px",
-                      background: "transparent",
-                      padding: "0px",
-                      cursor: "pointer"
-                    }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        width: "10%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRight: "1px solid #CCC"
-                      }}
-                    >
-                      <div style={{ fontSize: "12px" }}>
-                        {paymentMethodIdx === activePaymentMethod ? (
-                          <FontAwesomeIcon icon={["fas", "circle"]} />
-                        ) : (
-                          <FontAwesomeIcon icon={["far", "circle"]} />
-                        )}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        height: "100%",
-                        width: "90%",
-                        display: "flex",
-                        backgroundColor: "#fbfbfb",
-                        borderTopRightRadius: "5px",
-                        borderBottomRightRadius: "5px",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: "0 20px",
-                        fontSize: "14px"
-                      }}
-                    >
-                      <div style={{ display: "flex" }}>
-                        <div
-                          style={{
-                            paddingRight: "10px",
-                            textTransform: "capitalize"
-                          }}
-                        >
-                          {paymentMethod.card.brand}
-                        </div>
-                        <div style={{ paddingRight: "10px" }}>****</div>
-                        <div>{paymentMethod.card.last4}</div>
-                      </div>
-
-                      <div style={{ display: "flex" }}>
-                        <div style={{ paddingRight: "10px" }}>Expires</div>
-                        <div style={{ paddingRight: "10px" }}>
-                          {paymentMethod.card.exp_month}
-                        </div>
-                        <div style={{ paddingRight: "10px" }}>/</div>
-                        <div>{paymentMethod.card.exp_year}</div>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          ) : !noPaymentMethods &&
-            paymentMethods.length === 0 &&
-            getPaymentMethodsError &&
-            !loadingPaymentMethods ? (
-            <div
-              style={{
-                marginTop: "20px",
-                display: "flex",
-                alignItems: "center"
-              }}
-            >
-              <ul style={{ fontSize: "22px", color: "#FF0000" }}>
-                <FontAwesomeIcon icon={["fas", "dizzy"]} />
-              </ul>
-
-              <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
-                Looks like there was a problem with your internet connection.
-                Click{" "}
-                <span
-                  onClick={handleGetPaymentMethodsRetry}
-                  style={{ cursor: "pointer", textDecorationLine: "underline" }}
-                >
-                  here
-                </span>{" "}
-                to retry.
-              </div>
-            </div>
-          ) : noPaymentMethods &&
-            paymentMethods.length === 0 &&
-            !loadingPaymentMethods ? (
-            <div style={{ marginTop: "20px", display: "flex" }}>
-              <ul style={{ fontSize: "18px", color: "#FF8800" }}>
-                <FontAwesomeIcon icon={["fas", "exclamation-triangle"]} />
-              </ul>
-
-              <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
-                You don't have any payment methods, you can add one{" "}
-                <span
-                  onClick={handleScrollToAddPaymentMethodSection}
-                  style={{ cursor: "pointer", textDecorationLine: "underline" }}
-                >
-                  here
-                </span>
-                !
-              </div>
-            </div>
-          ) : (
-            <div style={{ marginTop: "20px", display: "flex" }}>
-              <ul style={{ fontSize: "18px", color: "#CCC" }}>
-                <FontAwesomeIcon icon={["fas", "circle-notch"]} spin={true} />
-              </ul>
-
-              <div style={{ paddingLeft: "20px", fontSize: "15px" }}>
-                Loading...
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   const handleGettingBillingAddresses = () => {
     firestore
@@ -816,7 +492,7 @@ export default () => {
         .get()
         .then(snapshot => {
           if (snapshot.metadata.fromCache) {
-            setGetPaymentMethodsError(true);
+            setGetBillingAddressesError(true)
           } else {
             if (snapshot.empty) {
               return setNoBillingAddresses(true);
@@ -1432,7 +1108,17 @@ export default () => {
           />
 
           <div style={{ paddingTop: "40px" }}>
-            {handleGettingPaymentMethods()}
+            <ChoosePaymentMethod
+              noPaymentMethods={noPaymentMethods}
+              setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
+              paymentMethods={paymentMethods}
+              setPaymentMethods={(val) => setPaymentMethods(val)}
+              setPaymentMethod={(val) => setPaymentMethod(val)}
+              paymentMethod={paymentMethod}
+              noPaymentMethods={noPaymentMethods}
+              noPaymentMethodSelected={noPaymentMethodSelected}
+
+            />
           </div>
 
           <div style={{ paddingTop: "40px" }}>
