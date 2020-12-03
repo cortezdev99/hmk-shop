@@ -11,6 +11,8 @@ export default (props) => {
   const [activeBillingAddress, setActiveBillingAddress] = useState(false);
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62)
+  const el2 = document.getElementById("rotating-thinger-1");
+  const el3 = document.getElementById("rotating-thinger-2");
 
   useEffect(() => {
     firebase.firestore()
@@ -42,10 +44,20 @@ export default (props) => {
 
   useEffect(() => {
     if (!collapsableContentShowing) {
+      if (el2 !== null && el3 !== null && el2.classList.contains('rotating-plus-minus-rotated-tester')) {
+        el2.classList.toggle("rotating-plus-minus-rotated-tester");
+        el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
+      }
+
       setCollapsableContentMaxHeight(62)
     } else {
-      // setCollapsableContentMaxHeight(200)
       const billingAddressesAdditionalHeight = props.billingAddresses.length * 65
+
+      if (el2 !== null && el3 !== null && !el2.classList.contains('rotating-plus-minus-rotated-tester')) {
+        el2.classList.toggle("rotating-plus-minus-rotated-tester");
+        el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
+      }
+
       setCollapsableContentMaxHeight(82 + billingAddressesAdditionalHeight)
     }
 
@@ -56,19 +68,6 @@ export default (props) => {
       props.setBillingAddress(billingAddress),
       setActiveBillingAddress(billingAddressIdx)
     );
-  };
-
-  const handleOpeningInnerContent = () => {
-    const el = document.getElementById("checkout-shipping-methods-wrapper");
-    const el2 = document.getElementById("rotating-thinger-1");
-    const el3 = document.getElementById("rotating-thinger-2");
-    if (props.billingAddresses.length < 3) {
-      el.classList.toggle("transform-inner-content");
-    } else {
-      el.classList.toggle("transform-inner-content-large");
-    }
-    el2.classList.toggle("rotating-plus-minus-rotated-tester");
-    el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
   };
 
   const handleScrollToAddBillingAddressSection = () => {
