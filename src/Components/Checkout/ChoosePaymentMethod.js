@@ -57,7 +57,6 @@ export default (props) => {
 
       setCollapsableContentMaxHeight(82 + paymentMethodsAdditionalHeight)
     }
-
   }, [ collapsableContentShowing ])
 
   const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
@@ -65,19 +64,6 @@ export default (props) => {
       props.setPaymentMethod(paymentMethod.id),
       setActivePaymentMethod(paymentMethodIdx)
     );
-  };
-
-  const handleOpeningInnerContent = () => {
-    const el = document.getElementById("checkout-payment-methods-wrapper");
-   
-
-    if (props.paymentMethods.length < 3) {
-      el.classList.toggle("transform-inner-content");
-    } else {
-      el.classList.toggle("transform-inner-content-large");
-    }
-    el2.classList.toggle("rotating-plus-minus-rotated-tester");
-    el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
   };
 
   const handleScrollToAddPaymentMethodSection = () => {
@@ -156,7 +142,6 @@ export default (props) => {
       }}
     >
       <div
-        // onClick={handleOpeningInnerContent}
         onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
         style={{
           cursor: "pointer",
