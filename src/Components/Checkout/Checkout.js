@@ -1,10 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import CartContext from "../../Contexts/CartContext";
-import CountryDropdown from "./CountryDropdown";
 import { Link, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Shipping from "../Utilities/Shipping";
-import { firestore } from "../../Config/fbConfig";
 import "firebase/auth";
 import firebase from "firebase/app";
 import "firebase/functions";

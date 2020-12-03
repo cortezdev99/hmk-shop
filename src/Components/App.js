@@ -19,6 +19,7 @@ import CreateAccount from './Checkout/CreateAccount';
 import TotalsLogicProvider from '../Providers/TotalsLogicProvider'
 import MobileSideNav from './Nav/MobileSideNav';
 import MobileSideNavProvider from '../Providers/MobileSideNavProvider';
+import { firebaseConfig } from '../Config/fbConfig';
 
 function App() {
   Icons()
@@ -34,12 +35,21 @@ function App() {
   }
 
   useEffect(() => {
+    firebase.initializeApp(firebaseConfig)
+    firebase.analytics();
+  }, [])
+
+  useEffect(() => {
     const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   })
 
   if (initializing) {
-    return <div />
+    return (
+      <div>
+        Loading...
+      </div>
+    )
   }
 
   return (
