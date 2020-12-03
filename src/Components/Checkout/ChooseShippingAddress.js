@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
 import 'firebase/firestore'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,32 +9,47 @@ export default (props) => {
   );
   const [loadingBillingAddresses, setLoadingBillingAddresses] = useState(true);
   const [activeBillingAddress, setActiveBillingAddress] = useState(false);
+  const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62)
 
-  firebase.firestore()
-    .collection("stripe_customers")
-    .doc(firebase.auth().currentUser.uid)
-    .collection("billing_addresses")
-    .get()
-    .then(snapshot => {
-      if (snapshot.metadata.fromCache) {
-        setGetBillingAddressesError(true);
-      } else {
-        if (snapshot.empty) {
-          props.setNoBillingAddresses(true);
+  useEffect(() => {
+    firebase.firestore()
+      .collection("stripe_customers")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("billing_addresses")
+      .get()
+      .then(snapshot => {
+        if (snapshot.metadata.fromCache) {
+          setGetBillingAddressesError(true);
+        } else {
+          if (snapshot.empty) {
+            props.setNoBillingAddresses(true);
+          }
+  
+          if (props.billingAddresses.length !== snapshot.size) {
+            const currentState = props.billingAddresses;
+            snapshot.forEach(doc => {
+              currentState.push(doc.data());
+            });
+  
+            props.setBillingAddresses([...currentState]);
+          }
         }
+  
+        setLoadingBillingAddresses(false);
+      });
+  }, [])
 
-        if (props.billingAddresses.length !== snapshot.size) {
-          const currentState = props.billingAddresses;
-          snapshot.forEach(doc => {
-            currentState.push(doc.data());
-          });
+  useEffect(() => {
+    if (!collapsableContentShowing) {
+      setCollapsableContentMaxHeight(62)
+    } else {
+      // setCollapsableContentMaxHeight(200)
+      const billingAddressesAdditionalHeight = props.billingAddresses.length * 65
+      setCollapsableContentMaxHeight(82 + billingAddressesAdditionalHeight)
+    }
 
-          props.setBillingAddresses([...currentState]);
-        }
-      }
-
-      setLoadingBillingAddresses(false);
-    });
+  }, [ collapsableContentShowing ])
 
   const handleUseAddressClick = (billingAddress, billingAddressIdx) => {
     return (
@@ -126,7 +141,7 @@ export default (props) => {
       className="checkout-shipping-methods-wrapper"
       style={{
         height: "100%",
-        maxHeight: "62px",
+        maxHeight: `${collapsableContentMaxHeight}px`,
         overflow: "hidden",
         paddingBottom: "40px",
         borderBottom: "1px solid #CCC",
@@ -135,7 +150,8 @@ export default (props) => {
       }}
     >
       <div
-        onClick={handleOpeningInnerContent}
+        // onClick={handleOpeningInnerContent}
+        onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
         style={{
           cursor: "pointer",
           fontSize: "18px",
