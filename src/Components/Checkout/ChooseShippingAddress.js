@@ -149,7 +149,6 @@ export default (props) => {
       }}
     >
       <div
-        // onClick={handleOpeningInnerContent}
         onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
         style={{
           cursor: "pointer",

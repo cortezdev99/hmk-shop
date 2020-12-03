@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import firebase from 'firebase'
 import 'firebase/firestore'
@@ -7,32 +7,58 @@ export default (props) => {
   const [loadingPaymentMethods, setLoadingPaymentMethods] = useState(true);
   const [activePaymentMethod, setActivePaymentMethod] = useState(false);
   const [getPaymentMethodsError, setGetPaymentMethodsError] = useState(false);
+  const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62)
+  const el2 = document.getElementById("rotating-thing-1");
+  const el3 = document.getElementById("rotating-thing-2");
 
-  firebase.firestore()
-    .collection("stripe_customers")
-    .doc(firebase.auth().currentUser.uid)
-    .collection("payment_methods")
-    .get()
-    .then(snapshot => {
-      if (snapshot.metadata.fromCache) {
-        setGetPaymentMethodsError(true);
-      } else {
-        if (snapshot.empty) {
-          props.setNoPaymentMethods(true);
-        } else if (props.paymentMethods.length !== snapshot.size) {
-          const currentState = props.paymentMethods;
-          snapshot.forEach(doc => {
-            currentState.push(doc.data());
-          });
+  useEffect(() => {
 
-          props.setPaymentMethods([...currentState]);
+    firebase.firestore()
+      .collection("stripe_customers")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("payment_methods")
+      .get()
+      .then(snapshot => {
+        if (snapshot.metadata.fromCache) {
+          setGetPaymentMethodsError(true);
+        } else {
+          if (snapshot.empty) {
+            props.setNoPaymentMethods(true);
+          } else if (props.paymentMethods.length !== snapshot.size) {
+            const currentState = props.paymentMethods;
+            snapshot.forEach(doc => {
+              currentState.push(doc.data());
+            });
+  
+            props.setPaymentMethods([...currentState]);
+          }
         }
+  
+        setLoadingPaymentMethods(false);
+      });
+  }, [])
+
+  useEffect(() => {
+    if (!collapsableContentShowing) {
+      if (el2 !== null && el3 !== null && el2.classList.contains('rotating-plus-minus-rotated-tester')) {
+        el2.classList.toggle("rotating-plus-minus-rotated-tester");
+        el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
       }
 
-      setLoadingPaymentMethods(false);
-    });
+      setCollapsableContentMaxHeight(62)
+    } else {
+      const paymentMethodsAdditionalHeight = props.paymentMethods.length * 65
 
-  // console.log(getPaymentMethodsError)
+      if (el2 !== null && el3 !== null && !el2.classList.contains('rotating-plus-minus-rotated-tester')) {
+        el2.classList.toggle("rotating-plus-minus-rotated-tester");
+        el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
+      }
+
+      setCollapsableContentMaxHeight(82 + paymentMethodsAdditionalHeight)
+    }
+
+  }, [ collapsableContentShowing ])
 
   const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
     return (
@@ -43,8 +69,7 @@ export default (props) => {
 
   const handleOpeningInnerContent = () => {
     const el = document.getElementById("checkout-payment-methods-wrapper");
-    const el2 = document.getElementById("rotating-thing-1");
-    const el3 = document.getElementById("rotating-thing-2");
+   
 
     if (props.paymentMethods.length < 3) {
       el.classList.toggle("transform-inner-content");
@@ -122,7 +147,7 @@ export default (props) => {
       id="checkout-payment-methods-wrapper"
       style={{
         height: "100%",
-        maxHeight: "62px",
+        maxHeight: `${collapsableContentMaxHeight}px`,
         overflow: "hidden",
         paddingBottom: "40px",
         borderBottom: "1px solid #CCC",
@@ -131,7 +156,8 @@ export default (props) => {
       }}
     >
       <div
-        onClick={handleOpeningInnerContent}
+        // onClick={handleOpeningInnerContent}
+        onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
         style={{
           cursor: "pointer",
           fontSize: "18px",
