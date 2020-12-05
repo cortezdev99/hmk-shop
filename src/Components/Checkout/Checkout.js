@@ -14,6 +14,7 @@ import AddPaymentMethodForm from "./AddPaymentMethodForm";
 import ChoosePaymentMethod from "./ChoosePaymentMethod";
 import ChooseShippingAddress from "./ChooseShippingAddress";
 import ExpressCheckoutPaymentForms from "./ExpressCheckoutPaymentForms";
+import ContactInfoForm from "./ContactInfoForm";
 // import axios from 'axios'
 
 export default () => {
@@ -402,117 +403,15 @@ export default () => {
             />
           </div>
 
-          <div
-            id="checkout-contact-info-wrapper"
-            className="checkout-contact-info-wrapper"
-            style={{
-              marginTop: "40px",
-              height: "100%",
-              maxHeight: "62px",
-              overflow: "hidden",
-              paddingBottom: "40px",
-              borderBottom: "1px solid #CCC",
-              width: "100%",
-              transition: "max-height 0.7s"
-            }}
-          >
-            <div
-              onClick={() =>
-                handleOpeningInnerContent(
-                  "checkout-contact-info-wrapper",
-                  "contact-info-rotating-thinger-"
-                )
-              }
-              style={{
-                cursor: "pointer",
-                fontSize: "18px",
-                padding: "0px 20px",
-                paddingBottom: "20px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between"
-              }}
-            >
-              <div
-                className="shipping-toggle-header"
-                style={{ display: "flex" }}
-              >
-                Contact information
-                <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
-                  {noEmail &&
-                  noPhoneNumber &&
-                  phone.length === 0 &&
-                  email.length === 0
-                    ? "* Required"
-                    : (noEmail && email.length === 0) ||
-                      (noPhoneNumber && phone.length === 0)
-                    ? "* Incomplete"
-                    : null}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "relative",
-                  width: "12px"
-                }}
-              >
-                <div
-                  id="contact-info-rotating-thinger-1"
-                  className="rotating-thing-1"
-                  style={{
-                    top: "-11px",
-                    position: "absolute",
-                    transform: "rotate(90deg)",
-                    transition: "0.7s"
-                  }}
-                >
-                  |
-                </div>
-
-                <div
-                  id="contact-info-rotating-thinger-2"
-                  className="rotating-thing-2"
-                  style={{
-                    left: "2px",
-                    top: "-10px",
-                    position: "absolute",
-                    transform: "rotate(180deg)",
-                    width: "5px",
-                    transition: "0.7s"
-                  }}
-                >
-                  |
-                </div>
-              </div>
-            </div>
-
-            <div className="checkout-contact-info-input-wrapper">
-              <input
-                className="checkout-input"
-                placeholder="Email"
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="checkout-contact-info-phone-input-wrapper">
-              <input
-                className="checkout-input"
-                placeholder="Phone"
-                type="tel"
-                value={phone.replace(
-                  /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
-                  "($1) $2-$3"
-                )}
-                onChange={e => setPhone(e.target.value)}
-              />
-            </div>
-          </div>
+          <ContactInfoForm
+            noEmail={noEmail}
+            noPhoneNumber={noPhoneNumber}
+            email={email}
+            phone={phone}
+            setEmail={(val) => setEmail(val)}
+            setPhone={(val) => setPhone(val)}
+            handleOpeningInnerContent={(val) => handleOpeningInnerContent(val)}
+          />
 
           <div className="checkout-left-column-btns-wrapper">
             <Link
