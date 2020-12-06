@@ -195,21 +195,6 @@ export default () => {
     }
   };
 
-  const handleOpeningInnerContent = (wrapper, plusMinus) => {
-    const el = document.getElementById(wrapper);
-    const el2 = document.getElementById(`${plusMinus}1`);
-    const el3 = document.getElementById(`${plusMinus}2`);
-
-    if (wrapper === "checkout-contact-info-wrapper") {
-      el.classList.toggle("transform-add-contact-info-inner-content");
-    }
-
-    if (el2 !== null && el3 !== null) {
-      el2.classList.toggle("rotating-plus-minus-rotated-tester");
-      el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
-    }
-  };
-
   const handleAddDiscountClick = () => {
     let deconstructedProducts = [];
     products.map(product => {
@@ -410,7 +395,6 @@ export default () => {
             phone={phone}
             setEmail={(val) => setEmail(val)}
             setPhone={(val) => setPhone(val)}
-            handleOpeningInnerContent={(val) => handleOpeningInnerContent(val)}
           />
 
           <div className="checkout-left-column-btns-wrapper">

@@ -42,12 +42,9 @@ export default (props) => {
     >
       <div
         onClick={() =>
-          // props.handleOpeningInnerContent(
-          //   "checkout-contact-info-wrapper",
-          //   "contact-info-rotating-thinger-"
-          // )
           setCollapsableContentShowing(!collapsableContentShowing)
         }
+        
         style={{
           cursor: "pointer",
           fontSize: "18px",
