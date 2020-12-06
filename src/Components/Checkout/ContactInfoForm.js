@@ -1,6 +1,30 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 export default (props) => {
+  const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62)
+  const el2 = document.getElementById("contact-info-rotating-thinger-1");
+  const el3 = document.getElementById("contact-info-rotating-thinger-2");
+
+  useEffect(() => {
+    if (!collapsableContentShowing) {
+      if (el2 !== null && el3 !== null && el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
+        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      }
+
+      setCollapsableContentMaxHeight(62);
+    } else {
+      if (el2 !== null && el3 !== null && !el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
+        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
+        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      }
+      
+      const baseHeight = 212
+      setCollapsableContentMaxHeight(baseHeight)
+    }
+  }, [collapsableContentShowing])
+
   return (
     <div
       id="checkout-contact-info-wrapper"
@@ -8,7 +32,7 @@ export default (props) => {
       style={{
         marginTop: "40px",
         height: "100%",
-        maxHeight: "62px",
+        maxHeight: `${collapsableContentMaxHeight}px`,
         overflow: "hidden",
         paddingBottom: "40px",
         borderBottom: "1px solid #CCC",
@@ -18,10 +42,11 @@ export default (props) => {
     >
       <div
         onClick={() =>
-          props.handleOpeningInnerContent(
-            "checkout-contact-info-wrapper",
-            "contact-info-rotating-thinger-"
-          )
+          // props.handleOpeningInnerContent(
+          //   "checkout-contact-info-wrapper",
+          //   "contact-info-rotating-thinger-"
+          // )
+          setCollapsableContentShowing(!collapsableContentShowing)
         }
         style={{
           cursor: "pointer",
