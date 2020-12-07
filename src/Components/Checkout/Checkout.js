@@ -362,7 +362,10 @@ export default () => {
             setPaymentMethods={(val) => setPaymentMethods(val)}
           />
 
-        <div style={{ paddingTop: "40px" }}>
+          <div
+            className="checkout-form-component-padding"
+            style={{ paddingTop: "40px" }}
+          >
             <ChooseShippingAddress
               setNoBillingAddressSelected={(val) => setNoBillingAddressSelected(val)}
               billingAddresses={billingAddresses}
@@ -374,7 +377,10 @@ export default () => {
             />
           </div>
 
-          <div style={{ paddingTop: "40px" }}>
+          <div
+            className="checkout-form-component-padding"
+            style={{ paddingTop: "40px" }}
+          >
             <ChoosePaymentMethod
               noPaymentMethods={noPaymentMethods}
               setNoPaymentMethods={(val) => setNoPaymentMethods(val)}

@@ -9,7 +9,7 @@ export default (props) => {
   const [getPaymentMethodsError, setGetPaymentMethodsError] = useState(false);
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
-    window.document.body.clientWidth > 1024 ? 62 : 75
+    window.document.body.clientWidth > 1024 ? 62 : 55
   )
   const el2 = document.getElementById("rotating-thing-1");
   const el3 = document.getElementById("rotating-thing-2");
@@ -48,7 +48,7 @@ export default (props) => {
         el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
       }
 
-      setCollapsableContentMaxHeight(window.document.body.clientWidth > 1024 ? 62 : 75)
+      setCollapsableContentMaxHeight(window.document.body.clientWidth > 1024 ? 62 : 55)
     } else {
       const paymentMethodsAdditionalHeight = props.paymentMethods.length * 65
 
@@ -168,19 +168,21 @@ export default (props) => {
         </div>
 
         <div
+          className="choose-payment-chevron"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            width: "12px"
+            // display: "flex",
+            // alignItems: "center",
+            // justifyContent: "center",
+            // position: "relative",
+            // width: "12px"
           }}
         >
-          <div
+          <FontAwesomeIcon icon={["fas", "chevron-down"]} />
+          {/* <div
             id="rotating-thing-1"
             className="rotating-thing-1"
             style={{
-              top: "-11px",
+              // top: "-11px",
               position: "absolute",
               transform: "rotate(90deg)",
               transition: "0.7s"
@@ -193,16 +195,17 @@ export default (props) => {
             id="rotating-thing-2"
             className="rotating-thing-2"
             style={{
-              left: "2px",
-              top: "-10px",
+              // left: "2px",
+              right: "2px",
+              // top: "-10px",
               position: "absolute",
               transform: "rotate(180deg)",
-              width: "5px",
+              // width: "5px",
               transition: "0.7s"
             }}
           >
             |
-          </div>
+          </div> */}
         </div>
       </div>
 
