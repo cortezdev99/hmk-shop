@@ -400,6 +400,15 @@
   .checkout-product-wrapper {
     grid-template-columns: 0.5fr 1fr 0.5fr;
   }
+
+  .choose-payment-method-header {
+    font-size: 13px;
+    height: 35px;
+  }
+
+  .choose-payment-method-wrapper {
+    padding: 0 10px 20px !important;
+  }
 }
 
 @media (max-width: 450px) {
@@ -541,3 +550,4 @@
 .country-dropdown-chevron-rotated {
   transform: rotate(-180deg);
 }
+

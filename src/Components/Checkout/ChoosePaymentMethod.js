@@ -8,7 +8,9 @@ export default (props) => {
   const [activePaymentMethod, setActivePaymentMethod] = useState(false);
   const [getPaymentMethodsError, setGetPaymentMethodsError] = useState(false);
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
-  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62)
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
+    window.document.body.clientWidth > 1024 ? 62 : 75
+  )
   const el2 = document.getElementById("rotating-thing-1");
   const el3 = document.getElementById("rotating-thing-2");
 
@@ -46,7 +48,7 @@ export default (props) => {
         el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
       }
 
-      setCollapsableContentMaxHeight(62)
+      setCollapsableContentMaxHeight(window.document.body.clientWidth > 1024 ? 62 : 75)
     } else {
       const paymentMethodsAdditionalHeight = props.paymentMethods.length * 65
 
@@ -55,7 +57,7 @@ export default (props) => {
         el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
       }
 
-      setCollapsableContentMaxHeight(82 + paymentMethodsAdditionalHeight)
+      setCollapsableContentMaxHeight(95 + paymentMethodsAdditionalHeight)
     }
   }, [ collapsableContentShowing ])
 
@@ -142,6 +144,7 @@ export default (props) => {
       }}
     >
       <div
+        className="choose-payment-method-wrapper"
         onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
         style={{
           cursor: "pointer",
@@ -153,11 +156,15 @@ export default (props) => {
           justifyContent: "space-between"
         }}
       >
-        <div className="shipping-toggle-header" style={{ display: "flex" }}>
+        <div className="choose-payment-method-header" style={{ width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Choose from your payment methods
-          <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
-            {props.noPaymentMethodSelected && !props.paymentMethod ? "* Required" : null}
-          </div>
+            {
+              props.noPaymentMethodSelected && !props.paymentMethod ? (
+                <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
+                  * Required
+                </div>
+              ) : null
+            }
         </div>
 
         <div
