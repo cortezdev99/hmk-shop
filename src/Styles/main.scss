@@ -9,6 +9,11 @@
 @import './shipping.scss';
 @import './cart.scss';
 @import './checkout.scss';
+@import './add-payment-method-form.scss';
+@import './choose-payment-method.scss';
+@import './add-shipping-address-form.scss';
+@import './choose-shipping-address.scss';
+@import './order-summary.scss';
 
 *, *::before, *::after {
   margin: 0;

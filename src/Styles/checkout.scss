@@ -400,10 +400,6 @@
   .checkout-product-wrapper {
     grid-template-columns: 0.5fr 1fr 0.5fr;
   }
-
-  .choose-payment-method-wrapper {
-    font-size: 16px;
-  }
 }
 
 @media (max-width: 450px) {
@@ -477,24 +473,6 @@
   .checkout-discount-code-wrapper {
     grid-template-columns: 1fr;
     row-gap: 20px;
-  }
-
-  .choose-payment-method-header {
-    // font-size: 13px;
-    height: 35px;
-  }
-
-  .choose-payment-method-wrapper {
-    padding: 0 10px 20px !important;
-    font-size: 13px !important;
-  }
-
-  #checkout-payment-methods-wrapper {
-    padding-bottom: 20px !important;
-  }
-
-  .checkout-form-component-padding {
-    padding-top: 20px !important;
   }
 
   // .choose-payment-chevron {
