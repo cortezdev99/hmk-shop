@@ -4,8 +4,7 @@ import CountryDropdown from './CountryDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default (props) => {
-  const el2 = document.getElementById('shipping-address-rotating-thinger-1');
-  const el3 = document.getElementById('shipping-address-rotating-thinger-2');
+  const el2 = document.getElementById('add-shipping-address-chevron');
   const [errors, setErrors] = useState([])
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false)
   const [noFirstNameErr, setNoFirstNameErr] = useState(false);
@@ -23,7 +22,7 @@ export default (props) => {
   const [region, setRegion] = useState([]);
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
-  const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(62)
+  const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(55)
   const [submitting, setSubmitting] = useState(false)
   const [successfulFormSubmission, setSuccessfulSubmission] = useState(false)
 
@@ -42,16 +41,14 @@ export default (props) => {
 
   useEffect(() => {
     if (!collapsableContentShowing) {
-      if (el2 !== null && el3 !== null && el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
-        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
-        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      if (el2 !== null && el2.classList.contains('chevron-rotated')) {
+        el2.classList.toggle('chevron-rotated')
       }
 
-      setAddShippingMaxHeight(62);
+      setAddShippingMaxHeight(55);
     } else {
-      if (el2 !== null && el3 !== null && !el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
-        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
-        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      if (el2 !== null && !el2.classList.contains('chevron-rotated')) {
+        el2.classList.toggle('chevron-rotated')
       }
       
       const errorsHeight = errors.length * 26;
@@ -174,7 +171,7 @@ export default (props) => {
       onClick={() =>
         setCollapsableContentShowing(!collapsableContentShowing)
       }
-
+      className="add-shipping-form-wrapper"
       style={{
         cursor: "pointer",
         fontSize: "18px",
@@ -188,9 +185,10 @@ export default (props) => {
       <div style={{
         width: "calc(100% - 40px)",
         display: "flex",
+        alignItems: "center",
         justifyContent: "space-between"
       }}
-      className="shipping-toggle-header">
+      className="add-shipping-header">
         Add a shipping address
 
         {
@@ -205,41 +203,13 @@ export default (props) => {
       </div>
 
       <div
+        id="add-shipping-address-chevron"
+        className="add-shipping-address-chevron"
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-          width: "12px"
+          transition: "transform 0.7s"
         }}
       >
-        <div
-          id="shipping-address-rotating-thinger-1"
-          className="rotating-thing-1"
-          style={{
-            top: "-11px",
-            position: "absolute",
-            transform: "rotate(90deg)",
-            transition: "0.7s"
-          }}
-        >
-          |
-        </div>
-
-        <div
-          id="shipping-address-rotating-thinger-2"
-          className="rotating-thing-2"
-          style={{
-            left: "2px",
-            top: "-10px",
-            position: "absolute",
-            transform: "rotate(180deg)",
-            width: "5px",
-            transition: "0.7s"
-          }}
-        >
-          |
-        </div>
+        <FontAwesomeIcon icon={["fas", "chevron-down"]} />
       </div>
     </div>
 
