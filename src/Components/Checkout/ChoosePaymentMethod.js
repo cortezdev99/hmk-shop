@@ -11,8 +11,7 @@ export default (props) => {
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
     window.document.body.clientWidth > 1024 ? 62 : 55
   )
-  const el2 = document.getElementById("rotating-thing-1");
-  const el3 = document.getElementById("rotating-thing-2");
+  const el2 = document.getElementById("choose-payment-chevron");
 
   useEffect(() => {
 
@@ -43,18 +42,16 @@ export default (props) => {
 
   useEffect(() => {
     if (!collapsableContentShowing) {
-      if (el2 !== null && el3 !== null && el2.classList.contains('rotating-plus-minus-rotated-tester')) {
-        el2.classList.toggle("rotating-plus-minus-rotated-tester");
-        el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
+      if (el2 !== null && el2.classList.contains('chevron-rotated')) {
+        el2.classList.toggle("chevron-rotated");
       }
 
       setCollapsableContentMaxHeight(window.document.body.clientWidth > 1024 ? 62 : 55)
     } else {
       const paymentMethodsAdditionalHeight = props.paymentMethods.length * 65
 
-      if (el2 !== null && el3 !== null && !el2.classList.contains('rotating-plus-minus-rotated-tester')) {
-        el2.classList.toggle("rotating-plus-minus-rotated-tester");
-        el3.classList.toggle("rotating-plus-minus-rotated-tester-1");
+      if (el2 !== null && !el2.classList.contains('chevron-rotated')) {
+        el2.classList.toggle("chevron-rotated");
       }
 
       setCollapsableContentMaxHeight(95 + paymentMethodsAdditionalHeight)
@@ -168,44 +165,13 @@ export default (props) => {
         </div>
 
         <div
+          id="choose-payment-chevron"
           className="choose-payment-chevron"
           style={{
-            // display: "flex",
-            // alignItems: "center",
-            // justifyContent: "center",
-            // position: "relative",
-            // width: "12px"
+            transition: "transform 0.7s"
           }}
         >
           <FontAwesomeIcon icon={["fas", "chevron-down"]} />
-          {/* <div
-            id="rotating-thing-1"
-            className="rotating-thing-1"
-            style={{
-              // top: "-11px",
-              position: "absolute",
-              transform: "rotate(90deg)",
-              transition: "0.7s"
-            }}
-          >
-            |
-          </div>
-
-          <div
-            id="rotating-thing-2"
-            className="rotating-thing-2"
-            style={{
-              // left: "2px",
-              right: "2px",
-              // top: "-10px",
-              position: "absolute",
-              transform: "rotate(180deg)",
-              // width: "5px",
-              transition: "0.7s"
-            }}
-          >
-            |
-          </div> */}
         </div>
       </div>
 

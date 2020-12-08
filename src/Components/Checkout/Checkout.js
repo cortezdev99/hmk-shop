@@ -248,16 +248,16 @@ export default () => {
   useEffect(() => {
     const el4 = document.getElementById("order-summary-rotating-chevron")
       if (!collapsableOrderSummaryOpen) {
-        if (el4 !== null && el4.classList.contains("order-summary-rotating-chevron-rotated")) {
-          el4.classList.toggle("order-summary-rotating-chevron-rotated")
+        if (el4 !== null && el4.classList.contains("chevron-rotated")) {
+          el4.classList.toggle("chevron-rotated")
           setOrderSummaryHidden(!orderSummaryHidden)
         }
         setCollapsableOrderSummaryMaxHeight(101)
       } else {
         let mobileDiscountHeight = window.document.body.clientWidth <= 450 ? 65 : 0 
         const newMaxHeight = (mobileDiscountHeight + 440.5) + (products.length * 181);
-        if (el4 !== null && !el4.classList.contains("order-summary-rotating-chevron-rotated")) {
-          el4.classList.toggle("order-summary-rotating-chevron-rotated")
+        if (el4 !== null && !el4.classList.contains("chevron-rotated")) {
+          el4.classList.toggle("chevron-rotated")
           setOrderSummaryHidden(!orderSummaryHidden)
         }
         setCollapsableOrderSummaryMaxHeight(newMaxHeight)
