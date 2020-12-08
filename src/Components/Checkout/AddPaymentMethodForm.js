@@ -6,14 +6,14 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default (props) => {
   const [cardholderName, setCardholderName] = useState("");
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
-  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62);
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(55);
   const [customerData, setCustomerData] = useState({});
-  const el2 = window.document.getElementById('add-payment-rotating-thinger-1')
-  const el3 = window.document.getElementById('add-payment-rotating-thinger-2')
+  const el2 = window.document.getElementById('add-payment-payment-chevron')
   const stripe = useStripe();
   const elements = useElements();
 
@@ -34,16 +34,14 @@ export default (props) => {
 
   useEffect(() => {
     if (!collapsableContentShowing) {
-      if (el2 !== null && el3 !== null && el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
-        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
-        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      if (el2 !== null && el2.classList.contains('chevron-rotated')) {
+        el2.classList.toggle('chevron-rotated')
       }
 
-      setCollapsableContentMaxHeight(62);
+      setCollapsableContentMaxHeight(55);
     } else {
-      if (el2 !== null && el3 !== null && !el3.classList.contains('rotating-plus-minus-rotated-tester-1')) {
-        el3.classList.toggle('rotating-plus-minus-rotated-tester-1')
-        el2.classList.toggle('rotating-plus-minus-rotated-tester')
+      if (el2 !== null && !el2.classList.contains('chevron-rotated')) {
+        el2.classList.toggle('chevron-rotated')
       }
 
       setCollapsableContentMaxHeight(277)
@@ -118,13 +116,13 @@ export default (props) => {
         height: "100%",
         maxHeight: `${collapsableContentMaxHeight}px`,
         overflow: "hidden",
-        paddingBottom: "40px",
         borderBottom: "1px solid #CCC",
         width: "100%",
         transition: "max-height 0.7s"
       }}
     >
       <div
+        className="add-payment-method-wrapper"
         onClick={() => setCollapsableContentShowing(!collapsableContentShowing)} 
         style={{
           cursor: "pointer",
@@ -136,44 +134,18 @@ export default (props) => {
           justifyContent: "space-between"
         }}
       >
-        <div className="shipping-toggle-header">Add a payment method</div>
+        <div className="add-payment-header" style={{ width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
+          Add a payment method
+        </div>
 
         <div
+          id="add-payment-payment-chevron"
+          className="add-payment-payment-chevron"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            width: "12px"
+            transition: "transform 0.7s"
           }}
         >
-          <div
-            id="add-payment-rotating-thinger-1"
-            className="rotating-thing-1"
-            style={{
-              top: "-11px",
-              position: "absolute",
-              transform: "rotate(90deg)",
-              transition: "0.7s"
-            }}
-          >
-            |
-          </div>
-
-          <div
-            id="add-payment-rotating-thinger-2"
-            className="rotating-thing-2"
-            style={{
-              left: "2px",
-              top: "-10px",
-              position: "absolute",
-              transform: "rotate(180deg)",
-              width: "5px",
-              transition: "0.7s"
-            }}
-          >
-            |
-          </div>
+          <FontAwesomeIcon icon={["fas", "chevron-down"]} />
         </div>
       </div>
 

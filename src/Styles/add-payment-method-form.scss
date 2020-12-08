@@ -1,0 +1,30 @@
+@media (max-width: 1024px) {
+  .add-payment-method-wrapper {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .add-payment-header {
+    height: 35px;
+  }
+
+  .add-payment-method-wrapper {
+    padding: 0 10px 20px !important;
+    font-size: 14px !important;
+  }
+
+  #checkout-add-payment-wrapper {
+    margin-top: 20px !important;
+  }
+
+  .checkout-form-component-padding {
+    padding-top: 20px !important;
+  }
+}
+
+@media(max-width: 350px) {
+  .add-payment-method-wrapper {
+    font-size: 13px !important;
+  }
+}
