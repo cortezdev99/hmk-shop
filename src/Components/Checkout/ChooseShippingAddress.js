@@ -10,7 +10,7 @@ export default (props) => {
   const [loadingBillingAddresses, setLoadingBillingAddresses] = useState(true);
   const [activeBillingAddress, setActiveBillingAddress] = useState(false);
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
-  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(62)
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(55)
   const el2 = document.getElementById("choose-shipping-chevron");
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default (props) => {
         el2.classList.toggle("chevron-rotated");
       }
 
-      setCollapsableContentMaxHeight(62)
+      setCollapsableContentMaxHeight(55)
     } else {
       const billingAddressesAdditionalHeight = props.billingAddresses.length * 65
 
@@ -147,6 +147,7 @@ export default (props) => {
     >
       <div
         onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
+        className="choose-shipping-address-wrapper"
         style={{
           cursor: "pointer",
           fontSize: "18px",
@@ -157,7 +158,7 @@ export default (props) => {
           justifyContent: "space-between"
         }}
       >
-        <div className="shipping-toggle-header" style={{ display: "flex" }}>
+        <div className="shipping-toggle-header" style={{ width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Choose from your shipping addresses
             {props.noBillingAddressSelected && !props.billingAddress
               ? (
