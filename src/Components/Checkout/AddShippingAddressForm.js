@@ -22,9 +22,12 @@ export default (props) => {
   const [region, setRegion] = useState([]);
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
-  const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(55)
+  const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(
+    window.document.body.clientWidth > 450 ? 75 : 55
+  )
   const [submitting, setSubmitting] = useState(false)
   const [successfulFormSubmission, setSuccessfulSubmission] = useState(false)
+  let timeout = false;
 
   const handleSuccessfulFormSubmittion = () => {
     setFirstName("");
@@ -40,12 +43,21 @@ export default (props) => {
   }
 
   useEffect(() => {
+    if (!collapsableContentShowing && props.resizeObsMaxHeightReAlignment !== addShippingMaxHeight) {
+      // console.log(props.resizeObsMaxHeightReAlignment)
+      setAddShippingMaxHeight(props.resizeObsMaxHeightReAlignment)
+    }
+  }, [props.resizeObsMaxHeightReAlignment])
+
+  useEffect(() => {
     if (!collapsableContentShowing) {
       if (el2 !== null && el2.classList.contains('chevron-rotated')) {
         el2.classList.toggle('chevron-rotated')
       }
 
-      setAddShippingMaxHeight(55);
+      setAddShippingMaxHeight(
+        window.document.body.clientWidth > 450 ? 75 : 55
+      );
     } else {
       if (el2 !== null && !el2.classList.contains('chevron-rotated')) {
         el2.classList.toggle('chevron-rotated')
@@ -188,7 +200,7 @@ export default (props) => {
         alignItems: "center",
         justifyContent: "space-between"
       }}
-      className="add-shipping-header">
+      className="add-shipping-header" style={{ height: "35px", display: "flex", alignItems: "center" }}>
         Add a shipping address
 
         {

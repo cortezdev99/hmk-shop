@@ -47,6 +47,11 @@ export default () => {
   const [ testerState, setTesterState ] = useState(false)
   const [ collapsableOrderSummaryOpen, setCollapsableOrderSummaryOpen ] = useState(false);
   const [ collapsableOrderSummaryMaxHeight, setCollapsableOrderSummaryMaxHeight ] = useState(101);
+  const [ collapsedFormsMaxHeight, setCollapsedFormsMaxHeight ] = useState(
+    window.document.body.clientWidth > 450 ? 75 : 55
+  )
+  let timeout = false;
+
   const { products } = useContext(CartContext);
 
   if (products.length < 1) {
@@ -78,6 +83,25 @@ export default () => {
 
     setSubtotal(subtotal);
   }, [products]);
+
+  const resize_ob = new ResizeObserver(function(entries) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      if (window.document.body.clientWidth > 450 && collapsedFormsMaxHeight !== 75) {
+        setCollapsedFormsMaxHeight(75)
+      } else if (window.document.body.clientWidth <= 450 && collapsedFormsMaxHeight !== 55) {
+        setCollapsedFormsMaxHeight(55)
+      }
+    }, 500);
+    // console.log('hit this')
+  });
+  
+  useEffect(() => {
+    // start observing for resize
+    if (window.document.getElementById('checkout-options-seperator-wrapper') !== null) {
+      resize_ob.observe(window.document.getElementById('checkout-options-seperator-wrapper'))
+    }
+  }, [collapsedFormsMaxHeight])
 
   // Handle card actions like 3D Secure
   async function handleCardAction(payment, docId) {
@@ -342,7 +366,10 @@ export default () => {
             subtotal={subtotal}
           />
 
-          <div className="checkout-options-seperator-wrapper">
+          <div
+            id="checkout-options-seperator-wrapper"
+            className="checkout-options-seperator-wrapper"
+          >
             <span className="checkout-options-seperator-border"></span>
             <span className="checkout-options-seperator-header">OR</span>
             <span className="checkout-options-seperator-border"></span>
@@ -353,6 +380,7 @@ export default () => {
             setNoBillingAddresses={(val) => setNoBillingAddresses(val)}
             billingAddresses={billingAddresses}
             setBillingAddresses={(val) => setBillingAddresses(val)}
+            resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
           />
 
           <AddPaymentMethodForm 
@@ -360,6 +388,7 @@ export default () => {
             setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
             paymentMethods={paymentMethods}
             setPaymentMethods={(val) => setPaymentMethods(val)}
+            resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
           />
 
           <div

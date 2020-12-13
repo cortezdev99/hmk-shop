@@ -10,6 +10,7 @@ export default () => {
   );
   const { setIsCartOpen, products } = useContext(CartContext);
   const { setIsSideNavOpen } = useContext(MobileSideNavContext);
+  let timeout = false;
 
   const handleCartToggle = () => {
     const htmlElement = document.getElementById("html");
@@ -37,7 +38,7 @@ export default () => {
 
     window.addEventListener(
       "scroll",
-      function() {
+      () => {
         if (window.pageYOffset > 0 && injectedElmnt.length === 0) {
           permElmnt.classList.toggle("box-shadow");
         } else if (window.pageYOffset === 0 && injectedElmnt.length !== 0) {
@@ -51,18 +52,21 @@ export default () => {
   useEffect(() => {
     window.addEventListener(
       "resize",
-      function() {
-        if (
-          window.document.body.clientWidth >= 1023 &&
-          prevWindowWidth < 1023
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-        } else if (
-          window.document.body.clientWidth < 1023 &&
-          prevWindowWidth >= 1023
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-        }
+      () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          if (
+            window.document.body.clientWidth >= 1023 &&
+            prevWindowWidth < 1023
+          ) {
+            setPrevWindowWidth(window.document.body.clientWidth);
+          } else if (
+            window.document.body.clientWidth < 1023 &&
+            prevWindowWidth >= 1023
+          ) {
+            setPrevWindowWidth(window.document.body.clientWidth);
+          }
+        }, 500)
       },
       false
     );

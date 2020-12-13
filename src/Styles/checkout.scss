@@ -279,8 +279,8 @@
   padding: 40px 0;
   border-bottom: 1px solid #CCC;
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  column-gap: 20px;
+  grid-template-columns: 1fr;
+  row-gap: 20px;
 }
 
 .checkout-discount-btn {
@@ -466,11 +466,6 @@
   }
 
   .checkout-shipping-info-name-wrapper {
-    grid-template-columns: 1fr;
-    row-gap: 20px;
-  }
-
-  .checkout-discount-code-wrapper {
     grid-template-columns: 1fr;
     row-gap: 20px;
   }

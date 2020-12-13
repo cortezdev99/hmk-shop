@@ -35,8 +35,8 @@ function App() {
   }
 
   useEffect(() => {
-    firebase.initializeApp(firebaseConfig)
-    firebase.analytics();
+    firebase.initializeApp(firebaseConfig).analytics();
+    // firebase.analytics();
   }, [])
 
   useEffect(() => {

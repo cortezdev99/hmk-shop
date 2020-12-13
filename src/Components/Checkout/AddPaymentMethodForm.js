@@ -11,7 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default (props) => {
   const [cardholderName, setCardholderName] = useState("");
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
-  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(55);
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
+    window.document.body.clientWidth > 450 ? 75 : 55
+  );
   const [customerData, setCustomerData] = useState({});
   const el2 = window.document.getElementById('add-payment-payment-chevron')
   const stripe = useStripe();
@@ -33,12 +35,21 @@ export default (props) => {
   }, [])
 
   useEffect(() => {
+    if (!collapsableContentShowing && props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight) {
+      // console.log(props.resizeObsMaxHeightReAlignment)
+      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment)
+    }
+  }, [props.resizeObsMaxHeightReAlignment])
+
+  useEffect(() => {
     if (!collapsableContentShowing) {
       if (el2 !== null && el2.classList.contains('chevron-rotated')) {
         el2.classList.toggle('chevron-rotated')
       }
 
-      setCollapsableContentMaxHeight(55);
+      setCollapsableContentMaxHeight(
+        window.document.body.clientWidth > 450 ? 75 : 55
+      );
     } else {
       if (el2 !== null && !el2.classList.contains('chevron-rotated')) {
         el2.classList.toggle('chevron-rotated')
@@ -113,6 +124,7 @@ export default (props) => {
       id="checkout-add-payment-wrapper"
       style={{
         marginTop: "40px",
+        paddingBottom: "40px",
         height: "100%",
         maxHeight: `${collapsableContentMaxHeight}px`,
         overflow: "hidden",
@@ -134,7 +146,7 @@ export default (props) => {
           justifyContent: "space-between"
         }}
       >
-        <div className="add-payment-header" style={{ width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
+        <div className="add-payment-header" style={{ height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Add a payment method
         </div>
 
