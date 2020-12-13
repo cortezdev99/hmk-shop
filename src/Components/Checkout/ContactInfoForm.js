@@ -23,6 +23,13 @@ export default (props) => {
     }
   }, [collapsableContentShowing])
 
+  useEffect(() => {
+    if (!collapsableContentShowing && props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight) {
+      // console.log(props.resizeObsMaxHeightReAlignment)
+      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment)
+    }
+  }, [props.resizeObsMaxHeightReAlignment])
+
   return (
     <div
       id="checkout-contact-info-wrapper"
@@ -55,7 +62,7 @@ export default (props) => {
       >
         <div
           className="contact-info-form-header"
-          style={{ width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}
+          style={{ height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}
         >
           Contact information
           <div style={{ paddingLeft: "15px", color: "#FF0000" }}>

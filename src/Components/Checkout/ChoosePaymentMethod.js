@@ -9,7 +9,7 @@ export default (props) => {
   const [getPaymentMethodsError, setGetPaymentMethodsError] = useState(false);
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
-    window.document.body.clientWidth > 1024 ? 62 : 55
+    window.document.body.clientWidth > 450 ? 75 : 55
   )
   const el2 = document.getElementById("choose-payment-chevron");
 
@@ -41,12 +41,21 @@ export default (props) => {
   }, [])
 
   useEffect(() => {
+    if (!collapsableContentShowing && props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight) {
+      // console.log(props.resizeObsMaxHeightReAlignment)
+      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment)
+    }
+  }, [props.resizeObsMaxHeightReAlignment])
+
+  useEffect(() => {
     if (!collapsableContentShowing) {
       if (el2 !== null && el2.classList.contains('chevron-rotated')) {
         el2.classList.toggle("chevron-rotated");
       }
 
-      setCollapsableContentMaxHeight(window.document.body.clientWidth > 1024 ? 62 : 55)
+      setCollapsableContentMaxHeight(
+        window.document.body.clientWidth > 450 ? 75 : 55
+      )
     } else {
       const paymentMethodsAdditionalHeight = props.paymentMethods.length * 65
 
@@ -153,7 +162,7 @@ export default (props) => {
           justifyContent: "space-between"
         }}
       >
-        <div className="choose-payment-method-header" style={{ width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
+        <div className="choose-payment-method-header" style={{ height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Choose from your payment methods
             {
               props.noPaymentMethodSelected && !props.paymentMethod ? (

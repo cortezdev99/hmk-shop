@@ -10,7 +10,9 @@ export default (props) => {
   const [loadingBillingAddresses, setLoadingBillingAddresses] = useState(true);
   const [activeBillingAddress, setActiveBillingAddress] = useState(false);
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
-  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(55)
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
+    window.document.body.clientWidth > 450 ? 75 : 55
+  )
   const el2 = document.getElementById("choose-shipping-chevron");
 
   useEffect(() => {
@@ -47,7 +49,9 @@ export default (props) => {
         el2.classList.toggle("chevron-rotated");
       }
 
-      setCollapsableContentMaxHeight(55)
+      setCollapsableContentMaxHeight(
+        window.document.body.clientWidth > 450 ? 75 : 55
+      )
     } else {
       const billingAddressesAdditionalHeight = props.billingAddresses.length * 65
 
@@ -59,6 +63,13 @@ export default (props) => {
     }
 
   }, [ collapsableContentShowing ])
+
+  useEffect(() => {
+    if (!collapsableContentShowing && props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight) {
+      // console.log(props.resizeObsMaxHeightReAlignment)
+      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment)
+    }
+  }, [props.resizeObsMaxHeightReAlignment])
 
   const handleUseAddressClick = (billingAddress, billingAddressIdx) => {
     return (
@@ -152,13 +163,13 @@ export default (props) => {
           cursor: "pointer",
           fontSize: "18px",
           padding: "0px 20px",
-          paddingBottom: "20px",
+          paddingBottom: "40px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between"
         }}
       >
-        <div className="shipping-toggle-header" style={{ width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
+        <div className="shipping-toggle-header" style={{ height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Choose from your shipping addresses
             {props.noBillingAddressSelected && !props.billingAddress
               ? (

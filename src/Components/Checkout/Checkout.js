@@ -403,6 +403,7 @@ export default () => {
               noBillingAddressSelected={noBillingAddressSelected}
               noBillingAddresses={noBillingAddresses}
               billingAddress={billingAddress}
+              resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
             />
           </div>
 
@@ -419,6 +420,7 @@ export default () => {
               paymentMethod={paymentMethod}
               noPaymentMethods={noPaymentMethods}
               noPaymentMethodSelected={noPaymentMethodSelected}
+              resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
 
             />
           </div>
@@ -430,6 +432,7 @@ export default () => {
             phone={phone}
             setEmail={(val) => setEmail(val)}
             setPhone={(val) => setPhone(val)}
+            resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
           />
 
           <div className="checkout-left-column-btns-wrapper">
