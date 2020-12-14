@@ -64,7 +64,7 @@ export default (props) => {
       }
       
       const errorsHeight = errors.length * 26;
-      const baseHeight = window.document.body.clientWidth > 450 ? 539 : 690;
+      const baseHeight = window.document.body.clientWidth > 450 ? 555 : 665;
       const el = document.getElementById("country-dropdown-collapsable-content-wrapper")
       const collapsableCountryDropdownHeight = el.classList.contains('country-dropdown-collapsable-content-showing') ? 180 : 0
       setAddShippingMaxHeight((baseHeight + errorsHeight) + collapsableCountryDropdownHeight)
