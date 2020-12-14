@@ -9,8 +9,11 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default (props) => {
-  const [cardholderName, setCardholderName] = useState("");
+  const [cardHolderName, setCardHolderName] = useState("");
+  const [cardHolderNameError, setCardHolderNameError] = useState(false);
+  const [cardError, setCardError] = useState(false);
   const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
+  const [cardInputHasErrors, setCardInputHasErrors] = useState(false);
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
     window.document.body.clientWidth > 450 ? 75 : 55
   );
@@ -61,52 +64,78 @@ export default (props) => {
 
   const handleAddPaymentMethod = async ev => {
     ev.preventDefault();
-
-    const { setupIntent, error } = await stripe.confirmCardSetup(
-      customerData.setup_secret,
-      {
-        payment_method: {
-          card: elements.getElement(CardElement),
-          billing_details: {
-            name: cardholderName
-          }
-        }
-      }
-    );
-
-    if (error) {
-      console.log(error);
-      return;
-    }
-
-    firebase
-      .firestore()
-      .collection("stripe_customers")
-      .doc(firebase.auth().currentUser.uid)
-      .collection("payment_methods")
-      .add({ id: setupIntent.payment_method })
-      .then(resp => {
-        resp.onSnapshot(
-          {
-            // Listen for document metadata changes
-            includeMetadataChanges: true
-          },
-          doc => {
-            if (doc.data().card) {
-              if (props.noPaymentMethods) {
-                props.setNoPaymentMethods(false);
-              }
-
-              const currentState = props.paymentMethods;
-              currentState.push(doc.data());
-              props.setPaymentMethods([...currentState]);
+    if (!cardInputHasErrors) {
+      setCardError(false);
+      setCardHolderNameError(false);
+      const errors = [];
+      const { setupIntent, error } = await stripe.confirmCardSetup(
+        customerData.setup_secret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+            billing_details: {
+              name: cardHolderName
             }
           }
-        );
-      });
+        }
+      );
+
+      if (cardHolderName.length === 0) {
+        errors.push(setCardHolderNameError)
+      }
+
+      if (error) {
+        errors.push(setCardError)
+      }
+
+      if (errors.length > 0) {
+        errors.map((err, idx) => {
+          setTimeout(() => {
+            return err(true);
+          }, 40 * idx)
+        });
+      } else {
+        firebase
+        .firestore()
+        .collection("stripe_customers")
+        .doc(firebase.auth().currentUser.uid)
+        .collection("payment_methods")
+        .add({ id: setupIntent.payment_method })
+        .then(resp => {
+          resp.onSnapshot(
+            {
+              // Listen for document metadata changes
+              includeMetadataChanges: true
+            },
+            doc => {
+              if (doc.data().card) {
+                if (props.noPaymentMethods) {
+                  props.setNoPaymentMethods(false);
+                }
+
+                const currentState = props.paymentMethods;
+                currentState.push(doc.data());
+                props.setPaymentMethods([...currentState]);
+              }
+            }
+          );
+        });
+      }
+    }
   };
 
-  
+  const handleChange = (ev) => {
+    console.log(ev)
+    if (ev.empty && !cardInputHasErrors) {
+      setCardInputHasErrors({
+        message: 'The field above is required'
+      })
+    } else if (!ev.empty && ev.error === undefined && cardInputHasErrors) {
+      setCardInputHasErrors(false)
+    } else if (ev.error && !cardInputHasErrors) {
+      setCardInputHasErrors(ev.error);
+    }
+  }
 
   const cardElementOptions = {
     hidePostalCode: true,
@@ -168,15 +197,23 @@ export default (props) => {
           style={{
             height: "45px",
             width: "100%",
-            border: "1px solid #CCC",
+            border: `${cardHolderNameError && cardHolderName.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`,
             borderRadius: "5px"
           }}
           type="text"
           className="checkout-input"
-          value={cardholderName}
+          value={cardHolderName}
           placeholder="Card holder name"
-          onChange={e => setCardholderName(e.target.value)}
+          onChange={e => setCardHolderName(e.target.value)}
         />
+
+        {
+          cardHolderNameError && cardHolderName.length === 0 ? (
+            <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+              The field above is required
+            </div>
+          ) : null
+        }
       </div>
 
       <div
@@ -184,17 +221,35 @@ export default (props) => {
         // className="testeringtest"
         style={{
           marginTop: "20px",
-          height: "45px",
           width: "100%",
-          border: "1px solid #CCC",
-          backgroundColor: "#fbfbfb",
-          borderRadius: "5px",
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center"
         }}
       >
-        <CardElement options={cardElementOptions} />
+
+        <div
+          style={{
+            border: `${cardError && cardInputHasErrors ? "1px solid #FF0000" : "1px solid #CCC"}`,
+            width: "100%",
+            borderRadius: "5px",
+            backgroundColor: "#fbfbfb",
+          }}
+        >
+          <CardElement
+            options={cardElementOptions}
+            onChange={(ev) => handleChange(ev)}
+          />
+        </div>
+
+        {
+          cardError || cardInputHasErrors ? (
+            <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+              {cardInputHasErrors.message}
+            </div>
+          ) : null
+        }
       </div>
 
       <div style={{ marginTop: "20px" }}>
