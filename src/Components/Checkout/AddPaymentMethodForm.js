@@ -17,6 +17,7 @@ export default (props) => {
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
     window.document.body.clientWidth > 450 ? 75 : 55
   );
+  const [errors, setErrors] = useState([]);
   const [customerData, setCustomerData] = useState({});
   const el2 = window.document.getElementById('add-payment-payment-chevron')
   const stripe = useStripe();
@@ -58,9 +59,13 @@ export default (props) => {
         el2.classList.toggle('chevron-rotated')
       }
 
-      setCollapsableContentMaxHeight(277)
+      // const baseHeight = 295;
+      const baseHeight = window.document.body.clientWidth > 450 ? 295 : 275;
+      const errorsHeight = errors.length * 26;
+
+      setCollapsableContentMaxHeight(baseHeight + errorsHeight)
     }
-  }, [collapsableContentShowing])
+  }, [errors, collapsableContentShowing])
 
   const handleAddPaymentMethod = async ev => {
     ev.preventDefault();
@@ -89,6 +94,8 @@ export default (props) => {
       }
 
       if (errors.length > 0) {
+        setErrors(errors);
+
         errors.map((err, idx) => {
           setTimeout(() => {
             return err(true);
