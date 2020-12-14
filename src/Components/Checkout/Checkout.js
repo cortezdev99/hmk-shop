@@ -402,6 +402,7 @@ export default () => {
               setBillingAddress={(val) => setBillingAddress(val)}
               noBillingAddressSelected={noBillingAddressSelected}
               noBillingAddresses={noBillingAddresses}
+              setNoBillingAddresses={(val) => setNoBillingAddresses(val)}
               billingAddress={billingAddress}
               resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
             />

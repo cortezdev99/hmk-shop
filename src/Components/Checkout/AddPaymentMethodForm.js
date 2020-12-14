@@ -106,6 +106,8 @@ export default (props) => {
       });
   };
 
+  
+
   const cardElementOptions = {
     hidePostalCode: true,
     style: {
@@ -178,6 +180,8 @@ export default (props) => {
       </div>
 
       <div
+        // id="tester"
+        // className="testeringtest"
         style={{
           marginTop: "20px",
           height: "45px",

@@ -136,7 +136,7 @@
   &:focus {
     text-decoration: none;
     outline: none;
-    border: 1px solid #54b654 !important;
+    // border: 1px solid #54b654 !important;
   }
 
   &::placeholder {
@@ -542,3 +542,12 @@
   transform: rotate(-180deg);
 }
 
+// .StripeElement--focus {
+//   border: 1px solid blue !important;
+//   border-radius: 5px;
+//   height: 45px
+// }
+
+// .testeringtest[class~="StripeElement--focus"] {
+//   border: 1px solid blue !important;
+// }
