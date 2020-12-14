@@ -169,7 +169,7 @@ export default (props) => {
           justifyContent: "space-between"
         }}
       >
-        <div className="shipping-toggle-header" style={{ height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
+        <div className="shipping-toggle-header" style={{ letterSpacing: "0.75px", height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Choose from your shipping addresses
             {props.noBillingAddressSelected && !props.billingAddress
               ? (

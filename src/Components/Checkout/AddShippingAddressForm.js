@@ -200,7 +200,7 @@ export default (props) => {
         alignItems: "center",
         justifyContent: "space-between"
       }}
-      className="add-shipping-header" style={{ height: "35px", display: "flex", alignItems: "center" }}>
+      className="add-shipping-header" style={{ letterSpacing: "0.75px", height: "35px", display: "flex", alignItems: "center" }}>
         Add a shipping address
 
         {

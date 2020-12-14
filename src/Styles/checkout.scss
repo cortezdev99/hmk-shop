@@ -136,6 +136,7 @@
   &:focus {
     text-decoration: none;
     outline: none;
+    border: 1px solid #54b654 !important;
   }
 
   &::placeholder {

@@ -62,7 +62,7 @@ export default (props) => {
       >
         <div
           className="contact-info-form-header"
-          style={{ height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}
+          style={{ letterSpacing: "0.75px", height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}
         >
           Contact information
           <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
