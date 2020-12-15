@@ -19,6 +19,7 @@ export default (props) => {
   );
   const [errors, setErrors] = useState([]);
   const [customerData, setCustomerData] = useState({});
+  const [submitting, setSubmitting] = useState(false);
   const el2 = window.document.getElementById('add-payment-payment-chevron')
   const stripe = useStripe();
   const elements = useElements();
@@ -69,6 +70,7 @@ export default (props) => {
 
   const handleAddPaymentMethod = async ev => {
     ev.preventDefault();
+    setSubmitting(true);
     if (!cardInputHasErrors) {
       setCardError(false);
       setCardHolderNameError(false);
@@ -129,6 +131,8 @@ export default (props) => {
         });
       }
     }
+    
+    setSubmitting(false)
   };
 
   const handleChange = (ev) => {
@@ -260,21 +264,40 @@ export default (props) => {
       </div>
 
       <div style={{ marginTop: "20px" }}>
-        <button
-          onClick={handleAddPaymentMethod}
-          style={{
-            padding: "0 2rem",
-            height: "45px",
-            border: "none",
-            backgroundColor: "#1c1b1b",
-            color: "#fff",
-            borderRadius: "5px",
-            cursor: "pointer",
-            width: "100%"
-          }}
-        >
-          Add this card
+       {
+         submitting ? (
+          <button
+            style={{
+              padding: "0 2rem",
+              height: "45px",
+              border: "none",
+              backgroundColor: "#1c1b1b",
+              color: "#fff",
+              borderRadius: "5px",
+              cursor: "pointer",
+              width: "100%"
+            }}
+          >
+          Submitting...
         </button>
+         ) : (
+          <button
+            onClick={handleAddPaymentMethod}
+            style={{
+              padding: "0 2rem",
+              height: "45px",
+              border: "none",
+              backgroundColor: "#1c1b1b",
+              color: "#fff",
+              borderRadius: "5px",
+              cursor: "pointer",
+              width: "100%"
+            }}
+          >
+            Add this card
+          </button>
+         )
+       }
       </div>
     </div>
   )

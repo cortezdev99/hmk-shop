@@ -84,6 +84,26 @@ export default () => {
     setSubtotal(subtotal);
   }, [products]);
 
+
+  // REGULAR EVENT LISTENER, FIRING OFF 10 EVENTS AT A TIME POOLING 300+ IN A SECOND
+  // window.addEventListener("resize", () => {
+  //   console.log('Hit')
+  // })
+
+  // ELEMENT OBSERVER, FIRING OFF 1-2 EVENTS AT A TIME POOLING 50 IN A SECOND
+  // const resize_ob = new ResizeObserver(function(entries) {
+    // console.log('hit2')
+  // });
+
+  // ELEMENT OBSERVER DEBOUNCED, FIREST OFF 1-2 EVENTS EVERY HALF SECOND IF THE ELEMENT IS STILL UPDATING POOLING 2-5 EVENTS IN A SECOND
+  // const resize_ob = new ResizeObserver(function(entries) {
+  //   clearTimeout(timeout);
+  //   timeout = setTimeout(() => {
+  //     console.log('hit3')
+  //   }, 500);
+  // });
+
+  // ACTUAL IMPLEMENTATION CURRENTLY BEING USED
   const resize_ob = new ResizeObserver(function(entries) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
@@ -93,8 +113,9 @@ export default () => {
         setCollapsedFormsMaxHeight(55)
       }
     }, 500);
-    // console.log('hit this')
   });
+
+
   
   useEffect(() => {
     // start observing for resize
