@@ -177,7 +177,11 @@ export default (props) => {
     >
       <div
         className="add-payment-method-wrapper"
-        onClick={() => setCollapsableContentShowing(!collapsableContentShowing)} 
+        onClick={() => {
+          setTimeout(() => {
+            setCollapsableContentShowing(!collapsableContentShowing)
+          }, 200)
+        }} 
         style={{
           cursor: "pointer",
           fontSize: "18px",
