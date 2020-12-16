@@ -17,6 +17,7 @@ export default (props) => {
   const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
     window.document.body.clientWidth > 450 ? 75 : 55
   );
+  const [stripeElementFocused, setStripeElementFocused] = useState(false);
   const [errors, setErrors] = useState([]);
   const [customerData, setCustomerData] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -64,7 +65,9 @@ export default (props) => {
       const baseHeight = window.document.body.clientWidth > 450 ? 295 : 275;
       const errorsHeight = errors.length * 26;
 
-      setCollapsableContentMaxHeight(baseHeight + errorsHeight)
+      if (collapsableContentMaxHeight !== (baseHeight + errorsHeight)) {
+        setCollapsableContentMaxHeight(baseHeight + errorsHeight)
+      }
     }
   }, [errors, collapsableContentShowing])
 
@@ -178,10 +181,16 @@ export default (props) => {
       <div
         className="add-payment-method-wrapper"
         onClick={() => {
-          setTimeout(() => {
+            if (stripeElementFocused) {
+              console.log('hit')
+              return setTimeout(() => {
+                setCollapsableContentShowing(!collapsableContentShowing)
+              }, 200)
+            } 
+            console.log('hit2')
             setCollapsableContentShowing(!collapsableContentShowing)
-          }, 200)
         }} 
+       
         style={{
           cursor: "pointer",
           fontSize: "18px",
@@ -255,6 +264,8 @@ export default (props) => {
           <CardElement
             options={cardElementOptions}
             onChange={(ev) => handleChange(ev)}
+            onBlur={() => setStripeElementFocused(false)}
+            onFocus={() => setStripeElementFocused(true)}
           />
         </div>
 
