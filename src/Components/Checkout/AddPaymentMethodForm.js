@@ -72,6 +72,7 @@ export default (props) => {
   }, [errors, collapsableContentShowing])
 
   const handleAddPaymentMethod = async ev => {
+    // TODO FIX CARD TEST CASE WITH 4000000000000010
     ev.preventDefault();
     const errors = [];
     setSubmitting(true);
@@ -81,7 +82,7 @@ export default (props) => {
 
     if (cardHolderName.length === 0) {
       errors.push(setCardHolderNameError)
-    }
+    } 
 
     const { setupIntent, error } = await stripe.confirmCardSetup(
       customerData.setup_secret,
@@ -96,7 +97,7 @@ export default (props) => {
     );
       
     if (error) {
-      console.log(error)
+      // console.log(error)
       setCardInputHasErrors(error)
       errors.push(setCardError)
     }
@@ -144,6 +145,8 @@ export default (props) => {
     const errors = [];
     if (cardHolderName.length === 0) {
       errors.push(setCardHolderNameError)
+    } else {
+      setCardHolderNameError(false)
     }
 
     if (ev.empty && !cardInputHasErrors) {
