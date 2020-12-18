@@ -318,6 +318,26 @@ exports.discountBeingApplied = functions.https.onCall(async (data, context) => {
   return result;
 });
 
+exports.untypicalClientErrors = functions.https.onCall(async (data, context) => {
+  ////////// TODO ////////
+  ////// SAVE ERROR TO FIRESTORE ///////
+  ///// MAYBE POTENTIALLY NOTIFY ME VIA EMAIL OR PHONE /////
+  await admin
+  .firestore()
+  .collection("client_errors").add(
+    data
+  ).then(_ => {
+    return "Successfully alerted dev's"
+  }).catch(async (error) => {
+    await snap.ref.set(
+      { error: userFacingMessage(error) },
+      { merge: true }
+    );
+
+    await reportError(error, { user: context.params.userId });
+  })
+})
+
 function reportError(err, context = {}) {
   // This is the name of the StackDriver log stream that will receive the log
   // entry. This name can be any valid log stream name, but must contain "err"

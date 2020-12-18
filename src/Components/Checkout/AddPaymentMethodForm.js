@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
 import 'firebase/firestore'
+import 'firebase/functions'
 import {
   CardElement,
   useStripe,
@@ -61,7 +62,6 @@ export default (props) => {
         el2.classList.toggle('chevron-rotated')
       }
 
-      // const baseHeight = 295;
       const baseHeight = window.document.body.clientWidth > 450 ? 295 : 275;
       const errorsHeight = errors.length * 26;
 
@@ -72,9 +72,8 @@ export default (props) => {
   }, [errors, collapsableContentShowing])
 
   const handleAddPaymentMethod = async ev => {
-    // TODO FIX CARD TEST CASE WITH 4000000000000010
+    
     ev.preventDefault();
-    const errors = [];
     setSubmitting(true);
     setCardError(false);
     setCardHolderNameError(false)
@@ -99,6 +98,17 @@ export default (props) => {
     );
 
     if (error) {
+      if (error.type !== "card_error" || error.type !== "validation_error") {
+        const sendErrorToBackend = firebase
+          .functions()
+          .httpsCallable("untypicalClientErrors");
+        sendErrorToBackend(error)
+          .then(async result => {
+            // TODO //
+            // NOTIFY USER DEV'S HAVE BEEN ALERTED OF THE ISSUE AND PROMPT TO TRY AGAIN 
+          })
+      }
+
       setErrors(['card_error'])
       setCardInputHasErrors(error)
       setCardError(true)
