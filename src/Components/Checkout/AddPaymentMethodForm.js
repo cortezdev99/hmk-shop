@@ -73,82 +73,99 @@ export default (props) => {
 
   const handleAddPaymentMethod = async ev => {
     ev.preventDefault();
+    const errors = [];
     setSubmitting(true);
-    if (!cardInputHasErrors) {
-      setCardError(false);
-      setCardHolderNameError(false);
-      const errors = [];
-      const { setupIntent, error } = await stripe.confirmCardSetup(
-        customerData.setup_secret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              name: cardHolderName
-            }
+    setCardError(false);
+    setCardHolderNameError(false)
+    setErrors([]);
+
+    if (cardHolderName.length === 0) {
+      errors.push(setCardHolderNameError)
+    }
+
+    const { setupIntent, error } = await stripe.confirmCardSetup(
+      customerData.setup_secret,
+      {
+        payment_method: {
+          card: elements.getElement(CardElement),
+          billing_details: {
+            name: cardHolderName
           }
         }
-      );
-
-      if (cardHolderName.length === 0) {
-        errors.push(setCardHolderNameError)
       }
-
-      if (error) {
-        errors.push(setCardError)
-      }
-
-      if (errors.length > 0) {
-        setErrors(errors);
-
-        errors.map((err, idx) => {
-          setTimeout(() => {
-            return err(true);
-          }, 40 * idx)
-        });
-      } else {
-        firebase
-        .firestore()
-        .collection("stripe_customers")
-        .doc(firebase.auth().currentUser.uid)
-        .collection("payment_methods")
-        .add({ id: setupIntent.payment_method })
-        .then(resp => {
-          resp.onSnapshot(
-            {
-              // Listen for document metadata changes
-              includeMetadataChanges: true
-            },
-            doc => {
-              if (doc.data().card) {
-                if (props.noPaymentMethods) {
-                  props.setNoPaymentMethods(false);
-                }
-
-                const currentState = props.paymentMethods;
-                currentState.push(doc.data());
-                props.setPaymentMethods([...currentState]);
-              }
-            }
-          );
-        });
-      }
+    );
+      
+    if (error) {
+      console.log(error)
+      setCardInputHasErrors(error)
+      errors.push(setCardError)
     }
-    
+
+    if (errors.length > 0) {
+      setErrors(errors);
+
+      errors.map((err, idx) => {
+        setTimeout(() => {
+          return err(true);
+        }, 40 * idx)
+      });
+    } else {
+      firebase
+      .firestore()
+      .collection("stripe_customers")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("payment_methods")
+      .add({ id: setupIntent.payment_method })
+      .then(resp => {
+        resp.onSnapshot(
+          {
+            // Listen for document metadata changes
+            includeMetadataChanges: true
+          },
+          doc => {
+            if (doc.data().card) {
+              if (props.noPaymentMethods) {
+                props.setNoPaymentMethods(false);
+              }
+
+              const currentState = props.paymentMethods;
+              currentState.push(doc.data());
+              props.setPaymentMethods([...currentState]);
+            }
+          }
+        );
+      });
+    }
+
     setSubmitting(false)
   };
 
   const handleChange = (ev) => {
-    console.log(ev)
+    const errors = [];
+    if (cardHolderName.length === 0) {
+      errors.push(setCardHolderNameError)
+    }
+
     if (ev.empty && !cardInputHasErrors) {
       setCardInputHasErrors({
         message: 'The field above is required'
       })
+      errors.push(setCardError)
     } else if (!ev.empty && ev.error === undefined && cardInputHasErrors) {
       setCardInputHasErrors(false)
+      setCardError(false);
     } else if (ev.error && !cardInputHasErrors) {
       setCardInputHasErrors(ev.error);
+      errors.push(setCardError)
     }
+
+    setErrors(errors);
+
+    errors.map((err, idx) => {
+      setTimeout(() => {
+        return err(true);
+      }, 40 * idx)
+    });
   }
 
   const cardElementOptions = {
@@ -182,12 +199,10 @@ export default (props) => {
         className="add-payment-method-wrapper"
         onClick={() => {
             if (stripeElementFocused) {
-              console.log('hit')
               return setTimeout(() => {
                 setCollapsableContentShowing(!collapsableContentShowing)
               }, 200)
             } 
-            console.log('hit2')
             setCollapsableContentShowing(!collapsableContentShowing)
         }} 
        
@@ -270,7 +285,7 @@ export default (props) => {
         </div>
 
         {
-          cardError || cardInputHasErrors ? (
+          cardError && cardInputHasErrors ? (
             <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
               {cardInputHasErrors.message}
             </div>
