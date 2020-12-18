@@ -81,7 +81,9 @@ export default (props) => {
     setErrors([]);
 
     if (cardHolderName.length === 0) {
-      errors.push(setCardHolderNameError)
+      setErrors(['card_holder_name_error'])
+      setCardHolderNameError(true)
+      return setSubmitting(false)
     } 
 
     const { setupIntent, error } = await stripe.confirmCardSetup(
@@ -95,21 +97,11 @@ export default (props) => {
         }
       }
     );
-      
+
     if (error) {
-      // console.log(error)
+      setErrors(['card_error'])
       setCardInputHasErrors(error)
-      errors.push(setCardError)
-    }
-
-    if (errors.length > 0) {
-      setErrors(errors);
-
-      errors.map((err, idx) => {
-        setTimeout(() => {
-          return err(true);
-        }, 40 * idx)
-      });
+      setCardError(true)
     } else {
       firebase
       .firestore()
