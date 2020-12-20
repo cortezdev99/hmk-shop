@@ -8,6 +8,7 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import MoreInfoIcon from '../Utilities/MoreInfoIcon';
 
 export default (props) => {
   const [cardHolderName, setCardHolderName] = useState("");
@@ -99,6 +100,7 @@ export default (props) => {
 
     if (error) {
       if (error.type !== "card_error" || error.type !== "validation_error") {
+        // TODO SPECIFY WHERE THIS ERROR IS COMING FROM EX: AddPaymentMethodForm -- HandleAddPaymentMethod function
         const sendErrorToBackend = firebase
           .functions()
           .httpsCallable("untypicalClientErrors");
@@ -137,7 +139,10 @@ export default (props) => {
             }
           }
         );
-      });
+      }).catch((err) => {
+        // TODO //
+        // NOTIFY USER OF ERROR, PROMPT TO TRY AGAIN
+      })
     }
 
     setSubmitting(false)
@@ -187,6 +192,10 @@ export default (props) => {
   };
 
   return (
+    <div style={{
+      position: "relative"
+    }}>
+
     <div
       id="checkout-add-payment-wrapper"
       style={{
@@ -223,6 +232,8 @@ export default (props) => {
       >
         <div className="add-payment-header" style={{ letterSpacing: "0.75px", height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Add a payment method
+
+          <MoreInfoIcon />
         </div>
 
         <div
@@ -334,6 +345,7 @@ export default (props) => {
          )
        }
       </div>
+    </div>
     </div>
   )
 }
