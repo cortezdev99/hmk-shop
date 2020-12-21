@@ -232,10 +232,6 @@ export default (props) => {
       >
         <div className="add-payment-header" style={{ letterSpacing: "0.75px", height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
           Add a payment method
-
-          <MoreInfoIcon
-            info="you can check out shipping info here"
-          />
         </div>
 
         <div
