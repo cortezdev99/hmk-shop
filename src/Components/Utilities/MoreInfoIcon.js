@@ -2,36 +2,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, {useState, useEffect} from 'react'
 
 export default (props) => {
-  const el = window.document.getElementById('more-info-icon-container')
-  const el2 = window.document.getElementById('more-info-popup-content')
-  const [test, setTest] = useState(false)
-  const [offset, setOffset] = useState(50)
-  const handleTest = (e) => {
+  const iconContainerElem = window.document.getElementById('more-info-icon-container')
+  const popupContentWrapperElem = window.document.getElementById('more-info-popup-content')
+  const [isPopupContentShowing, setIsPopupContentShowing] = useState(false)
+  const [popupContentOffset, setPopupContentOffset] = useState(50)
+
+  const handleShowingPopup = (e) => {
     e.stopPropagation()
 
-    setTest(true)
-
+    setIsPopupContentShowing(true)
     setTimeout(() => {
-      setTest(false)
+      setIsPopupContentShowing(false)
     }, 2000)
   }
 
   useEffect(() => {
-    if (el !== null) {
-      el.addEventListener("mouseenter", () => {
-        setTest(true)
+    if (iconContainerElem !== null) {
+      iconContainerElem.addEventListener("mouseenter", () => {
+        setIsPopupContentShowing(true)
       })
     
-      el.addEventListener("mouseleave", () => {
-        setTest(false)
+      iconContainerElem.addEventListener("mouseleave", () => {
+        setIsPopupContentShowing(false)
       })
     }
   })
 
   useEffect(() => {
-    if (el2) {
-      if (el2.clientHeight !== offset) {
-        setOffset(el2.clientHeight);
+    if (popupContentWrapperElem) {
+      if (popupContentWrapperElem.clientHeight !== popupContentOffset) {
+        setPopupContentOffset(popupContentWrapperElem.clientHeight);
       }
     }
   })
@@ -50,12 +50,12 @@ export default (props) => {
           id="more-info-popup-content"
           style={{
           position: "absolute",
-          top: `-${offset}px`,
+          top: `-${popupContentOffset}px`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           marginLeft: "5px",
-          visibility: `${test ? "visible" : "hidden"}`
+          visibility: `${isPopupContentShowing ? "visible" : "hidden"}`
         }}>
           <div  style={{
             background: "#333333e6",
@@ -93,7 +93,7 @@ export default (props) => {
         paddingLeft: "5px",
         color: "rgba(114, 114, 114, 1)"
       }}
-      onClick={handleTest}
+      onClick={handleShowingPopup}
       >
         <FontAwesomeIcon 
           icon={['fas', 'info-circle']}
