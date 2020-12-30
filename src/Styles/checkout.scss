@@ -192,7 +192,6 @@
 
 .checkout-left-column-link-icon {
   padding-right: 20px;
-  font-size: 14px;
 }
 
 .checkout-left-column-right-link {
@@ -471,6 +470,10 @@
     row-gap: 20px;
   }
 
+  .checkout-left-column-btns-wrapper {
+    font-size: 15px;
+  }
+
   // .choose-payment-chevron {
   //   font-size: 13px;
   // }
@@ -488,6 +491,10 @@
 
   .checkout-right-column-wrapper {
     padding-top: 14.5px;
+  }
+
+  .checkout-left-column-btns-wrapper {
+    font-size: 13px;
   }
 
   // .checkout-input {
@@ -541,13 +548,3 @@
 .country-dropdown-chevron-rotated {
   transform: rotate(-180deg);
 }
-
-// .StripeElement--focus {
-//   border: 1px solid blue !important;
-//   border-radius: 5px;
-//   height: 45px
-// }
-
-// .testeringtest[class~="StripeElement--focus"] {
-//   border: 1px solid blue !important;
-// }

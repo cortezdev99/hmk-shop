@@ -17,7 +17,6 @@ export default (props) => {
   }
 
   useEffect(() => {
-    console.log(isMouseOver)
     if (isPopupContentShowing && !isMouseOver) {
       setTimeout(() => {
         setIsPopupContentShowing(false)

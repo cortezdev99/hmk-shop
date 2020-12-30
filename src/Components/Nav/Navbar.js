@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { NavLink } from "react-router-dom";
 import CartContext from "../../Contexts/CartContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MobileSideNavContext from "../../Contexts/MobileSideNavContext";
@@ -16,14 +15,6 @@ export default () => {
     const htmlElement = document.getElementById("html");
     htmlElement.classList.toggle("html-overflow-hidden");
     setIsCartOpen(true);
-  };
-
-  const handleGettingProductAmount = () => {
-    const itemsTotal = products.reduce((accum, currentVal) => {
-      return (accum += currentVal[4].quantity);
-    }, 0);
-
-    return `${itemsTotal}`;
   };
 
   const handleOpeningHiddenNav = () => {
@@ -78,7 +69,6 @@ export default () => {
     };
   });
 
-  if (window.document.body.clientWidth < 1023) {
     return (
       <div
         className="navbar-wrapper"
@@ -120,29 +110,4 @@ export default () => {
         </div>
       </div>
     );
-  }
-
-  return (
-    <div className="navbar-wrapper" id="navbar-wrapper-id">
-      <div className="navbar-logo-wrapper">HMK Shop</div>
-
-      <div className="navbar-links-wrapper">
-        <NavLink exact to="/" className="navbar-link">
-          New Arrivals
-        </NavLink>
-        <NavLink to="/best-sellers" className="navbar-link">
-          Best Sellers
-        </NavLink>
-        <NavLink to="/all-apparel" className="navbar-link">
-          All Apparel
-        </NavLink>
-        <NavLink to="/sale" className="navbar-link">
-          Sale
-        </NavLink>
-        <div className="navbar-link" onClick={handleCartToggle}>
-          Cart ({handleGettingProductAmount()})
-        </div>
-      </div>
-    </div>
-  );
 };

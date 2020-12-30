@@ -451,7 +451,11 @@ export default () => {
                 navbarElement.classList.toggle("hidden-nav");
               }}
             >
-              <span className="checkout-left-column-link-icon">
+              <span className="checkout-left-column-link-icon" style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}>
                 <FontAwesomeIcon icon="arrow-left" />
               </span>{" "}
               Return to home
