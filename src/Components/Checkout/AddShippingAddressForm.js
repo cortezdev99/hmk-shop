@@ -27,7 +27,7 @@ export default (props) => {
   )
   const [submitting, setSubmitting] = useState(false)
   const [successfulFormSubmission, setSuccessfulSubmission] = useState(false)
-  let timeout = false;
+  const [saveInfo, setSaveInfo] = useState(false);
 
   const handleSuccessfulFormSubmittion = () => {
     setFirstName("");
@@ -64,7 +64,7 @@ export default (props) => {
       }
       
       const errorsHeight = errors.length * 26;
-      const baseHeight = window.document.body.clientWidth > 450 ? 555 : 665;
+      const baseHeight = window.document.body.clientWidth > 450 ? 594 : 704;
       const el = document.getElementById("country-dropdown-collapsable-content-wrapper")
       const collapsableCountryDropdownHeight = el.classList.contains('country-dropdown-collapsable-content-showing') ? 180 : 0
       setAddShippingMaxHeight((baseHeight + errorsHeight) + collapsableCountryDropdownHeight)
@@ -163,6 +163,10 @@ export default (props) => {
       setSubmitting(false);
     }
   }, [submitting])
+
+  const handleSaveForLaterClick = () => {
+    setSaveInfo(!saveInfo)
+  }
 
   return (
     <div
@@ -368,6 +372,34 @@ export default (props) => {
         ) : null}
       </div>
     </div>
+
+    <div style={{
+      fontSize: "15px",
+      paddingTop: "20px",
+      paddingBottom: "3px",
+      letterSpacing: "0.75px",
+      textAlign: "center",
+      height: "41px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer"
+    }}
+      onClick={handleSaveForLaterClick}
+    >
+      <div style={{ marginRight: "10px" }}>
+        {
+          saveInfo ? (
+            <FontAwesomeIcon icon={['far', 'check-square']} />
+          ) : (
+            <FontAwesomeIcon icon={['far', 'square']} />
+          )
+        }
+      </div>
+
+      save this for later?
+    </div>
+
 
     <div style={{ marginTop: "20px" }}>
       {

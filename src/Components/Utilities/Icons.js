@@ -16,7 +16,7 @@ import {
   faCheck,
   faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
-import { faCircle as farFaCircle } from "@fortawesome/free-regular-svg-icons";
+import { faCircle as farFaCircle, faSquare, faCheckSquare } from "@fortawesome/free-regular-svg-icons";
 import { faInstagram, faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons' 
 import { library } from "@fortawesome/fontawesome-svg-core";
 
@@ -41,7 +41,9 @@ const Icons = () => {
     faTwitter,
     faChevronDown,
     faCheck,
-    faInfoCircle
+    faInfoCircle,
+    faSquare,
+    faCheckSquare
   );
 };
 
