@@ -338,6 +338,20 @@ exports.untypicalClientErrors = functions.https.onCall(async (data, context) => 
   })
 })
 
+exports.handleSaveShippingInformation = functions.https.onCall(async (data, context) => {
+  const shippingAddress = data.shippingAddress
+  const userUID = data.user
+  await admin
+  .firestore()
+  .collection("stripe_customers")
+  .doc(userUID)
+  .collection("billing_addresses")
+  .add(shippingAddress)
+  .catch(async (err) => {
+    await reportError(err, { user: userUID });
+  })
+})
+
 function reportError(err, context = {}) {
   // This is the name of the StackDriver log stream that will receive the log
   // entry. This name can be any valid log stream name, but must contain "err"

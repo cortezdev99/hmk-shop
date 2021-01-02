@@ -150,17 +150,19 @@ export default () => {
         return err(true);
       });
     } else {
-      const shippingDetails = {
-        name: billingAddress.name,
-        address: {
-          line1: billingAddress.address.line1,
-          line2: billingAddress.address.line2,
-          postal_code: billingAddress.address.postal_code,
-          city: billingAddress.address.city,
-          state: billingAddress.address.state,
-          country: billingAddress.address.country.split(",")[1]
-        }
-      };
+
+      console.log(billingAddress)
+      // const shippingDetails = {
+      //   name: billingAddress.name,
+      //   address: {
+      //     line1: billingAddress.address.line1,
+      //     line2: billingAddress.address.line2,
+      //     postal_code: billingAddress.address.postal_code,
+      //     city: billingAddress.address.city,
+      //     state: billingAddress.address.state,
+      //     country: billingAddress.address.country.split(",")[1]
+      //   }
+      // };
 
       let test = [];
       products.map(product => {
@@ -184,7 +186,7 @@ export default () => {
         payment_method: paymentMethod,
         currency: "usd",
         status: "new",
-        shipping_details: shippingDetails,
+        shipping_details: billingAddress,
         products: test,
         contact_info: {
           email,
@@ -382,6 +384,7 @@ export default () => {
             billingAddresses={billingAddresses}
             setBillingAddresses={(val) => setBillingAddresses(val)}
             resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
+            setBillingAddress={(val) => setBillingAddress(val)}
           />
 
           <AddPaymentMethodForm 

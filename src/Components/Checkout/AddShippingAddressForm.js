@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
+import 'firebase/functions'
 import CountryDropdown from './CountryDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -120,12 +121,8 @@ export default (props) => {
           }, 40 * idx)
         });
       } else {
-        firebase
-          .firestore()
-          .collection("stripe_customers")
-          .doc(firebase.auth().currentUser.uid)
-          .collection("billing_addresses")
-          .add({
+        const data = {
+          shippingAddress: {
             name: `${firstName} ${lastName}`,
             address: {
               line1: address,
@@ -135,29 +132,24 @@ export default (props) => {
               state,
               country: region
             }
-          })
-          .then(resp => {
-            resp.onSnapshot(
-              {
-                // Listen for document metadata changes
-                includeMetadataChanges: true
-              },
-              doc => {
-                if (props.noBillingAddresses) {
-                  props.setNoBillingAddresses(false);
-                }
-  
-                const currentState = props.billingAddresses;
-                currentState.push(doc.data());
-                props.setBillingAddresses([...currentState]);
+          }
+        };
 
-                handleSuccessfulFormSubmittion()
-              } 
-            );
+        if (saveInfo) {
+          const handleSaveShippingInformation = firebase
+            .functions()
+            .httpsCallable("handleSaveShippingInformation");
+          handleSaveShippingInformation({
+            ...data,
+            user: firebase.auth().currentUser.uid
           })
-          .catch(err => {
-            alert(err);
-          });
+
+          props.setBillingAddress(data)
+          handleSuccessfulFormSubmittion()
+        } else {
+          props.setBillingAddress(data)
+          handleSuccessfulFormSubmittion()
+        }
       }
   
       setSubmitting(false);
