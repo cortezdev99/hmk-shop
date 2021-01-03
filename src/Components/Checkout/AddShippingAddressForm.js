@@ -426,8 +426,6 @@ export default (props) => {
             }}
           >
             <div class="circle"></div>
-{/* 
-            Submitting */}
           </button>
         )
       }
