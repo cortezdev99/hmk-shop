@@ -152,7 +152,7 @@ export default (props) => {
         }
       }
   
-      // setSubmitting(false);
+      setSubmitting(false);
     }
   }, [submitting])
 
@@ -420,33 +420,14 @@ export default (props) => {
               color: "#fff",
               borderRadius: "5px",
               cursor: "pointer",
-              display: "flex"
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            Submitting
-
-            <div style={{  display: "flex"}}>
-              <div className="dot1">
-                .
-              </div>
-              <div className="dot2">
-                .
-              </div>
-              <div className="dot3">
-                .
-              </div>
-              {/* <div className="dot1" style={{ width: "20px", minWidth: "20px" }}>
-                <FontAwesomeIcon icon={['far', 'circle']} />
-              </div>
-              <div className="dot2" style={{ width: "20px", minWidth: "20px" }}>
-                <FontAwesomeIcon icon={['far', 'circle']} />
-              </div>
-              <div className="dot3" style={{ width: "20px", minWidth: "20px" }}>
-                <FontAwesomeIcon icon={['far', 'circle']} />
-              </div> */}
-            </div>
-            
-            {/* <FontAwesomeIcon icon={['fas', 'circle-notch']} spin={true} /> */}
+            <div class="circle"></div>
+{/* 
+            Submitting */}
           </button>
         )
       }
