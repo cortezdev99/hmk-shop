@@ -24,6 +24,7 @@ export default (props) => {
   const [customerData, setCustomerData] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const el2 = window.document.getElementById('add-payment-payment-chevron')
+  const [saveInfo, setSaveInfo] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -63,7 +64,7 @@ export default (props) => {
         el2.classList.toggle('chevron-rotated')
       }
 
-      const baseHeight = window.document.body.clientWidth > 450 ? 295 : 275;
+      const baseHeight = window.document.body.clientWidth > 450 ? 336 : 316;
       const errorsHeight = errors.length * 26;
 
       if (collapsableContentMaxHeight !== (baseHeight + errorsHeight)) {
@@ -305,6 +306,33 @@ export default (props) => {
             </div>
           ) : null
         }
+      </div>
+
+      <div style={{
+        fontSize: "15px",
+        paddingTop: "20px",
+        paddingBottom: "3px",
+        letterSpacing: "0.75px",
+        textAlign: "center",
+        height: "41px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer"
+      }}
+        onClick={() => setSaveInfo(!saveInfo)}
+      >
+        <div style={{ marginRight: "10px", height: "15px" }}>
+          {
+            saveInfo ? (
+              <FontAwesomeIcon icon={['far', 'check-square']} />
+            ) : (
+              <FontAwesomeIcon icon={['far', 'square']} />
+            )
+          }
+        </div>
+
+        save this for later?
       </div>
 
       <div style={{ marginTop: "20px" }}>

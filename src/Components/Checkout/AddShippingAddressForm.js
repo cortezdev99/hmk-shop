@@ -156,10 +156,6 @@ export default (props) => {
     }
   }, [submitting])
 
-  const handleSaveForLaterClick = () => {
-    setSaveInfo(!saveInfo)
-  }
-
   return (
     <div
     id="checkout-shipping-info-wrapper"
@@ -378,7 +374,7 @@ export default (props) => {
       justifyContent: "center",
       cursor: "pointer"
     }}
-      onClick={handleSaveForLaterClick}
+      onClick={() => setSaveInfo(!saveInfo)}
     >
       <div style={{ marginRight: "10px", height: "15px" }}>
         {

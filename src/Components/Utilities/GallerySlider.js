@@ -75,9 +75,13 @@ export default props => {
   };
 
   useEffect(() => {
+     // TODO
+     // gallery slider not updating and restarting at 0 index when resized, which is specifically the reason I have an event listener for resize events. MUST FIX 
     window.addEventListener("resize", event => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
+
+        console.log('hit')
         if (activeGalleryIdx === 2 || translatePxls === 0) {
           return;
         }

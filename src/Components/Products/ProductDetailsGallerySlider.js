@@ -2,6 +2,8 @@ import React, { useState, useEffect, useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default props => {
+  // TODO
+  // FIX MEMORY LEAK WHEN PAGE EXITED OUT, CAUSED WITH RESIZE EVENT LISTENER NOT BEING REMOVED
   const [activeGalloryIdx, setActiveGalloryIdx] = useState(2);
   const [translatePxls, setTranslatePxls] = useState(0);
   const [prevWindowWidth, setPrevWindowWidth] = useState(
