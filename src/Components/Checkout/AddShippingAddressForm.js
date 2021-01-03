@@ -202,7 +202,8 @@ export default (props) => {
         {
           successfulFormSubmission ? (
             <span style={{
-              color: "#54b654"
+              color: "#54b654",
+              marginLeft: "20px"
             }}>
               <FontAwesomeIcon icon={["fas", "check"]} />
             </span>

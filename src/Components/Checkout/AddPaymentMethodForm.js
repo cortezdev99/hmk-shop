@@ -319,10 +319,13 @@ export default (props) => {
               color: "#fff",
               borderRadius: "5px",
               cursor: "pointer",
-              width: "100%"
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-          Submitting...
+          <div class="circle"></div>
         </button>
          ) : (
           <button
