@@ -10,6 +10,14 @@ export default props => {
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
   let timeout = false;
 
+  const handleResizeEvents = () => {
+    if (activeGalleryIdx !== 2 || translatePxls !== 0) {
+      setActiveGalleryIdx(2);
+      setTranslatePxls(0);
+      forceUpdate();
+    }
+  }
+
   const handleTranslatingImages = direction => {
     if (
       direction === "Left" &&
@@ -79,64 +87,11 @@ export default props => {
      // gallery slider not updating and restarting at 0 index when resized, which is specifically the reason I have an event listener for resize events. MUST FIX 
     window.addEventListener("resize", event => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => {
-
-        console.log('hit')
-        if (activeGalleryIdx === 2 || translatePxls === 0) {
-          return;
-        }
-  
-        if (window.document.body.clientWidth > 640 && prevWindowWidth < 640) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalleryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          window.document.body.clientWidth < 640 &&
-          prevWindowWidth > 640
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalleryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          window.document.body.clientWidth > 375 &&
-          prevWindowWidth <= 375
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalleryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          window.document.body.clientWidth <= 375 &&
-          prevWindowWidth > 375
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalleryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          window.document.body.clientWidth > 325 &&
-          prevWindowWidth <= 325
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalleryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          window.document.body.clientWidth <= 325 &&
-          prevWindowWidth > 325
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalleryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        }
-      }, 500)
+      timeout = setTimeout(handleResizeEvents, 500)
     });
 
     return () => {
-      window.removeEventListener("resize", null);
+      window.removeEventListener("resize", handleResizeEvents);
     };
   }, []);
 

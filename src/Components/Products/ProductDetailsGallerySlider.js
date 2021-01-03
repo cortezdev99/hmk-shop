@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default props => {
   // TODO
-  // FIX MEMORY LEAK WHEN PAGE EXITED OUT, CAUSED WITH RESIZE EVENT LISTENER NOT BEING REMOVED
+  // INSTEAD OF USE IF CONDITIONALS TO CALCULATE HOW MANY PIXELS TO TRANSLATE, USE AN ELEMENT OBSERVER TO GET THE ELEMENT WIDTH AND PADDING
   const [activeGalloryIdx, setActiveGalloryIdx] = useState(2);
   const [translatePxls, setTranslatePxls] = useState(0);
   const [prevWindowWidth, setPrevWindowWidth] = useState(
@@ -14,62 +14,23 @@ export default props => {
   const { images, activeImageSet, handleGalleryImageClick } = props;
   let timeout = false;
 
+  const handleResizeEvents = () => {
+    if (activeGalloryIdx !== 2 || translatePxls !== 0) {
+      setActiveGalloryIdx(2);
+      setTranslatePxls(0);
+      forceUpdate();
+    }
+  }
+
   useEffect(() => {
     window.addEventListener("resize", event => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        if (activeGalloryIdx === 2 || translatePxls === 0) {
-          return
-        }
-  
-        if (window.document.body.clientWidth > 579 && prevWindowWidth < 579) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalloryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          prevWindowWidth > 579 &&
-          window.document.body.clientWidth < 579
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalloryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          window.document.body.clientWidth > 479 &&
-          prevWindowWidth < 479
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalloryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          prevWindowWidth > 479 &&
-          window.document.body.clientWidth < 479
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalloryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          window.document.body.clientWidth > 339 &&
-          prevWindowWidth < 339
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalloryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        } else if (
-          prevWindowWidth > 339 &&
-          window.document.body.clientWidth < 339
-        ) {
-          setPrevWindowWidth(window.document.body.clientWidth);
-          setActiveGalloryIdx(2);
-          setTranslatePxls(0);
-          forceUpdate();
-        }
-      }, 500)    
+      timeout = setTimeout(handleResizeEvents, 500)    
     });
+
+    return () => {
+      window.removeEventListener('resize', handleResizeEvents)
+    }
   });
 
   const handleImageTransition = direction => {
