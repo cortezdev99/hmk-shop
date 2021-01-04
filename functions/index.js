@@ -28,27 +28,27 @@ exports.createStripeCustomer = functions.auth.user().onCreate(async user => {
 exports.addPaymentMethodDetails = functions.firestore
   .document("/stripe_customers/{userId}/payment_methods/{pushId}")
   .onCreate(async (snap, context) => {
-    try {
-      const paymentMethodId = snap.data().id;
-      const paymentMethod = await stripe.paymentMethods.retrieve(
-        paymentMethodId
-      );
-      await snap.ref.set(paymentMethod);
-      // Create a new SetupIntent so the customer can add a new method next time.
-      const intent = await stripe.setupIntents.create({
-        customer: paymentMethod.customer
-      });
-      await snap.ref.parent.parent.set(
-        {
-          setup_secret: intent.client_secret
-        },
-        { merge: true }
-      );
-      return;
-    } catch (error) {
-      await snap.ref.set({ error: userFacingMessage(error) }, { merge: true });
-      await reportError(error, { user: context.params.userId });
-    }
+//     try {
+//       const paymentMethodId = snap.data().id;
+//       const paymentMethod = await stripe.paymentMethods.retrieve(
+//         paymentMethodId
+//       );
+//       await snap.ref.set(paymentMethod);
+//       // Create a new SetupIntent so the customer can add a new method next time.
+//       const intent = await stripe.setupIntents.create({
+//         customer: paymentMethod.customer
+//       });
+//       await snap.ref.parent.parent.set(
+//         {
+//           setup_secret: intent.client_secret
+//         },
+//         { merge: true }
+//       );
+//       return;
+//     } catch (error) {
+//       await snap.ref.set({ error: userFacingMessage(error) }, { merge: true });
+//       await reportError(error, { user: context.params.userId });
+//     }
   });
 
 exports.createStripePayment = functions.firestore
@@ -180,6 +180,54 @@ exports.confirmStripePayment = functions.firestore
       change.after.ref.set(payment);
     }
   });
+
+exports.addPaymentMethod = functions.https.onCall(
+  async (data, context) => {
+    const saveInfo = data.saveInfo;
+    const paymentMethodId = data.paymentMethodId;
+    const userUID = data.userUID;
+
+    try {
+      // The actual payment method details
+      const paymentMethod = await stripe.paymentMethods.retrieve(
+        paymentMethodId
+      )
+
+      // Creates a new SetupIntent so the customer can add a new method next time.
+      const intent = await stripe.setupIntents.create({
+        customer: paymentMethod.customer
+      });
+
+      // Updates the stripe customers setup intent with the newly created one
+      await admin.firestore.collection('stripe_customers').doc(userUID).set(
+        {
+          setup_secrete: intent.client_secret
+        },
+        { merge: true }
+      );
+      
+      if (saveInfo) {
+        // Adds payment method details to the users saved payment methods collection
+        await admin.firestore
+          .collection('stripe_customers')
+          .doc(userUID)
+          .collection('payment_methods')
+          .add(paymentMethod)
+      }
+      
+      // returns payment method details
+      return paymentMethod
+    } catch (error) {
+      const userFacingError = await userFacingMessage(error)
+      await reportError(error, { user: context.params.userId });
+
+      // send a userFacingMessage back apon an error
+      return {
+        userFacingError
+      }
+    }
+  }
+)
 
 exports.createExpressCheckoutPaymentIntent = functions.https.onCall(
   async (data, context) => {

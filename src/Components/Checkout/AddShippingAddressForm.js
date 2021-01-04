@@ -422,7 +422,7 @@ export default (props) => {
               justifyContent: "center"
             }}
           >
-            <div class="circle"></div>
+            <div className="circle"></div>
           </button>
         )
       }

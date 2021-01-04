@@ -116,34 +116,60 @@ export default (props) => {
       setCardInputHasErrors(error)
       setCardError(true)
     } else {
-      firebase
-      .firestore()
-      .collection("stripe_customers")
-      .doc(firebase.auth().currentUser.uid)
-      .collection("payment_methods")
-      .add({ id: setupIntent.payment_method })
-      .then(resp => {
-        resp.onSnapshot(
-          {
-            // Listen for document metadata changes
-            includeMetadataChanges: true
-          },
-          doc => {
-            if (doc.data().card) {
-              if (props.noPaymentMethods) {
-                props.setNoPaymentMethods(false);
-              }
+      console.log('hit')
+      const data = {
+        userUID: firebase.auth().currentUser.uid,
+        saveInfo,
+        paymentMethodId: setupIntent.payment_method
+      }
 
-              const currentState = props.paymentMethods;
-              currentState.push(doc.data());
-              props.setPaymentMethods([...currentState]);
-            }
-          }
-        );
-      }).catch((err) => {
-        // TODO //
-        // NOTIFY USER OF ERROR, PROMPT TO TRY AGAIN
-      })
+      const handlePaymentMethodDetails = firebase
+        .functions()
+        .httpsCallable("addPaymentMethod");
+
+      const {
+        paymentMethod,
+        userFacingError
+      } = await handlePaymentMethodDetails(data)
+
+      if (paymentMethod) {
+        console.log(paymentMethod)
+      } else if (userFacingError) {
+        console.log(userFacingError)
+      }
+      // if (saveInfo) {
+        // firebase
+        // .firestore()
+        // .collection("stripe_customers")
+        // .doc(firebase.auth().currentUser.uid)
+        // .collection("payment_methods")
+        // .add({ id: setupIntent.payment_method })
+        // .then(resp => {
+        //   resp.onSnapshot(
+        //     {
+        //       // Listen for document metadata changes
+        //       includeMetadataChanges: true
+        //     },
+        //     doc => {
+        //       if (doc.data().card) {
+        //         if (props.noPaymentMethods) {
+        //           props.setNoPaymentMethods(false);
+        //         }
+
+        //         const currentState = props.paymentMethods;
+        //         currentState.push(doc.data());
+        //         props.setPaymentMethods([...currentState]);
+        //       }
+        //     }
+        //   );
+        // }).catch((err) => {
+        //   // TODO //
+        //   // NOTIFY USER OF ERROR, PROMPT TO TRY AGAIN
+        // })
+      // } else {
+      //   console.log(setupIntent, 'FULL INTENT')
+      //   console.log(setupIntent.payment_method, 'PAYMENT METHOD')
+      // }
     }
 
     setSubmitting(false)
@@ -353,7 +379,7 @@ export default (props) => {
               justifyContent: "center"
             }}
           >
-          <div class="circle"></div>
+          <div className="circle"></div>
         </button>
          ) : (
           <button
