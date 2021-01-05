@@ -30,20 +30,12 @@ export default (props) => {
 
   useEffect(() => {
     if (firebase.auth().currentUser.uid) {
+      // TODO
+      // CATCH ANY ERRORS
       firebase.firestore().collection("stripe_customers").doc(firebase.auth().currentUser.uid)
         .onSnapshot(function(doc) {
             setCustomerData(doc.data());
         })
-      // firebase.firestore()
-      //   .collection("stripe_customers")
-      //   .doc(firebase.auth().currentUser.uid)
-      //   .get()
-      //   .then(resp => {
-      //     setCustomerData(resp.data());
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
     }
   }, [])
 
@@ -91,29 +83,6 @@ export default (props) => {
       return setSubmitting(false)
     } 
 
-    // const { paymentMethod, error } = await stripe
-    //   .createPaymentMethod({
-    //     type: 'card',
-    //     card: elements.getElement(CardElement),
-    //     billing_details: {
-    //       name: cardHolderName,
-    //     },
-    //   })
-
-
-    // const result = await stripe.createPaymentMethod(
-    //   {
-    //       payment_method: {
-    //         type: 'card',
-    //         card: elements.getElement(CardElement),
-    //         billing_details: {
-    //           name: cardHolderName
-    //         }
-    //       }
-    //     }
-    // )
-
-    // console.log(result)
     const { setupIntent, error } = await stripe.confirmCardSetup(
       customerData.setup_secret,
       {
@@ -126,25 +95,22 @@ export default (props) => {
       }
     );
 
-    console.log(setupIntent)
-
     if (error) {
-      console.log(error)
-      // if (error.type !== "card_error" || error.type !== "validation_error") {
-      //   // TODO SPECIFY WHERE THIS ERROR IS COMING FROM EX: AddPaymentMethodForm -- HandleAddPaymentMethod function
-      //   const sendErrorToBackend = firebase
-      //     .functions()
-      //     .httpsCallable("untypicalClientErrors");
-      //   sendErrorToBackend(error)
-      //     .then(async result => {
-      //       // TODO //
-      //       // NOTIFY USER DEV'S HAVE BEEN ALERTED OF THE ISSUE AND PROMPT TO TRY AGAIN 
-      //     })
-      // }
+      if (error.type !== "card_error" || error.type !== "validation_error") {
+        // TODO SPECIFY WHERE THIS ERROR IS COMING FROM EX: AddPaymentMethodForm -- HandleAddPaymentMethod function
+        const sendErrorToBackend = firebase
+          .functions()
+          .httpsCallable("untypicalClientErrors");
+        sendErrorToBackend(error)
+          .then(async result => {
+            // TODO //
+            // NOTIFY USER DEV'S HAVE BEEN ALERTED OF THE ISSUE AND PROMPT TO TRY AGAIN 
+          })
+      }
 
-      // setErrors(['card_error'])
-      // setCardInputHasErrors(error)
-      // setCardError(true)
+      setErrors(['card_error'])
+      setCardInputHasErrors(error)
+      setCardError(true)
     } else {
       const data = {
         userUID: firebase.auth().currentUser.uid,
