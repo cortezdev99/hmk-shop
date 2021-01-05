@@ -65,7 +65,8 @@ export default () => {
           </div>
 
           {
-            successfulSubmition || firebase.auth().currentUser ? (
+            successfulSubmition ? (
+            // successfulSubmition || firebase.auth().currentUser ? (
               <Redirect
                 to={{
                   pathname: '/checkout',
@@ -116,6 +117,15 @@ export default () => {
                   <button
                     style={{ height: "100%", padding: "1rem 4rem", borderRadius: "5px", border: "none", background: "#45b3e0", color: "#1d1d1d", fontWeight: "500", fontSize: "15px", cursor: "pointer" }}
                     onClick={handleCreateAccountClick}
+                  >
+                    Create
+                  </button>
+                </div>
+
+                <div style={{ height: "50px" }}>
+                  <button
+                    style={{ height: "100%", padding: "1rem 4rem", borderRadius: "5px", border: "none", background: "#45b3e0", color: "#1d1d1d", fontWeight: "500", fontSize: "15px", cursor: "pointer" }}
+                    onClick={handleSignoutClick}
                   >
                     Create
                   </button>

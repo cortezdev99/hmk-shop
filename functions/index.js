@@ -186,7 +186,19 @@ exports.addPaymentMethod = functions.https.onCall(
     const saveInfo = data.saveInfo;
     const paymentMethodId = data.paymentMethodId;
     const userUID = data.userUID;
+    // let stripeCustomerId
+    // admin.firestore.collection('stripe_customers').doc(userUID).get().then((response) => {
+    //   functions.logger.log(
+    //     response
+    //   );
+    // }).catch((err) => {
+    //   functions.logger.log(
+    //     err
+    //   );
+    // })
 
+    // seti_1I6AktFTrR1Ad7nVxb7uch9B_secret_IhZutqGfhSuR5gq0dnUSoW2lmZjBeMj
+    // seti_1I6AmRFTrR1Ad7nVhGuvAYZS_secret_IhZwdnhcszLKKxtZsFFlPFpcxPD1CnI
     try {
       // The actual payment method details
       const paymentMethod = await stripe.paymentMethods.retrieve(
@@ -198,17 +210,18 @@ exports.addPaymentMethod = functions.https.onCall(
         customer: paymentMethod.customer
       });
 
+
       // Updates the stripe customers setup intent with the newly created one
-      await admin.firestore.collection('stripe_customers').doc(userUID).set(
+      await admin.firestore().collection('stripe_customers').doc(userUID).set(
         {
-          setup_secrete: intent.client_secret
+          setup_secret: intent.client_secret
         },
         { merge: true }
       );
       
       if (saveInfo) {
         // Adds payment method details to the users saved payment methods collection
-        await admin.firestore
+        await admin.firestore()
           .collection('stripe_customers')
           .doc(userUID)
           .collection('payment_methods')
@@ -219,10 +232,11 @@ exports.addPaymentMethod = functions.https.onCall(
       return paymentMethod
     } catch (error) {
       const userFacingError = await userFacingMessage(error)
-      await reportError(error, { user: context.params.userId });
+      await reportError(error, { user: userUID });
 
       // send a userFacingMessage back apon an error
       return {
+        error,
         userFacingError
       }
     }

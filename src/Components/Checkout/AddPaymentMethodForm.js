@@ -30,16 +30,20 @@ export default (props) => {
 
   useEffect(() => {
     if (firebase.auth().currentUser.uid) {
-      firebase.firestore()
-        .collection("stripe_customers")
-        .doc(firebase.auth().currentUser.uid)
-        .get()
-        .then(resp => {
-          setCustomerData(resp.data());
+      firebase.firestore().collection("stripe_customers").doc(firebase.auth().currentUser.uid)
+        .onSnapshot(function(doc) {
+            setCustomerData(doc.data());
         })
-        .catch(err => {
-          console.log(err);
-        });
+      // firebase.firestore()
+      //   .collection("stripe_customers")
+      //   .doc(firebase.auth().currentUser.uid)
+      //   .get()
+      //   .then(resp => {
+      //     setCustomerData(resp.data());
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
     }
   }, [])
 
@@ -73,9 +77,9 @@ export default (props) => {
     }
   }, [errors, collapsableContentShowing])
 
-  const handleAddPaymentMethod = async ev => {
-    
+  const handleAddPaymentMethod = async ev => { 
     ev.preventDefault();
+
     setSubmitting(true);
     setCardError(false);
     setCardHolderNameError(false)
@@ -87,6 +91,29 @@ export default (props) => {
       return setSubmitting(false)
     } 
 
+    // const { paymentMethod, error } = await stripe
+    //   .createPaymentMethod({
+    //     type: 'card',
+    //     card: elements.getElement(CardElement),
+    //     billing_details: {
+    //       name: cardHolderName,
+    //     },
+    //   })
+
+
+    // const result = await stripe.createPaymentMethod(
+    //   {
+    //       payment_method: {
+    //         type: 'card',
+    //         card: elements.getElement(CardElement),
+    //         billing_details: {
+    //           name: cardHolderName
+    //         }
+    //       }
+    //     }
+    // )
+
+    // console.log(result)
     const { setupIntent, error } = await stripe.confirmCardSetup(
       customerData.setup_secret,
       {
@@ -99,24 +126,26 @@ export default (props) => {
       }
     );
 
-    if (error) {
-      if (error.type !== "card_error" || error.type !== "validation_error") {
-        // TODO SPECIFY WHERE THIS ERROR IS COMING FROM EX: AddPaymentMethodForm -- HandleAddPaymentMethod function
-        const sendErrorToBackend = firebase
-          .functions()
-          .httpsCallable("untypicalClientErrors");
-        sendErrorToBackend(error)
-          .then(async result => {
-            // TODO //
-            // NOTIFY USER DEV'S HAVE BEEN ALERTED OF THE ISSUE AND PROMPT TO TRY AGAIN 
-          })
-      }
+    console.log(setupIntent)
 
-      setErrors(['card_error'])
-      setCardInputHasErrors(error)
-      setCardError(true)
+    if (error) {
+      console.log(error)
+      // if (error.type !== "card_error" || error.type !== "validation_error") {
+      //   // TODO SPECIFY WHERE THIS ERROR IS COMING FROM EX: AddPaymentMethodForm -- HandleAddPaymentMethod function
+      //   const sendErrorToBackend = firebase
+      //     .functions()
+      //     .httpsCallable("untypicalClientErrors");
+      //   sendErrorToBackend(error)
+      //     .then(async result => {
+      //       // TODO //
+      //       // NOTIFY USER DEV'S HAVE BEEN ALERTED OF THE ISSUE AND PROMPT TO TRY AGAIN 
+      //     })
+      // }
+
+      // setErrors(['card_error'])
+      // setCardInputHasErrors(error)
+      // setCardError(true)
     } else {
-      console.log('hit')
       const data = {
         userUID: firebase.auth().currentUser.uid,
         saveInfo,
@@ -127,49 +156,42 @@ export default (props) => {
         .functions()
         .httpsCallable("addPaymentMethod");
 
-      const {
-        paymentMethod,
-        userFacingError
-      } = await handlePaymentMethodDetails(data)
+      const test = await handlePaymentMethodDetails(data)
 
-      if (paymentMethod) {
-        console.log(paymentMethod)
-      } else if (userFacingError) {
-        console.log(userFacingError)
-      }
-      // if (saveInfo) {
-        // firebase
-        // .firestore()
-        // .collection("stripe_customers")
-        // .doc(firebase.auth().currentUser.uid)
-        // .collection("payment_methods")
-        // .add({ id: setupIntent.payment_method })
-        // .then(resp => {
-        //   resp.onSnapshot(
-        //     {
-        //       // Listen for document metadata changes
-        //       includeMetadataChanges: true
-        //     },
-        //     doc => {
-        //       if (doc.data().card) {
-        //         if (props.noPaymentMethods) {
-        //           props.setNoPaymentMethods(false);
-        //         }
+      console.log(test)
+    //   if (saveInfo) {
+    //     firebase
+    //     .firestore()
+    //     .collection("stripe_customers")
+    //     .doc(firebase.auth().currentUser.uid)
+    //     .collection("payment_methods")
+    //     .add({ id: setupIntent.payment_method })
+    //     .then(resp => {
+    //       resp.onSnapshot(
+    //         {
+    //           // Listen for document metadata changes
+    //           includeMetadataChanges: true
+    //         },
+    //         doc => {
+    //           if (doc.data().card) {
+    //             if (props.noPaymentMethods) {
+    //               props.setNoPaymentMethods(false);
+    //             }
 
-        //         const currentState = props.paymentMethods;
-        //         currentState.push(doc.data());
-        //         props.setPaymentMethods([...currentState]);
-        //       }
-        //     }
-        //   );
-        // }).catch((err) => {
-        //   // TODO //
-        //   // NOTIFY USER OF ERROR, PROMPT TO TRY AGAIN
-        // })
-      // } else {
-      //   console.log(setupIntent, 'FULL INTENT')
-      //   console.log(setupIntent.payment_method, 'PAYMENT METHOD')
-      // }
+    //             const currentState = props.paymentMethods;
+    //             currentState.push(doc.data());
+    //             props.setPaymentMethods([...currentState]);
+    //           }
+    //         }
+    //       );
+    //     }).catch((err) => {
+    //       // TODO //
+    //       // NOTIFY USER OF ERROR, PROMPT TO TRY AGAIN
+    //     })
+    //   } else {
+    //     console.log(setupIntent, 'FULL INTENT')
+    //     console.log(setupIntent.payment_method, 'PAYMENT METHOD')
+    //   }
     }
 
     setSubmitting(false)
