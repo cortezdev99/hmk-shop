@@ -3,6 +3,7 @@ import firebase from 'firebase'
 import 'firebase/functions'
 import CountryDropdown from './CountryDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import InputLabel from '../Utilities/InputLabel';
 
 export default (props) => {
   const el2 = document.getElementById('add-shipping-address-chevron');
@@ -220,6 +221,14 @@ export default (props) => {
 
     <div className="checkout-shipping-info-name-wrapper">
       <div>
+        {
+          firstName.length > 0 ? (
+            <InputLabel
+              labelText="First Name"
+            />
+          ) : null
+        }
+
         <input
           className="checkout-input"
           style={{
@@ -239,6 +248,14 @@ export default (props) => {
       </div>
 
       <div>
+        {
+          lastName.length > 0 ? (
+            <InputLabel
+              labelText="Last Name"
+            />
+          ) : null
+        }
+
         <input
           className="checkout-input"
           style={{
@@ -259,6 +276,14 @@ export default (props) => {
     </div>
 
     <div className="checkout-shipping-info-address-one-wrapper  checkout-input-padding">
+      {
+        address.length > 0 ? (
+          <InputLabel
+            labelText="Address"
+          />
+        ) : null
+      }
+
       <input
         className="checkout-input"
         style={{
@@ -278,6 +303,14 @@ export default (props) => {
     </div>
 
     <div className="checkout-shipping-info-address-two-wrapper checkout-input-padding">
+      {
+        address2.length > 0 ? (
+          <InputLabel
+            labelText="Apartment, Suite, etc. (optional)"
+          />
+        ) : null
+      }
+
       <input
         className="checkout-input"
         placeholder="Apartment, Suite, etc. (optional)"
@@ -288,6 +321,14 @@ export default (props) => {
     </div>
 
     <div className="checkout-shipping-info-city-wrapper checkout-input-padding">
+      {
+        city.length > 0 ? (
+          <InputLabel
+            labelText="City"
+          />
+        ) : null
+      }
+
       <input
         className="checkout-input"
         style={{
@@ -307,6 +348,14 @@ export default (props) => {
     </div>
 
     <div style={{ paddingTop: "20px" }}>
+      {
+        region.length > 0 ? (
+          <InputLabel
+            labelText="Region or Country"
+          />
+        ) : null
+      }
+
       <CountryDropdown
         setRegion={country => setRegion(country)} 
         region={region}
@@ -324,6 +373,14 @@ export default (props) => {
 
     <div className="checkout-shipping-info-region-state-city-wrapper checkout-input-padding">
       <div>
+        {
+          state.length > 0 ? (
+            <InputLabel
+              labelText="State"
+            />
+          ) : null
+        }
+
         <input
           className="checkout-input"
           placeholder="State"
@@ -343,6 +400,14 @@ export default (props) => {
       </div>
 
       <div>
+        {
+          zip.length > 0 ? (
+            <InputLabel
+              labelText="Zip Code"
+            />
+          ) : null
+        }
+
         <input
           className="checkout-input"
           placeholder="Zip code"

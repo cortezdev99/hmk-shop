@@ -9,6 +9,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MoreInfoIcon from '../Utilities/MoreInfoIcon';
+import InputLabel from '../Utilities/InputLabel';
 
 export default (props) => {
   const [cardHolderName, setCardHolderName] = useState("");
@@ -275,29 +276,9 @@ export default (props) => {
       <div>
         {
           cardHolderName.length > 0 ? (
-            <div style={{
-              position: "relative",
-              width: "0px",
-              height: "0px",
-              // float
-            }}>
-              <label style={{
-                zIndex: 2,
-                float: "left",
-                padding: "0px 5px 0px 5px",
-                position: "absolute",
-                width: "135px",
-                left: "20px",
-                fontSize: "12px",
-                textTransform: "uppercase",
-                top: "-7px",
-                color: "#7c7979",
-                background: "linear-gradient(0deg, #fbfbfb, #fbfbfb, #fff, #fff)",
-                "-webkit-font-smoothing": "subpixel-antialiased"
-              }}>
-                Card holder name
-              </label>
-            </div>
+            <InputLabel
+              labelText="Card Holder Name"
+            />
           ) : null
         }
 
@@ -339,29 +320,12 @@ export default (props) => {
 
         {
           !isCardEmpty ? (
-            <div style={{
-              position: "relative",
-              width: "0px",
-              height: "0px",
-              alignSelf: "flex-start"
-              // float
-            }}>
-              <label style={{
-                zIndex: 2,
-                float: "left",
-                padding: "0px 5px 0px 5px",
-                position: "absolute",
-                left: "20px",
-                fontSize: "12px",
-                textTransform: "uppercase",
-                top: "-7px",
-                color: `${cardError && cardInputHasErrors ? "#FF0000" : "#7c7979"}`,
-                background: "linear-gradient(0deg, #fbfbfb, #fbfbfb, #fff, #fff)",
-                "-webkit-font-smoothing": "subpixel-antialiased"
-              }}>
-                Card
-              </label>
-            </div>
+            <InputLabel
+              labelStyle={{
+                color: `${cardError && cardInputHasErrors ? "#FF0000" : "#7c7979"}`
+              }}
+              labelText="Card"
+            />
           ) : null
         }
 
