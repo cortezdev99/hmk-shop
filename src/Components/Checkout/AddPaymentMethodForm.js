@@ -26,6 +26,7 @@ export default (props) => {
   const el2 = window.document.getElementById('add-payment-payment-chevron')
   const [saveInfo, setSaveInfo] = useState(false);
   const [successfulSubmission, setSuccessfulSubmission] = useState(false);
+  const [isCardEmpty, setIsCardEmpty] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -176,6 +177,12 @@ export default (props) => {
         setCardInputHasErrors(ev.error);
         errors.push(setCardError)
       }
+
+      if (!ev.empty) {
+        setIsCardEmpty(false)
+      } else {
+        setIsCardEmpty(true)
+      }
   
       setErrors(errors);
   
@@ -283,7 +290,7 @@ export default (props) => {
                 left: "20px",
                 fontSize: "12px",
                 textTransform: "uppercase",
-                top: "-8px",
+                top: "-7px",
                 color: "#7c7979",
                 background: "linear-gradient(0deg, #fbfbfb, #fbfbfb, #fff, #fff)",
                 "-webkit-font-smoothing": "subpixel-antialiased"
@@ -293,6 +300,7 @@ export default (props) => {
             </div>
           ) : null
         }
+
         <input
           style={{
             height: "45px",
@@ -328,6 +336,34 @@ export default (props) => {
           alignItems: "center"
         }}
       >
+
+        {
+          !isCardEmpty ? (
+            <div style={{
+              position: "relative",
+              width: "0px",
+              height: "0px",
+              alignSelf: "flex-start"
+              // float
+            }}>
+              <label style={{
+                zIndex: 2,
+                float: "left",
+                padding: "0px 5px 0px 5px",
+                position: "absolute",
+                left: "20px",
+                fontSize: "12px",
+                textTransform: "uppercase",
+                top: "-7px",
+                color: `${cardError && cardInputHasErrors ? "#FF0000" : "#7c7979"}`,
+                background: "linear-gradient(0deg, #fbfbfb, #fbfbfb, #fff, #fff)",
+                "-webkit-font-smoothing": "subpixel-antialiased"
+              }}>
+                Card
+              </label>
+            </div>
+          ) : null
+        }
 
         <div
           style={{
