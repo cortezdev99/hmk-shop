@@ -149,7 +149,6 @@ export default (props) => {
 
        props.setPaymentMethod(data.id)
        handleSuccessfulFormSubmission();
-      //  setSuccessfulSubmission(true)
     }
 
     return setSubmitting(false)
@@ -157,7 +156,7 @@ export default (props) => {
 
   const handleChange = (ev) => {
     const errors = [];
-    
+
     if (!successfulSubmission) {
       if (cardHolderName.length === 0) {
         errors.push(setCardHolderNameError)
@@ -254,7 +253,7 @@ export default (props) => {
             ) : null
           }
         </div>
-
+        
         <div
           id="add-payment-payment-chevron"
           className="add-payment-payment-chevron"
@@ -267,6 +266,33 @@ export default (props) => {
       </div>
 
       <div>
+        {
+          cardHolderName.length > 0 ? (
+            <div style={{
+              position: "relative",
+              width: "0px",
+              height: "0px",
+              // float
+            }}>
+              <label style={{
+                zIndex: 2,
+                float: "left",
+                padding: "0px 5px 0px 5px",
+                position: "absolute",
+                width: "135px",
+                left: "20px",
+                fontSize: "12px",
+                textTransform: "uppercase",
+                top: "-8px",
+                color: "#7c7979",
+                background: "linear-gradient(0deg, #fbfbfb, #fbfbfb, #fff, #fff)",
+                "-webkit-font-smoothing": "subpixel-antialiased"
+              }}>
+                Card holder name
+              </label>
+            </div>
+          ) : null
+        }
         <input
           style={{
             height: "45px",
