@@ -112,7 +112,7 @@ export default (props) => {
       setCardInputHasErrors(error)
       setCardError(true)
     } else {
-      const data = {
+      const dataToSend = {
         userUID: firebase.auth().currentUser.uid,
         saveInfo,
         paymentMethodId: setupIntent.payment_method
@@ -122,9 +122,12 @@ export default (props) => {
         .functions()
         .httpsCallable("addPaymentMethod");
 
-      const test = await handlePaymentMethodDetails(data)
+      const { 
+        data
+       } = await handlePaymentMethodDetails(dataToSend)
 
-      console.log(test)
+       props.setPaymentMethod(data.id)
+      // console.log(test)
     //   if (saveInfo) {
     //     firebase
     //     .firestore()

@@ -387,7 +387,8 @@ export default () => {
             setBillingAddress={(val) => setBillingAddress(val)}
           />
 
-          <AddPaymentMethodForm 
+          <AddPaymentMethodForm
+            setPaymentMethod={(val) => setPaymentMethod(val)} 
             noPaymentMethods={noPaymentMethods}
             setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
             paymentMethods={paymentMethods}
