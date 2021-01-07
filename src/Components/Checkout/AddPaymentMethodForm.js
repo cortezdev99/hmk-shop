@@ -202,7 +202,9 @@ export default (props) => {
         '::placeholder': {
           color: "#7c7979",
           fontSize: `${window.document.body.clientWidth > 450 ? "14px" : "13px"}`,
-          letterSpacing: "0.75px"
+          letterSpacing: "0.75px",
+          textTransform: "uppercase",
+          fontSize: "12px"
         }
       }
     }
@@ -275,7 +277,7 @@ export default (props) => {
 
       <div>
         {
-          cardHolderName.length > 0 ? (
+          cardHolderName.length > 0 && collapsableContentShowing ? (
             <InputLabel
               labelText="Card Holder Name"
             />
@@ -319,7 +321,7 @@ export default (props) => {
       >
 
         {
-          !isCardEmpty ? (
+          !isCardEmpty && collapsableContentShowing ? (
             <InputLabel
               labelStyle={{
                 color: `${cardError && cardInputHasErrors ? "#FF0000" : "#7c7979"}`

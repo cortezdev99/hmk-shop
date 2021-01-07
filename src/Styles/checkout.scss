@@ -141,7 +141,17 @@
 
   &::placeholder {
     color: #7c7979;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.75px;
     -webkit-font-smoothing: subpixel-antialiased;
+  }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover, 
+  &:-webkit-autofill:focus, 
+  &:-webkit-autofill:active  {
+      -webkit-box-shadow: 0 0 0 30px #fbfbfb inset !important;
   }
 }
 

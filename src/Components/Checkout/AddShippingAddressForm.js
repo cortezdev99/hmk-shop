@@ -222,7 +222,7 @@ export default (props) => {
     <div className="checkout-shipping-info-name-wrapper">
       <div>
         {
-          firstName.length > 0 ? (
+          firstName.length > 0 && collapsableContentShowing ? (
             <InputLabel
               labelText="First Name"
             />
@@ -249,7 +249,7 @@ export default (props) => {
 
       <div>
         {
-          lastName.length > 0 ? (
+          lastName.length > 0 && collapsableContentShowing ? (
             <InputLabel
               labelText="Last Name"
             />
@@ -277,7 +277,7 @@ export default (props) => {
 
     <div className="checkout-shipping-info-address-one-wrapper  checkout-input-padding">
       {
-        address.length > 0 ? (
+        address.length > 0 && collapsableContentShowing ? (
           <InputLabel
             labelText="Address"
           />
@@ -304,7 +304,7 @@ export default (props) => {
 
     <div className="checkout-shipping-info-address-two-wrapper checkout-input-padding">
       {
-        address2.length > 0 ? (
+        address2.length > 0 && collapsableContentShowing ? (
           <InputLabel
             labelText="Apartment, Suite, etc. (optional)"
           />
@@ -322,7 +322,7 @@ export default (props) => {
 
     <div className="checkout-shipping-info-city-wrapper checkout-input-padding">
       {
-        city.length > 0 ? (
+        city.length > 0 && collapsableContentShowing ? (
           <InputLabel
             labelText="City"
           />
@@ -349,7 +349,7 @@ export default (props) => {
 
     <div style={{ paddingTop: "20px" }}>
       {
-        region.length > 0 ? (
+        region.length > 0 && collapsableContentShowing ? (
           <InputLabel
             labelText="Region or Country"
           />
@@ -374,7 +374,7 @@ export default (props) => {
     <div className="checkout-shipping-info-region-state-city-wrapper checkout-input-padding">
       <div>
         {
-          state.length > 0 ? (
+          state.length > 0 && collapsableContentShowing ? (
             <InputLabel
               labelText="State"
             />
@@ -401,7 +401,7 @@ export default (props) => {
 
       <div>
         {
-          zip.length > 0 ? (
+          zip.length > 0 && collapsableContentShowing ? (
             <InputLabel
               labelText="Zip Code"
             />
