@@ -470,7 +470,7 @@ export default (props) => {
               cursor: "pointer"
             }}
           >
-            Add this address
+            Use this address
           </button>
         ) : (
           <button

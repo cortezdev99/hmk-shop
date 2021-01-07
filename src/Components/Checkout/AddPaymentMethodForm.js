@@ -415,7 +415,7 @@ export default (props) => {
               width: "100%"
             }}
           >
-            Add this card
+            Use this payment method
           </button>
          )
        }

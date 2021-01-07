@@ -12,7 +12,7 @@ export default (props) => {
   const labelStyle = {
     zIndex: 2,
     float: "left",
-    padding: "0px 5px 0px 5px",
+    padding: "0px 10px",
     position: "absolute",
     left: "20px",
     fontSize: "12px",

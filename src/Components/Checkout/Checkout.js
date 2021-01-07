@@ -89,7 +89,9 @@ export default () => {
     timeout = setTimeout(() => {
       if (window.document.body.clientWidth > 450 && collapsedFormsMaxHeight !== 75) {
         setCollapsedFormsMaxHeight(75)
+        console.log('hit', window.document.body.clientWidth)
       } else if (window.document.body.clientWidth <= 450 && collapsedFormsMaxHeight !== 55) {
+        console.log('hit2', window.document.body.clientWidth)
         setCollapsedFormsMaxHeight(55)
       }
     }, 500);
