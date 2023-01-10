@@ -14,7 +14,7 @@
   "dependencies": {
     "@google-cloud/logging": "^8.0.4",
     "@types/stripe": "^7.13.24",
-    "firebase-admin": "^8.13.0",
+    "firebase-admin": "^11.4.1",
     "firebase-functions": "^3.13.0",
     "stripe": "^8.88.0"
   },
