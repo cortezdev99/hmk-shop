@@ -1,13 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import CartContext from "../../Contexts/CartContext";
-import { Link, Redirect } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "firebase/auth";
-import firebase from "firebase/app";
-import "firebase/functions";
-import {
-  useStripe
-} from "@stripe/react-stripe-js";
+import { useStripe } from "@stripe/react-stripe-js";
 import OrderSummary from "./OrderSummary";
 import AddShippingAddressForm from "./AddShippingAddressForm";
 import AddPaymentMethodForm from "./AddPaymentMethodForm";
@@ -15,6 +10,9 @@ import ChoosePaymentMethod from "./ChoosePaymentMethod";
 import ChooseShippingAddress from "./ChooseShippingAddress";
 import ExpressCheckoutPaymentForms from "./ExpressCheckoutPaymentForms";
 import ContactInfoForm from "./ContactInfoForm";
+import { auth, db } from "../../Config/firebase";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 // import axios from 'axios'
 
 export default () => {
@@ -22,20 +20,18 @@ export default () => {
   // Todo Add Logic To Add Discount
   // TODO Remove Create Account Component and create an account simultaniously when creating an order
   const [email, setEmail] = useState("");
-  
-  
+
   const [phone, setPhone] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const [billingAddresses, setBillingAddresses] = useState([]);
   const [billingAddress, setBillingAddress] = useState(false);
-  
+
   const [noBillingAddresses, setNoBillingAddresses] = useState(false);
   const [userUID, setUserUID] = useState("");
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState(false);
-  const [noBillingAddressSelected, setNoBillingAddressSelected] = useState(
-    false
-  );
+  const [noBillingAddressSelected, setNoBillingAddressSelected] =
+    useState(false);
   const [noPaymentMethodSelected, setNoPaymentMethodSelected] = useState(false);
   const [noEmail, setNoEmail] = useState(false);
   const [noPhoneNumber, setNoPhoneNumber] = useState(false);
@@ -43,19 +39,23 @@ export default () => {
   const [discount, setDiscount] = useState("");
   const [activeDiscount, setActiveDiscount] = useState(false);
   const stripe = useStripe();
-  const [ orderSummaryHidden, setOrderSummaryHidden ] = useState(true)
-  const [ testerState, setTesterState ] = useState(false)
-  const [ collapsableOrderSummaryOpen, setCollapsableOrderSummaryOpen ] = useState(false);
-  const [ collapsableOrderSummaryMaxHeight, setCollapsableOrderSummaryMaxHeight ] = useState(101);
-  const [ collapsedFormsMaxHeight, setCollapsedFormsMaxHeight ] = useState(
+  const [orderSummaryHidden, setOrderSummaryHidden] = useState(true);
+  const [testerState, setTesterState] = useState(false);
+  const [collapsableOrderSummaryOpen, setCollapsableOrderSummaryOpen] =
+    useState(false);
+  const [
+    collapsableOrderSummaryMaxHeight,
+    setCollapsableOrderSummaryMaxHeight,
+  ] = useState(101);
+  const [collapsedFormsMaxHeight, setCollapsedFormsMaxHeight] = useState(
     window.document.body.clientWidth > 450 ? 75 : 55
-  )
+  );
   let timeout = false;
 
   const { products } = useContext(CartContext);
 
   if (products.length < 1) {
-    return <Redirect to="/" />;
+    return redirect("/");
   }
 
   useEffect(() => {
@@ -68,13 +68,13 @@ export default () => {
     rootElement.scrollIntoView(
       {
         behavior: "smooth",
-        block: "start"
+        block: "start",
       },
       500
     );
 
     if (userUID.length === 0) {
-      setUserUID(firebase.auth().currentUser.uid);
+      setUserUID(auth.currentUser.uid);
     }
 
     const subtotal = products.reduce((accum, currentVal) => {
@@ -84,27 +84,36 @@ export default () => {
     setSubtotal(subtotal);
   }, [products]);
 
-  const resize_ob = new ResizeObserver(function(entries) {
+  const resize_ob = new ResizeObserver(function (entries) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      if (window.document.body.clientWidth > 450 && collapsedFormsMaxHeight !== 75) {
-        setCollapsedFormsMaxHeight(75)
-        console.log('hit', window.document.body.clientWidth)
-      } else if (window.document.body.clientWidth <= 450 && collapsedFormsMaxHeight !== 55) {
-        console.log('hit2', window.document.body.clientWidth)
-        setCollapsedFormsMaxHeight(55)
+      if (
+        window.document.body.clientWidth > 450 &&
+        collapsedFormsMaxHeight !== 75
+      ) {
+        setCollapsedFormsMaxHeight(75);
+        console.log("hit", window.document.body.clientWidth);
+      } else if (
+        window.document.body.clientWidth <= 450 &&
+        collapsedFormsMaxHeight !== 55
+      ) {
+        console.log("hit2", window.document.body.clientWidth);
+        setCollapsedFormsMaxHeight(55);
       }
     }, 500);
   });
 
-
-  
   useEffect(() => {
     // start observing for resize
-    if (window.document.getElementById('checkout-options-seperator-wrapper') !== null) {
-      resize_ob.observe(window.document.getElementById('checkout-options-seperator-wrapper'))
+    if (
+      window.document.getElementById("checkout-options-seperator-wrapper") !==
+      null
+    ) {
+      resize_ob.observe(
+        window.document.getElementById("checkout-options-seperator-wrapper")
+      );
     }
-  }, [collapsedFormsMaxHeight])
+  }, [collapsedFormsMaxHeight]);
 
   // Handle card actions like 3D Secure
   async function handleCardAction(payment, docId) {
@@ -118,16 +127,18 @@ export default () => {
       payment = paymentIntent;
     }
 
-    await firebase
-      .firestore()
-      .collection("stripe_customers")
-      .doc(userUID)
-      .collection("payments")
-      .doc(docId)
-      .set(payment, { merge: true });
+    const docRef = doc(db, "stripe_customers", userUID, "payments", docId);
+
+    await setDoc(
+      docRef,
+      {
+        payment,
+      },
+      { merge: true }
+    );
   }
 
-  const handleCheckoutPurchase = async ev => {
+  const handleCheckoutPurchase = async (ev) => {
     ev.preventDefault();
 
     const errors = [];
@@ -148,12 +159,11 @@ export default () => {
     }
 
     if (errors.length > 0) {
-      errors.map(err => {
+      errors.map((err) => {
         return err(true);
       });
     } else {
-
-      console.log(billingAddress)
+      console.log(billingAddress);
       // const shippingDetails = {
       //   name: billingAddress.name,
       //   address: {
@@ -167,7 +177,7 @@ export default () => {
       // };
 
       let test = [];
-      products.map(product => {
+      products.map((product) => {
         const productId = product[0].product.id;
         const productPrice = product[0].product.price;
         const title = product[0].product.title;
@@ -180,7 +190,7 @@ export default () => {
           productPrice,
           quantity,
           productColor,
-          productSize
+          productSize,
         });
       });
 
@@ -192,33 +202,40 @@ export default () => {
         products: test,
         contact_info: {
           email,
-          phone
+          phone,
         },
         discount: activeDiscount,
         expressCheckoutPurchase: false,
-        user: firebase.auth().currentUser.uid
+        user: auth.currentUser.uid,
       };
 
-      firebase
-        .firestore()
-        .collection("stripe_customers")
-        .doc(userUID)
-        .collection("payments")
-        .add(data)
-        .then(docRef => {
-          docRef.onSnapshot(snapshot => {
-            const data = snapshot.data();
+      const collectionRef = collection(
+        db,
+        "stripe_customers",
+        userUID,
+        "payments"
+      );
 
-            if (data.status === "succeeded") {
-              //IF SUCCESS PUSH TO PURCHASE DASHBOARD
-            } else if (data.status === "requires_action") {
-              handleCardAction(data, docRef.id);
-            } else if (data.error) {
-              alert(data.error);
-            }
-          });
+      addDoc(collectionRef, data)
+        .then(async (docSnapshot) => {
+          const addedDoc = await getDoc(
+            db,
+            "stripe_customers",
+            userUID,
+            "payments",
+            docSnapshot.id
+          );
+          const data = addedDoc.data();
+
+          if (data.status === "succeeded") {
+            //IF SUCCESS PUSH TO PURCHASE DASHBOARD
+          } else if (data.status === "requires_action") {
+            handleCardAction(data, docSnapshot.id);
+          } else if (data.error) {
+            alert(data.error);
+          }
         })
-        .catch(err => {
+        .catch((err) => {
           alert(err);
         });
     }
@@ -226,7 +243,7 @@ export default () => {
 
   const handleAddDiscountClick = () => {
     let deconstructedProducts = [];
-    products.map(product => {
+    products.map((product) => {
       const productId = product[0].product.id;
       const productPrice = product[0].product.price;
       const title = product[0].product.title;
@@ -239,63 +256,65 @@ export default () => {
         productPrice,
         quantity,
         productColor,
-        productSize
+        productSize,
       });
     });
 
     const data = {
       discount: discount.toUpperCase(),
-      user: firebase.auth().currentUser.uid,
-      products: deconstructedProducts
+      user: auth.currentUser.uid,
+      products: deconstructedProducts,
     };
 
     if (discount.length > 0) {
-      const checkAndApplyDiscount = firebase
-        .functions()
-        .httpsCallable("discountBeingApplied");
+      const checkAndApplyDiscount = httpsCallable("discountBeingApplied");
       checkAndApplyDiscount(data)
-        .then(async result => {
+        .then(async (result) => {
           const { usable, error } = result.data;
 
           if (usable) {
-            setTesterState(true)
+            setTesterState(true);
             setActiveDiscount(result.data);
           } else {
             console.log(error);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
   };
-  
-    const handleCollapsableOrderSummaryClick = () => {
-    setCollapsableOrderSummaryOpen(!collapsableOrderSummaryOpen)
-  }
+
+  const handleCollapsableOrderSummaryClick = () => {
+    setCollapsableOrderSummaryOpen(!collapsableOrderSummaryOpen);
+  };
 
   useEffect(() => {
-    const el4 = document.getElementById("order-summary-rotating-chevron")
-      if (!collapsableOrderSummaryOpen) {
-        if (el4 !== null && el4.classList.contains("chevron-rotated")) {
-          el4.classList.toggle("chevron-rotated")
-          setOrderSummaryHidden(!orderSummaryHidden)
-        }
-        setCollapsableOrderSummaryMaxHeight(101)
-      } else {
-        let mobileDiscountHeight = window.document.body.clientWidth <= 450 ? 65 : 0 
-        const newMaxHeight = (mobileDiscountHeight + 440.5) + (products.length * 181);
-        if (el4 !== null && !el4.classList.contains("chevron-rotated")) {
-          el4.classList.toggle("chevron-rotated")
-          setOrderSummaryHidden(!orderSummaryHidden)
-        }
-        setCollapsableOrderSummaryMaxHeight(newMaxHeight)
+    const el4 = document.getElementById("order-summary-rotating-chevron");
+    if (!collapsableOrderSummaryOpen) {
+      if (el4 !== null && el4.classList.contains("chevron-rotated")) {
+        el4.classList.toggle("chevron-rotated");
+        setOrderSummaryHidden(!orderSummaryHidden);
       }
-  }, [ collapsableOrderSummaryOpen ])
+      setCollapsableOrderSummaryMaxHeight(101);
+    } else {
+      let mobileDiscountHeight =
+        window.document.body.clientWidth <= 450 ? 65 : 0;
+      const newMaxHeight = mobileDiscountHeight + 440.5 + products.length * 181;
+      if (el4 !== null && !el4.classList.contains("chevron-rotated")) {
+        el4.classList.toggle("chevron-rotated");
+        setOrderSummaryHidden(!orderSummaryHidden);
+      }
+      setCollapsableOrderSummaryMaxHeight(newMaxHeight);
+    }
+  }, [collapsableOrderSummaryOpen]);
 
   return (
     <div className="checkout-container" id="checkout-container">
-      <div className="checkout-banner-image-wrapper" style={{ maxHeight: "200px" }}>
+      <div
+        className="checkout-banner-image-wrapper"
+        style={{ maxHeight: "200px" }}
+      >
         <img
           className="checkout-banner-image"
           src="https://via.placeholder.com/1900x646"
@@ -304,66 +323,80 @@ export default () => {
       </div>
 
       <div className="checkout-wrapper">
-        {
-          window.document.body.clientWidth <= 1024 ? (
+        {window.document.body.clientWidth <= 1024 ? (
+          <div
+            id="checkout-order-summary-collapsable-container"
+            className="checkout-order-summary-collapsable-container"
+            // id="checkout-shipping-methods-wrapper"
+            // className="checkout-shipping-methods-wrapper"
+            style={{
+              height: "100%",
+              maxHeight: `${collapsableOrderSummaryMaxHeight}px`,
+              // marginTop: "40px",
+              overflow: "hidden",
+              padding: "40px 0px",
+              // paddingTop: "20px",
+              // paddingBottom: "20px",
+              // borderTop: "1px solid #CCC",
+              borderBottom: "1px solid #CCC",
+              width: "100%",
+              transition: "max-height 0.7s",
+            }}
+          >
             <div
-              id="checkout-order-summary-collapsable-container"
-              className="checkout-order-summary-collapsable-container"
-              // id="checkout-shipping-methods-wrapper"
-              // className="checkout-shipping-methods-wrapper"
+              onClick={handleCollapsableOrderSummaryClick}
+              className="checkout-collapsable-order-summary-header-wrapper"
               style={{
-                height: "100%",
-                maxHeight: `${collapsableOrderSummaryMaxHeight}px`,
-                // marginTop: "40px",
-                overflow: "hidden",
-                padding: "40px 0px",
-                // paddingTop: "20px",
-                // paddingBottom: "20px",
-                // borderTop: "1px solid #CCC",
-                borderBottom: "1px solid #CCC",
-                width: "100%",
-                transition: "max-height 0.7s"
+                cursor: "pointer",
+                fontSize: "18px",
+                padding: "0px 20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
-              >
-              <div
-                onClick={handleCollapsableOrderSummaryClick}
-                className="checkout-collapsable-order-summary-header-wrapper"
-                style={{
-                  cursor: "pointer",
-                  fontSize: "18px",
-                  padding: "0px 20px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between"
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
+            >
+              <div style={{ display: "flex" }}>
+                <FontAwesomeIcon icon={["fas", "shopping-cart"]} />
 
-                  <div className="checkout-collapsable-order-summary-heading" style={{ paddingLeft: "20px", display: "flex", alignItems: "center" }}>
-                    {
-                      orderSummaryHidden ? (
-                        "Show order summary"
-                      ) : (
-                        "Hide order summary"
-                      )
-                    }
-                    
-                    <div style={{ marginLeft: "10px", display: "flex", transition: "transform 0.7s" }} id="order-summary-rotating-chevron" className="order-summary-rotating-chevron">
-                     <FontAwesomeIcon icon={["fas", "chevron-down"]} />
-                    </div>
+                <div
+                  className="checkout-collapsable-order-summary-heading"
+                  style={{
+                    paddingLeft: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {orderSummaryHidden
+                    ? "Show order summary"
+                    : "Hide order summary"}
+
+                  <div
+                    style={{
+                      marginLeft: "10px",
+                      display: "flex",
+                      transition: "transform 0.7s",
+                    }}
+                    id="order-summary-rotating-chevron"
+                    className="order-summary-rotating-chevron"
+                  >
+                    <FontAwesomeIcon icon={["fas", "chevron-down"]} />
                   </div>
-                </div>
-
-                <div style={{ fontWeight: "500" }}>
-                  ${subtotal}
                 </div>
               </div>
 
-              <OrderSummary products={products} setDiscount={setDiscount} handleAddDiscountClick={handleAddDiscountClick} subtotal={subtotal} activeDiscount={activeDiscount} includeShipping={false} />
+              <div style={{ fontWeight: "500" }}>${subtotal}</div>
             </div>
-          ) : null
-        }
+
+            <OrderSummary
+              products={products}
+              setDiscount={setDiscount}
+              handleAddDiscountClick={handleAddDiscountClick}
+              subtotal={subtotal}
+              activeDiscount={activeDiscount}
+              includeShipping={false}
+            />
+          </div>
+        ) : null}
 
         <div className="checkout-left-column">
           <ExpressCheckoutPaymentForms
@@ -390,7 +423,7 @@ export default () => {
           />
 
           <AddPaymentMethodForm
-            setPaymentMethod={(val) => setPaymentMethod(val)} 
+            setPaymentMethod={(val) => setPaymentMethod(val)}
             noPaymentMethods={noPaymentMethods}
             setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
             paymentMethods={paymentMethods}
@@ -398,40 +431,31 @@ export default () => {
             resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
           />
 
-          <div
-            className="checkout-form-component-padding"
-            style={{ paddingTop: "40px" }}
-          >
-            <ChooseShippingAddress
-              setNoBillingAddressSelected={(val) => setNoBillingAddressSelected(val)}
-              billingAddresses={billingAddresses}
-              setBillingAddresses={(val) => setBillingAddresses(val)}
-              setBillingAddress={(val) => setBillingAddress(val)}
-              noBillingAddressSelected={noBillingAddressSelected}
-              noBillingAddresses={noBillingAddresses}
-              setNoBillingAddresses={(val) => setNoBillingAddresses(val)}
-              billingAddress={billingAddress}
-              resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
-            />
-          </div>
+          <ChooseShippingAddress
+            setNoBillingAddressSelected={(val) =>
+              setNoBillingAddressSelected(val)
+            }
+            billingAddresses={billingAddresses}
+            setBillingAddresses={(val) => setBillingAddresses(val)}
+            setBillingAddress={(val) => setBillingAddress(val)}
+            noBillingAddressSelected={noBillingAddressSelected}
+            noBillingAddresses={noBillingAddresses}
+            setNoBillingAddresses={(val) => setNoBillingAddresses(val)}
+            billingAddress={billingAddress}
+            resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
+          />
 
-          <div
-            className="checkout-form-component-padding"
-            style={{ paddingTop: "40px" }}
-          >
-            <ChoosePaymentMethod
-              noPaymentMethods={noPaymentMethods}
-              setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
-              paymentMethods={paymentMethods}
-              setPaymentMethods={(val) => setPaymentMethods(val)}
-              setPaymentMethod={(val) => setPaymentMethod(val)}
-              paymentMethod={paymentMethod}
-              noPaymentMethods={noPaymentMethods}
-              noPaymentMethodSelected={noPaymentMethodSelected}
-              resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
-
-            />
-          </div>
+          <ChoosePaymentMethod
+            noPaymentMethods={noPaymentMethods}
+            setNoPaymentMethods={(val) => setNoPaymentMethods(val)}
+            paymentMethods={paymentMethods}
+            setPaymentMethods={(val) => setPaymentMethods(val)}
+            setPaymentMethod={(val) => setPaymentMethod(val)}
+            paymentMethod={paymentMethod}
+            // noPaymentMethods={noPaymentMethods}
+            noPaymentMethodSelected={noPaymentMethodSelected}
+            resizeObsMaxHeightReAlignment={collapsedFormsMaxHeight}
+          />
 
           <ContactInfoForm
             noEmail={noEmail}
@@ -449,19 +473,21 @@ export default () => {
               to="/"
               onClick={() => {
                 const rootElement = document.getElementById("app-container");
-                const navbarElement = document.getElementById(
-                  "navbar-wrapper-id"
-                );
+                const navbarElement =
+                  document.getElementById("navbar-wrapper-id");
 
                 rootElement.classList.toggle("no-scroll-margin");
                 navbarElement.classList.toggle("hidden-nav");
               }}
             >
-              <span className="checkout-left-column-link-icon" style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}>
+              <span
+                className="checkout-left-column-link-icon"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <FontAwesomeIcon icon="arrow-left" />
               </span>{" "}
               Return to home
@@ -477,7 +503,7 @@ export default () => {
                   height: "45px",
                   padding: "0 2rem",
                   border: "none",
-                  cursor: "pointer"
+                  cursor: "pointer",
                 }}
                 onClick={handleCheckoutPurchase}
                 // disabled={stripe}
@@ -488,11 +514,16 @@ export default () => {
           </div>
         </div>
 
-        {
-          window.document.body.clientWidth > 1024 ? (
-            <OrderSummary products={products} setDiscount={setDiscount} handleAddDiscountClick={handleAddDiscountClick} subtotal={subtotal} activeDiscount={activeDiscount} includeShipping={true} />
-          ) : null
-        }
+        {window.document.body.clientWidth > 1024 ? (
+          <OrderSummary
+            products={products}
+            setDiscount={setDiscount}
+            handleAddDiscountClick={handleAddDiscountClick}
+            subtotal={subtotal}
+            activeDiscount={activeDiscount}
+            includeShipping={true}
+          />
+        ) : null}
       </div>
     </div>
   );

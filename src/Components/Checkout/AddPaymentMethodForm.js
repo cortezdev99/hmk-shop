@@ -1,30 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import firebase from 'firebase'
-import 'firebase/firestore'
-import 'firebase/functions'
-import {
-  CardElement,
-  useStripe,
-  useElements
-} from "@stripe/react-stripe-js";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import MoreInfoIcon from '../Utilities/MoreInfoIcon';
-import InputLabel from '../Utilities/InputLabel';
+import React, { useState, useEffect } from "react";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MoreInfoIcon from "../Utilities/MoreInfoIcon";
+import InputLabel from "../Utilities/InputLabel";
+import { auth, db } from "../../Config/firebase";
+import { collection, doc, getDoc, query } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 
 export default (props) => {
   const [cardHolderName, setCardHolderName] = useState("");
   const [cardHolderNameError, setCardHolderNameError] = useState(false);
   const [cardError, setCardError] = useState(false);
-  const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
+  const [collapsableContentShowing, setCollapsableContentShowing] =
+    useState(false);
   const [cardInputHasErrors, setCardInputHasErrors] = useState(false);
-  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
-    window.document.body.clientWidth > 450 ? 75 : 55
-  );
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] =
+    useState(window.document.body.clientWidth > 450 ? 75 : 55);
   const [stripeElementFocused, setStripeElementFocused] = useState(false);
   const [errors, setErrors] = useState([]);
   const [customerData, setCustomerData] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const el2 = window.document.getElementById('add-payment-payment-chevron')
+  const el2 = window.document.getElementById("add-payment-payment-chevron");
   const [saveInfo, setSaveInfo] = useState(false);
   const [successfulSubmission, setSuccessfulSubmission] = useState(false);
   const [isCardEmpty, setIsCardEmpty] = useState(true);
@@ -32,45 +28,57 @@ export default (props) => {
   const elements = useElements();
 
   useEffect(() => {
-    if (firebase.auth().currentUser.uid) {
+    if (auth.currentUser.uid) {
       // TODO
-      // CATCH ANY ERRORS
-      firebase.firestore().collection("stripe_customers").doc(firebase.auth().currentUser.uid)
-        .onSnapshot(function(doc) {
-            setCustomerData(doc.data());
+      // query(
+      //   collection(db, stripe_customers),
+      //   doc
+      // )
+
+      const docRef = doc(db, "stripe_customers", auth.currentUser.uid);
+      getDoc(docRef)
+        .then((docSnapshot) => {
+          setCustomerData(docSnapshot.data());
         })
+        .catch((err) => {
+          console.log(err);
+        });
+      // CATCH ANY ERRORS
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!collapsableContentShowing && props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight) {
+    if (
+      !collapsableContentShowing &&
+      props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight
+    ) {
       // console.log(props.resizeObsMaxHeightReAlignment)
-      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment)
+      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment);
     }
-  }, [props.resizeObsMaxHeightReAlignment])
+  }, [props.resizeObsMaxHeightReAlignment]);
 
   useEffect(() => {
     if (!collapsableContentShowing) {
-      if (el2 !== null && el2.classList.contains('chevron-rotated')) {
-        el2.classList.toggle('chevron-rotated')
+      if (el2 !== null && el2.classList.contains("chevron-rotated")) {
+        el2.classList.toggle("chevron-rotated");
       }
 
       setCollapsableContentMaxHeight(
         window.document.body.clientWidth > 450 ? 75 : 55
       );
     } else {
-      if (el2 !== null && !el2.classList.contains('chevron-rotated')) {
-        el2.classList.toggle('chevron-rotated')
+      if (el2 !== null && !el2.classList.contains("chevron-rotated")) {
+        el2.classList.toggle("chevron-rotated");
       }
 
       const baseHeight = window.document.body.clientWidth > 450 ? 336 : 316;
       const errorsHeight = errors.length * 26;
 
-      if (collapsableContentMaxHeight !== (baseHeight + errorsHeight)) {
-        setCollapsableContentMaxHeight(baseHeight + errorsHeight)
+      if (collapsableContentMaxHeight !== baseHeight + errorsHeight) {
+        setCollapsableContentMaxHeight(baseHeight + errorsHeight);
       }
     }
-  }, [errors, collapsableContentShowing])
+  }, [errors, collapsableContentShowing]);
 
   const handleSuccessfulFormSubmission = () => {
     setSuccessfulSubmission(true);
@@ -78,12 +86,12 @@ export default (props) => {
     setCardHolderNameError(false);
     setCardInputHasErrors(false);
     setErrors([]);
-    const cardElement = elements.getElement(CardElement)
+    const cardElement = elements.getElement(CardElement);
     cardElement.clear();
     return setCollapsableContentShowing(false);
-  }
+  };
 
-  const handleAddPaymentMethod = async ev => { 
+  const handleAddPaymentMethod = async (ev) => {
     ev.preventDefault();
 
     setSubmitting(true);
@@ -93,10 +101,10 @@ export default (props) => {
     setErrors([]);
 
     if (cardHolderName.length === 0) {
-      setErrors(['card_holder_name_error'])
-      setCardHolderNameError(true)
-      return setSubmitting(false)
-    } 
+      setErrors(["card_holder_name_error"]);
+      setCardHolderNameError(true);
+      return setSubmitting(false);
+    }
 
     const { setupIntent, error } = await stripe.confirmCardSetup(
       customerData.setup_secret,
@@ -104,56 +112,48 @@ export default (props) => {
         payment_method: {
           card: elements.getElement(CardElement),
           billing_details: {
-            name: cardHolderName
-          }
-        }
+            name: cardHolderName,
+          },
+        },
       }
     );
 
     if (error) {
       if (error.type !== "card_error" || error.type !== "validation_error") {
         // TODO SPECIFY WHERE THIS ERROR IS COMING FROM EX: AddPaymentMethodForm -- HandleAddPaymentMethod function
-        const sendErrorToBackend = firebase
-          .functions()
-          .httpsCallable("untypicalClientErrors");
-        sendErrorToBackend(error)
-          .then(async result => {
-            // TODO //
-            // NOTIFY USER DEV'S HAVE BEEN ALERTED OF THE ISSUE AND PROMPT TO TRY AGAIN 
-          })
+        const sendErrorToBackend = httpsCallable("untypicalClientErrors");
+        sendErrorToBackend(error).then(async (result) => {
+          // TODO //
+          // NOTIFY USER DEV'S HAVE BEEN ALERTED OF THE ISSUE AND PROMPT TO TRY AGAIN
+        });
       }
 
-      setErrors(['card_error'])
-      setCardInputHasErrors(error)
-      setCardError(true)
+      setErrors(["card_error"]);
+      setCardInputHasErrors(error);
+      setCardError(true);
     } else {
       const dataToSend = {
-        userUID: firebase.auth().currentUser.uid,
+        userUID: auth.currentUser.uid,
         saveInfo,
-        paymentMethodId: setupIntent.payment_method
+        paymentMethodId: setupIntent.payment_method,
+      };
+
+      const handlePaymentMethodDetails = httpsCallable("addPaymentMethod");
+
+      const { data, error } = await handlePaymentMethodDetails(dataToSend);
+
+      if (error) {
+        // TODO
+        // UPDATE THE USER THAT THERE WAS AN ERROR WITH THEIR PURCHASE
+        setSubmitting(false);
+        return;
       }
 
-      const handlePaymentMethodDetails = firebase
-        .functions()
-        .httpsCallable("addPaymentMethod");
-
-      const { 
-        data,
-        error
-       } = await handlePaymentMethodDetails(dataToSend)
-
-       if (error) {
-         // TODO 
-         // UPDATE THE USER THAT THERE WAS AN ERROR WITH THEIR PURCHASE
-         setSubmitting(false)
-         return
-       }
-
-       props.setPaymentMethod(data.id)
-       handleSuccessfulFormSubmission();
+      props.setPaymentMethod(data.id);
+      handleSuccessfulFormSubmission();
     }
 
-    return setSubmitting(false)
+    return setSubmitting(false);
   };
 
   const handleChange = (ev) => {
@@ -161,268 +161,287 @@ export default (props) => {
 
     if (!successfulSubmission) {
       if (cardHolderName.length === 0) {
-        errors.push(setCardHolderNameError)
+        errors.push(setCardHolderNameError);
       } else {
-        setCardHolderNameError(false)
+        setCardHolderNameError(false);
       }
-  
+
       if (ev.empty && !cardInputHasErrors) {
         setCardInputHasErrors({
-          message: 'The field above is required'
-        })
-        errors.push(setCardError)
+          message: "The field above is required",
+        });
+        errors.push(setCardError);
       } else if (!ev.empty && ev.error === undefined && cardInputHasErrors) {
-        setCardInputHasErrors(false)
+        setCardInputHasErrors(false);
         setCardError(false);
       } else if (ev.error && !cardInputHasErrors) {
         setCardInputHasErrors(ev.error);
-        errors.push(setCardError)
+        errors.push(setCardError);
       }
 
       if (!ev.empty) {
-        setIsCardEmpty(false)
+        setIsCardEmpty(false);
       } else {
-        setIsCardEmpty(true)
+        setIsCardEmpty(true);
       }
-  
+
       setErrors(errors);
-  
+
       errors.map((err, idx) => {
         setTimeout(() => {
           return err(true);
-        }, 40 * idx)
+        }, 40 * idx);
       });
     }
-  }
+  };
 
   const cardElementOptions = {
     hidePostalCode: true,
     style: {
-      base: {   
-        '::placeholder': {
+      base: {
+        "::placeholder": {
           color: "#7c7979",
-          fontSize: `${window.document.body.clientWidth > 450 ? "14px" : "13px"}`,
+          fontSize: `${
+            window.document.body.clientWidth > 450 ? "14px" : "13px"
+          }`,
           letterSpacing: "0.75px",
           textTransform: "uppercase",
-          fontSize: "12px"
-        }
-      }
-    }
+          fontSize: "12px",
+        },
+      },
+    },
   };
 
   return (
-    <div style={{
-      position: "relative"
-    }}>
-
     <div
-      id="checkout-add-payment-wrapper"
       style={{
-        marginTop: "40px",
-        paddingBottom: "40px",
-        height: "100%",
-        maxHeight: `${collapsableContentMaxHeight}px`,
-        overflow: "hidden",
-        borderBottom: "1px solid #CCC",
-        width: "100%",
-        transition: "max-height 0.7s"
+        position: "relative",
       }}
     >
       <div
-        className="add-payment-method-wrapper"
-        onClick={() => {
+        id="checkout-add-payment-wrapper"
+        style={{
+          marginTop: "40px",
+          paddingBottom: "40px",
+          height: "100%",
+          maxHeight: `${collapsableContentMaxHeight}px`,
+          overflow: "hidden",
+          borderBottom: "1px solid #CCC",
+          width: "100%",
+          transition: "max-height 0.7s",
+        }}
+      >
+        <div
+          className="add-payment-method-wrapper"
+          onClick={() => {
             if (stripeElementFocused) {
               return setTimeout(() => {
-                setCollapsableContentShowing(!collapsableContentShowing)
-              }, 200)
-            } 
-            setCollapsableContentShowing(!collapsableContentShowing)
-        }} 
-       
-        style={{
-          cursor: "pointer",
-          fontSize: "18px",
-          padding: "0px 20px",
-          paddingBottom: "40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between"
-        }}
-      >
-        <div className="add-payment-header" style={{ letterSpacing: "0.75px", height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
-          Add a payment method
-
-          {
-            successfulSubmission ? (
-              <span style={{
-                color: "#54b654",
-                marginLeft: "20px"
-              }}>
-                <FontAwesomeIcon icon={["fas", "check"]} />
-              </span>
-            ) : null
-          }
-        </div>
-        
-        <div
-          id="add-payment-payment-chevron"
-          className="add-payment-payment-chevron"
+                setCollapsableContentShowing(!collapsableContentShowing);
+              }, 200);
+            }
+            setCollapsableContentShowing(!collapsableContentShowing);
+          }}
           style={{
-            transition: "transform 0.7s"
+            cursor: "pointer",
+            fontSize: "18px",
+            padding: "0px 20px",
+            paddingBottom: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          <FontAwesomeIcon icon={["fas", "chevron-down"]} />
+          <div
+            className="add-payment-header"
+            style={{
+              letterSpacing: "0.75px",
+              height: "35px",
+              width: "calc(100% - 40px)",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Add a payment method
+            {successfulSubmission ? (
+              <span
+                style={{
+                  color: "#54b654",
+                  marginLeft: "20px",
+                }}
+              >
+                <FontAwesomeIcon icon={["fas", "check"]} />
+              </span>
+            ) : null}
+          </div>
+
+          <div
+            id="add-payment-payment-chevron"
+            className="add-payment-payment-chevron"
+            style={{
+              transition: "transform 0.7s",
+            }}
+          >
+            <FontAwesomeIcon icon={["fas", "chevron-down"]} />
+          </div>
         </div>
-      </div>
 
-      <div>
-        {
-          cardHolderName.length > 0 && collapsableContentShowing ? (
-            <InputLabel
-              labelText="Card Holder Name"
-            />
-          ) : null
-        }
+        <div>
+          {cardHolderName.length > 0 && collapsableContentShowing ? (
+            <InputLabel labelText="Card Holder Name" />
+          ) : null}
 
-        <input
-          style={{
-            height: "45px",
-            width: "100%",
-            border: `${cardHolderNameError && cardHolderName.length === 0 ? "1px solid #FF0000" : "1px solid #CCC"}`,
-            borderRadius: "5px"
-          }}
-          type="text"
-          className="checkout-input"
-          value={cardHolderName}
-          placeholder="Card holder name"
-          onChange={e => setCardHolderName(e.target.value)}
-        />
+          <input
+            style={{
+              height: "45px",
+              width: "100%",
+              border: `${
+                cardHolderNameError && cardHolderName.length === 0
+                  ? "1px solid #FF0000"
+                  : "1px solid #CCC"
+              }`,
+              borderRadius: "5px",
+            }}
+            type="text"
+            className="checkout-input"
+            value={cardHolderName}
+            placeholder="Card holder name"
+            onChange={(e) => setCardHolderName(e.target.value)}
+          />
 
-        {
-          cardHolderNameError && cardHolderName.length === 0 ? (
-            <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
+          {cardHolderNameError && cardHolderName.length === 0 ? (
+            <div
+              style={{
+                paddingTop: "10px",
+                color: "#FF0000",
+                textAlign: "center",
+                fontSize: "13px",
+              }}
+            >
               The field above is required
             </div>
-          ) : null
-        }
-      </div>
+          ) : null}
+        </div>
 
-      <div
-        // id="tester"
-        // className="testeringtest"
-        style={{
-          marginTop: "20px",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-
-        {
-          !isCardEmpty && collapsableContentShowing ? (
+        <div
+          // id="tester"
+          // className="testeringtest"
+          style={{
+            marginTop: "20px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {!isCardEmpty && collapsableContentShowing ? (
             <InputLabel
               labelStyle={{
-                color: `${cardError && cardInputHasErrors ? "#FF0000" : "#7c7979"}`
+                color: `${
+                  cardError && cardInputHasErrors ? "#FF0000" : "#7c7979"
+                }`,
               }}
               labelText="Card"
             />
-          ) : null
-        }
+          ) : null}
+
+          <div
+            style={{
+              border: `${
+                cardError && cardInputHasErrors
+                  ? "1px solid #FF0000"
+                  : "1px solid #CCC"
+              }`,
+              width: "100%",
+              borderRadius: "5px",
+              backgroundColor: "#fbfbfb",
+            }}
+          >
+            <CardElement
+              options={cardElementOptions}
+              onChange={(ev) => handleChange(ev)}
+              onBlur={() => setStripeElementFocused(false)}
+              onFocus={() => setStripeElementFocused(true)}
+            />
+          </div>
+
+          {cardError && cardInputHasErrors ? (
+            <div
+              style={{
+                paddingTop: "10px",
+                color: "#FF0000",
+                textAlign: "center",
+                fontSize: "13px",
+              }}
+            >
+              {cardInputHasErrors.message}
+            </div>
+          ) : null}
+        </div>
 
         <div
           style={{
-            border: `${cardError && cardInputHasErrors ? "1px solid #FF0000" : "1px solid #CCC"}`,
-            width: "100%",
-            borderRadius: "5px",
-            backgroundColor: "#fbfbfb",
+            fontSize: "15px",
+            paddingTop: "20px",
+            paddingBottom: "3px",
+            letterSpacing: "0.75px",
+            textAlign: "center",
+            height: "41px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
           }}
+          onClick={() => setSaveInfo(!saveInfo)}
         >
-          <CardElement
-            options={cardElementOptions}
-            onChange={(ev) => handleChange(ev)}
-            onBlur={() => setStripeElementFocused(false)}
-            onFocus={() => setStripeElementFocused(true)}
-          />
-        </div>
-
-        {
-          cardError && cardInputHasErrors ? (
-            <div style={{ paddingTop: "10px", color: "#FF0000", textAlign: "center", fontSize: "13px" }}>
-              {cardInputHasErrors.message}
-            </div>
-          ) : null
-        }
-      </div>
-
-      <div style={{
-        fontSize: "15px",
-        paddingTop: "20px",
-        paddingBottom: "3px",
-        letterSpacing: "0.75px",
-        textAlign: "center",
-        height: "41px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer"
-      }}
-        onClick={() => setSaveInfo(!saveInfo)}
-      >
-        <div style={{ marginRight: "10px", height: "15px" }}>
-          {
-            saveInfo ? (
-              <FontAwesomeIcon icon={['far', 'check-square']} />
+          <div style={{ marginRight: "10px", height: "15px" }}>
+            {saveInfo ? (
+              <FontAwesomeIcon icon={["far", "check-square"]} />
             ) : (
-              <FontAwesomeIcon icon={['far', 'square']} />
-            )
-          }
+              <FontAwesomeIcon icon={["far", "square"]} />
+            )}
+          </div>
+          save this for later?
         </div>
 
-        save this for later?
-      </div>
-
-      <div style={{ marginTop: "20px" }}>
-       {
-         submitting ? (
-          <button
-            style={{
-              padding: "0 2rem",
-              height: "45px",
-              border: "none",
-              backgroundColor: "#1c1b1b",
-              color: "#fff",
-              borderRadius: "5px",
-              cursor: "pointer",
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
-          <div className="circle"></div>
-        </button>
-         ) : (
-          <button
-            onClick={handleAddPaymentMethod}
-            style={{
-              padding: "0 2rem",
-              height: "45px",
-              border: "none",
-              backgroundColor: "#1c1b1b",
-              color: "#fff",
-              borderRadius: "5px",
-              cursor: "pointer",
-              width: "100%"
-            }}
-          >
-            Use this payment method
-          </button>
-         )
-       }
+        <div style={{ marginTop: "20px" }}>
+          {submitting ? (
+            <button
+              style={{
+                padding: "0 2rem",
+                height: "45px",
+                border: "none",
+                backgroundColor: "#1c1b1b",
+                color: "#fff",
+                borderRadius: "5px",
+                cursor: "pointer",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div className="circle"></div>
+            </button>
+          ) : (
+            <button
+              onClick={handleAddPaymentMethod}
+              style={{
+                padding: "0 2rem",
+                height: "45px",
+                border: "none",
+                backgroundColor: "#1c1b1b",
+                color: "#fff",
+                borderRadius: "5px",
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              Use this payment method
+            </button>
+          )}
+        </div>
       </div>
     </div>
-    </div>
-  )
-}
+  );
+};
