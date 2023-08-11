@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getDocs} from 'firebase/firestore';
-import { auth, db } from '../../Config/firebase';
+import { collection, getDocs } from "firebase/firestore";
+import { auth, db } from "../../Config/firebase";
 
 export default (props) => {
   const [loadingPaymentMethods, setLoadingPaymentMethods] = useState(true);
   const [activePaymentMethod, setActivePaymentMethod] = useState(false);
   const [getPaymentMethodsError, setGetPaymentMethodsError] = useState(false);
-  const [collapsableContentShowing, setCollapsableContentShowing] = useState(false);
-  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] = useState(
-    window.document.body.clientWidth > 450 ? 75 : 55
-  )
+  const [collapsableContentShowing, setCollapsableContentShowing] =
+    useState(false);
+  const [collapsableContentMaxHeight, setCollapsableContentMaxHeight] =
+    useState(window.document.body.clientWidth > 450 ? 75 : 55);
   const el2 = document.getElementById("choose-payment-chevron");
 
   useEffect(() => {
-    getDocs(db, "stripe_customers", auth.currentUser.uid, "payment_methods").then((snapshot) => {
+    getDocs(
+      collection(
+        db,
+        "stripe_customers",
+        auth.currentUser.uid,
+        "payment_methods"
+      )
+    ).then((snapshot) => {
       if (snapshot.metadata.fromCache) {
         setGetPaymentMethodsError(true);
       } else {
@@ -22,7 +29,7 @@ export default (props) => {
           props.setNoPaymentMethods(true);
         } else if (props.paymentMethods.length !== snapshot.size) {
           const currentState = props.paymentMethods;
-          snapshot.forEach(doc => {
+          snapshot.forEach((doc) => {
             currentState.push(doc.data());
           });
 
@@ -31,35 +38,38 @@ export default (props) => {
       }
 
       setLoadingPaymentMethods(false);
-    })
-  }, [])
+    });
+  }, []);
 
   useEffect(() => {
-    if (!collapsableContentShowing && props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight) {
+    if (
+      !collapsableContentShowing &&
+      props.resizeObsMaxHeightReAlignment !== collapsableContentMaxHeight
+    ) {
       // console.log(props.resizeObsMaxHeightReAlignment)
-      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment)
+      setCollapsableContentMaxHeight(props.resizeObsMaxHeightReAlignment);
     }
-  }, [props.resizeObsMaxHeightReAlignment])
+  }, [props.resizeObsMaxHeightReAlignment]);
 
   useEffect(() => {
     if (!collapsableContentShowing) {
-      if (el2 !== null && el2.classList.contains('chevron-rotated')) {
+      if (el2 !== null && el2.classList.contains("chevron-rotated")) {
         el2.classList.toggle("chevron-rotated");
       }
 
       setCollapsableContentMaxHeight(
         window.document.body.clientWidth > 450 ? 75 : 55
-      )
+      );
     } else {
-      const paymentMethodsAdditionalHeight = props.paymentMethods.length * 65
+      const paymentMethodsAdditionalHeight = props.paymentMethods.length * 65;
 
-      if (el2 !== null && !el2.classList.contains('chevron-rotated')) {
+      if (el2 !== null && !el2.classList.contains("chevron-rotated")) {
         el2.classList.toggle("chevron-rotated");
       }
 
-      setCollapsableContentMaxHeight(95 + paymentMethodsAdditionalHeight)
+      setCollapsableContentMaxHeight(95 + paymentMethodsAdditionalHeight);
     }
-  }, [ collapsableContentShowing ])
+  }, [collapsableContentShowing]);
 
   const handleUsePaymentClick = (paymentMethod, paymentMethodIdx) => {
     return (
@@ -80,7 +90,7 @@ export default (props) => {
     );
     addPaymentMethodElem.scrollIntoView({
       block: "center",
-      behavior: "smooth"
+      behavior: "smooth",
     });
 
     setTimeout(() => {
@@ -105,32 +115,43 @@ export default (props) => {
   const handleGetPaymentMethodsRetry = () => {
     setLoadingPaymentMethods(true);
 
-    getDocs(db, "stripe_customers", auth.currentUser.uid, "payment_methods").then((snapshot) => {
-      if (snapshot.metadata.fromCache) {
-        setGetPaymentMethodsError(true);
-      } else {
-        if (snapshot.empty) {
-          props.setNoPaymentMethods(true);
-        } else if (props.paymentMethods.length !== snapshot.size) {
-          const currentState = props.paymentMethods;
-          snapshot.forEach(doc => {
-            currentState.push(doc.data());
-          });
+    getDocs(
+      collection(
+        db,
+        "stripe_customers",
+        auth.currentUser.uid,
+        "payment_methods"
+      )
+    )
+      .then((snapshot) => {
+        if (snapshot.metadata.fromCache) {
+          setGetPaymentMethodsError(true);
+        } else {
+          if (snapshot.empty) {
+            props.setNoPaymentMethods(true);
+          } else if (props.paymentMethods.length !== snapshot.size) {
+            const currentState = props.paymentMethods;
+            snapshot.forEach((doc) => {
+              currentState.push(doc.data());
+            });
 
-          props.setPaymentMethods([...currentState]);
+            props.setPaymentMethods([...currentState]);
+          }
         }
-      }
 
-    setLoadingPaymentMethods(false);
-    }).catch((err) => {
-      console.log(err)
-    })
+        setLoadingPaymentMethods(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  if (loadingPaymentMethods || props.noPaymentMethods || props.paymentMethods.length === 0) {
-    return (
-      <></>
-    )
+  if (
+    loadingPaymentMethods ||
+    props.noPaymentMethods ||
+    props.paymentMethods.length === 0
+  ) {
+    return <></>;
   }
 
   return (
@@ -138,7 +159,6 @@ export default (props) => {
       className="checkout-form-component-padding"
       style={{ paddingTop: "40px" }}
     >
-
       <div
         id="checkout-payment-methods-wrapper"
         style={{
@@ -148,12 +168,14 @@ export default (props) => {
           paddingBottom: "40px",
           borderBottom: "1px solid #CCC",
           width: "100%",
-          transition: "max-height 0.7s"
+          transition: "max-height 0.7s",
         }}
       >
         <div
           className="choose-payment-method-wrapper"
-          onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
+          onClick={() =>
+            setCollapsableContentShowing(!collapsableContentShowing)
+          }
           style={{
             cursor: "pointer",
             fontSize: "18px",
@@ -161,25 +183,32 @@ export default (props) => {
             paddingBottom: "20px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
           }}
         >
-          <div className="choose-payment-method-header" style={{ letterSpacing: "0.75px", height: "35px", width: "calc(100% - 40px)", display: "flex", alignItems: "center" }}>
+          <div
+            className="choose-payment-method-header"
+            style={{
+              letterSpacing: "0.75px",
+              height: "35px",
+              width: "calc(100% - 40px)",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             Choose from your payment methods
-              {
-                props.noPaymentMethodSelected && !props.paymentMethod ? (
-                  <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
-                    * Required
-                  </div>
-                ) : null
-              }
+            {props.noPaymentMethodSelected && !props.paymentMethod ? (
+              <div style={{ paddingLeft: "15px", color: "#FF0000" }}>
+                * Required
+              </div>
+            ) : null}
           </div>
 
           <div
             id="choose-payment-chevron"
             className="choose-payment-chevron"
             style={{
-              transition: "transform 0.7s"
+              transition: "transform 0.7s",
             }}
           >
             <FontAwesomeIcon icon={["fas", "chevron-down"]} />
@@ -207,7 +236,7 @@ export default (props) => {
                       borderRadius: "5px",
                       background: "transparent",
                       padding: "0px",
-                      cursor: "pointer"
+                      cursor: "pointer",
                     }}
                   >
                     <div
@@ -217,7 +246,7 @@ export default (props) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRight: "1px solid #CCC"
+                        borderRight: "1px solid #CCC",
                       }}
                     >
                       <div style={{ fontSize: "12px" }}>
@@ -240,14 +269,14 @@ export default (props) => {
                         justifyContent: "space-between",
                         alignItems: "center",
                         padding: "0 20px",
-                        fontSize: "14px"
+                        fontSize: "14px",
                       }}
                     >
                       <div style={{ display: "flex" }}>
                         <div
                           style={{
                             paddingRight: "10px",
-                            textTransform: "capitalize"
+                            textTransform: "capitalize",
                           }}
                         >
                           {paymentMethod.card.brand}
@@ -277,7 +306,7 @@ export default (props) => {
               style={{
                 marginTop: "20px",
                 display: "flex",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <ul style={{ fontSize: "22px", color: "#FF0000" }}>
@@ -330,4 +359,4 @@ export default (props) => {
       </div>
     </div>
   );
-}
+};

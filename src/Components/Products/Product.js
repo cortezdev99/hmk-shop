@@ -1,25 +1,26 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import GallerySlider from '../Utilities/GallerySlider'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import GallerySlider from "../Utilities/GallerySlider";
 
 export default (props) => {
-  const [image, setImage] = useState(Object.values(Object.values(props.product.images[0])[0][0])[0])
-
+  const [image, setImage] = useState(
+    Object.values(Object.values(props.product.images[0])[0][0])[0]
+  );
+  console.log(props);
   return (
     <div className="product-container">
       <Link
         className="product-image-wrapper"
         to={{
           pathname: `/products/${props.product.id}`,
+        }}
+        state={{
           productDetailsProps: {
-            product: props.product
-          } 
+            product: props.product,
+          },
         }}
       >
-        <img
-          src={image}
-          alt="placeholder"
-        />
+        <img src={image} alt="placeholder" />
       </Link>
 
       <GallerySlider
@@ -31,11 +32,11 @@ export default (props) => {
         to={{
           pathname: `/products/${props.product.id}`,
           productDetailsProps: {
-            product: props.product
-          } 
+            product: props.product,
+          },
         }}
         className="product-title-wrapper"
-        style={{ paddingTop: "5px", paddingBottom: "5px", textAlign:  "center" }}
+        style={{ paddingTop: "5px", paddingBottom: "5px", textAlign: "center" }}
       >
         {props.product.title}
       </Link>
@@ -44,5 +45,5 @@ export default (props) => {
         ${props.product.price}
       </div>
     </div>
-  )
-}
+  );
+};

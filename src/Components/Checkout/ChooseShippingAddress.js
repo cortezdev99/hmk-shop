@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { auth, db } from "../../Config/firebase";
 
 export default (props) => {
@@ -15,7 +15,14 @@ export default (props) => {
   const el2 = document.getElementById("choose-shipping-chevron");
 
   useEffect(() => {
-    getDocs(db, "stripe_customers", auth.currentUser.uid, "billing_addresses")
+    getDocs(
+      collection(
+        db,
+        "stripe_customers",
+        auth.currentUser.uid,
+        "billing_addresses"
+      )
+    )
       .then((snapshot) => {
         if (snapshot.metadata.fromCache) {
           setGetBillingAddressesError(true);
@@ -117,10 +124,12 @@ export default (props) => {
     setLoadingBillingAddresses(true);
 
     await getDocs(
-      db,
-      "stripe_customers",
-      auth.currentUser.uid,
-      "billing_addresses"
+      collection(
+        db,
+        "stripe_customers",
+        auth.currentUser.uid,
+        "billing_addresses"
+      )
     )
       .then((snapshot) => {
         if (snapshot.metadata.fromCache) {

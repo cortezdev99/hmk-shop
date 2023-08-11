@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MoreInfoIcon from "../Utilities/MoreInfoIcon";
 import InputLabel from "../Utilities/InputLabel";
 import { auth, db } from "../../Config/firebase";
-import { collection, doc, getDoc, query } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
+import { doc, getDoc } from "firebase/firestore";
 
 export default (props) => {
   const [cardHolderName, setCardHolderName] = useState("");
@@ -31,13 +31,14 @@ export default (props) => {
     if (auth.currentUser.uid) {
       // TODO
       // query(
-      //   collection(db, stripe_customers),
+      //   collection(db, "stripe_customers", auth.currentUser.uid,
       //   doc
       // )
 
       const docRef = doc(db, "stripe_customers", auth.currentUser.uid);
       getDoc(docRef)
         .then((docSnapshot) => {
+          console.log("hit");
           setCustomerData(docSnapshot.data());
         })
         .catch((err) => {

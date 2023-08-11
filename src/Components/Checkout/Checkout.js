@@ -218,13 +218,14 @@ export default () => {
 
       addDoc(collectionRef, data)
         .then(async (docSnapshot) => {
-          const addedDoc = await getDoc(
+          const docRef = doc(
             db,
             "stripe_customers",
             userUID,
             "payments",
             docSnapshot.id
           );
+          const addedDoc = await getDoc(docRef);
           const data = addedDoc.data();
 
           if (data.status === "succeeded") {

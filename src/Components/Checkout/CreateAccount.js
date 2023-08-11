@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Redirect, redirect } from "react-router-dom";
+import { Navigate, Redirect, redirect } from "react-router-dom";
 import CartContext from "../../Contexts/CartContext";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../Config/firebase";
@@ -34,7 +34,7 @@ export default () => {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        redirect("/checkout");
+        console.log("hit");
       })
       .catch((err) => {
         console.log(err.code, err.message);
@@ -45,6 +45,8 @@ export default () => {
     e.preventDefault();
     return signOut(auth);
   };
+
+  console.log("hit");
 
   return (
     <div>
