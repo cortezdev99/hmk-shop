@@ -8,7 +8,8 @@ export default () => {
   const [triggerReRender, setTriggerReRender] = useState(false);
   const [subtotal, setSubtotal] = useState(null);
 
-  const { isCartOpen, setIsCartOpen, products } = useContext(CartContext);
+  const { isCartOpen, setIsCartOpen, products, setProducts } =
+    useContext(CartContext);
 
   const handleCloseModal = () => {
     const htmlElement = document.getElementById("html");
@@ -49,6 +50,7 @@ export default () => {
     setTimeout(() => {
       cartProductWrapper.classList.toggle("cart-product-remove-product-anim");
       products.splice(id, 1);
+      localStorage.setItem("productsInCart", JSON.stringify(products));
       setTriggerReRender(!triggerReRender);
     }, 700);
   };

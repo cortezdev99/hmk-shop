@@ -52,11 +52,7 @@ export default () => {
   );
   let timeout = false;
 
-  const { products } = useContext(CartContext);
-
-  if (products.length < 1) {
-    return redirect("/");
-  }
+  const products = JSON.parse(localStorage.getItem("productsInCart"));
 
   useEffect(() => {
     const rootElement = document.getElementById("app-container");
