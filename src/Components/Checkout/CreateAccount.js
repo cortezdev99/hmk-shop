@@ -13,22 +13,13 @@ export default () => {
   const [phone, setPhone] = useState("");
   const [phoneErr, setPhoneErr] = useState(false);
   const [specialErr, setSpecialErr] = useState(false);
-  const [submittedFormErrors, setSubmittedFormErrors] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
   const [successfulSubmition, setSuccessfulSubmition] = useState(false);
-  const { products } = useContext(CartContext);
-
-  const handleShippingToggle = () => {
-    const shippingWrapperElmnt = document.getElementById("shipping-wrapper");
-    const rotatingElmnt1 = document.getElementById("rotating-plus-minus-1");
-    const rotatingElmnt2 = document.getElementById("rotating-plus-minus-2");
-
-    shippingWrapperElmnt.classList.toggle("shipping-wrapper-content-visible");
-    rotatingElmnt1.classList.toggle("rotating-plus-minus-rotated");
-    rotatingElmnt2.classList.toggle("rotating-plus-minus-rotated");
-  };
 
   const handleCreateAccountClick = (e) => {
     e.preventDefault();
+    // start loading state
+    setSubmitting(true);
     // clear error state
     setEmailErr(false);
     setPasswordErr(false);
@@ -63,8 +54,13 @@ export default () => {
       errors.push([setPhoneErr, true]);
     }
 
+    // TODO create regex to check if valid phone number was submitted
+
     // if there's errors, loop through them and set error state
     if (errors.length > 0) {
+      // clear loading state and return errors
+      setSubmitting(false);
+
       return errors.map((err, idx) => {
         setTimeout(() => {
           const errorStateToSet = err[0];
@@ -77,10 +73,15 @@ export default () => {
     // if no errors continue to creating account
     return createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        console.log("hit");
+        // clear loading state
+        setSubmitting(false);
+
+        // TODO Change successful form submission state and move to next form
       })
       .catch((err) => {
-        console.log(err.code);
+        // clear loading state and return error
+        setSubmitting(false);
+
         if (err.code === "auth/invalid-email") {
           return setEmailErr("You submitted an invalid email");
         } else if (err.code === "auth/email-already-exists") {
@@ -114,9 +115,7 @@ export default () => {
               <InputLabel
                 labelText="Email"
                 labelStyle={{
-                  color: `${
-                    emailErr && submittedFormErrors ? "#FF0000" : "#7c7979"
-                  }`,
+                  color: `${emailErr ? "#FF0000" : "#7c7979"}`,
                 }}
               />
             ) : null}
@@ -143,11 +142,7 @@ export default () => {
               <InputLabel
                 labelText="Password"
                 labelStyle={{
-                  color: `${
-                    password.length < 0 && submittedFormErrors
-                      ? "#FF0000"
-                      : "#7c7979"
-                  }`,
+                  color: `${passwordErr ? "#FF0000" : "#7c7979"}`,
                 }}
               />
             ) : null}
@@ -176,9 +171,7 @@ export default () => {
               <InputLabel
                 labelText="Phone Number"
                 labelStyle={{
-                  color: `${
-                    phoneErr && submittedFormErrors ? "#FF0000" : "#7c7979"
-                  }`,
+                  color: `${phoneErr ? "#FF0000" : "#7c7979"}`,
                 }}
               />
             ) : null}
@@ -205,45 +198,11 @@ export default () => {
               className="create-account-form-button"
               onClick={handleCreateAccountClick}
             >
-              Create
+              {submitting ? "Creating..." : "Create"}
             </button>
           </div>
         </form>
       </div>
-
-      {/* <div className="create-account-form-container">
-        <div className="create-account-form-header">Account</div>
-
-        <form className="create-account-form-wrapper">
-          <div className="create-account-form-input-wrapper">
-            <input
-              className="create-account-form-input"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-            />
-
-            {noEmailErr && email.length === 0 ? (
-              <div className="create-account-form-input-error">* Required</div>
-            ) : null}
-          </div>
-
-          <div>
-            <input
-              className="create-account-form-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-            />
-
-            {noPasswordErr && password.length === 0 ? (
-              <div className="create-account-form-input-error">* Required</div>
-            ) : null}
-          </div>
-        </form>
-      </div> */}
     </div>
   );
 };
