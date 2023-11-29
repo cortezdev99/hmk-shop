@@ -15,9 +15,18 @@ import {
   faChevronDown,
   faCheck,
   faInfoCircle,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { faCircle as farFaCircle, faSquare, faCheckSquare } from "@fortawesome/free-regular-svg-icons";
-import { faInstagram, faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons' 
+import {
+  faCircle as farFaCircle,
+  faSquare,
+  faCheckSquare,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+  faInstagram,
+  faFacebookF,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 const Icons = () => {
@@ -43,7 +52,8 @@ const Icons = () => {
     faCheck,
     faInfoCircle,
     faSquare,
-    faCheckSquare
+    faCheckSquare,
+    faArrowRight
   );
 };
 

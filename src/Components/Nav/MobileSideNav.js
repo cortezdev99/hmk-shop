@@ -2,6 +2,8 @@ import React, { useState, useReducer, useContext, useEffect } from "react";
 import MobileSideNavContext from "../../Contexts/MobileSideNavContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../Config/firebase";
 
 export default () => {
   const { isSideNavOpen, setIsSideNavOpen } = useContext(MobileSideNavContext);
@@ -18,8 +20,12 @@ export default () => {
     );
     if (isSideNavOpen) {
       mobileSideNavWrapperElement.classList.toggle("side-nav-slide");
-      mobileSideNavMainContentWrapperElement.classList.toggle("side-nav-main-content-slide");
-      mobileSideNavFooterWrapperElement.classList.toggle("side-nav-footer-slide")
+      mobileSideNavMainContentWrapperElement.classList.toggle(
+        "side-nav-main-content-slide"
+      );
+      mobileSideNavFooterWrapperElement.classList.toggle(
+        "side-nav-footer-slide"
+      );
     }
   }, [isSideNavOpen]);
 
@@ -45,6 +51,10 @@ export default () => {
     el3.classList.toggle("spin");
   };
 
+  const handleSigningOut = () => {
+    return signOut(auth);
+  };
+
   if (!isSideNavOpen) {
     return <></>;
   }
@@ -57,19 +67,15 @@ export default () => {
         zIndex: "1000",
         top: 0,
         bottom: 0,
-        // minHeight: "100vh",
-        // height: "100%",
         width: "100%",
         display: "flex",
-        justifyContent: "flex-start"
+        justifyContent: "flex-start",
       }}
     >
       <div
         id="mobile-side-nav-wrapper"
         className="mobile-side-nav-wrapper"
         style={{
-          // height: "100%",
-          // minHeight: "100vh",
           background: "#1c1b1b",
           position: "relative",
           color: "#fff",
@@ -80,7 +86,7 @@ export default () => {
           transition: "height 0.5s, transform 0.5s",
           overflowX: "hidden",
           overflowY: "hidden",
-          transform: "translateX(-570px)"
+          transform: "translateX(-570px)",
         }}
       >
         <div
@@ -89,7 +95,7 @@ export default () => {
             alignItems: "center",
             padding: "20px 40px 0px",
             boxShadow: "rgba(28,27,27,1) 0px 19px 16px 6px",
-            zIndex: 1
+            zIndex: 1,
           }}
         >
           <div
@@ -97,7 +103,7 @@ export default () => {
               width: "25px",
               height: "25px",
               marginLeft: "-4px",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
             onClick={handleCloseMobileSideNav}
           >
@@ -128,20 +134,20 @@ export default () => {
             overflowY: "auto",
             overflowX: "hidden",
             transform: "translateX(-570px)",
-            transition: "transform 0.7s"
+            transition: "transform 0.7s",
           }}
         >
           <div style={{ fontWeight: "400", letterSpacing: "0.2em" }}>
             <div
               style={{
                 borderBottom: "1px solid rgba(255,255,255,0.25)",
-                padding: "20px 0"
+                padding: "20px 0",
               }}
             >
               <NavLink
                 style={{
                   textDecoration: "none",
-                  color: "#fff"
+                  color: "#fff",
                 }}
                 exact
                 to="/"
@@ -154,13 +160,13 @@ export default () => {
             <div
               style={{
                 borderBottom: "1px solid rgba(255,255,255,0.25)",
-                padding: "20px 0"
+                padding: "20px 0",
               }}
             >
               <NavLink
                 style={{
                   textDecoration: "none",
-                  color: "#fff"
+                  color: "#fff",
                 }}
                 to="/best-sellers"
                 onClick={handleCloseMobileSideNav}
@@ -176,7 +182,7 @@ export default () => {
                 borderBottom: "1px solid rgba(255,255,255,0.25)",
                 maxHeight: "58px",
                 overflow: "hidden",
-                transition: "max-height 0.7s"
+                transition: "max-height 0.7s",
               }}
             >
               <div
@@ -184,7 +190,7 @@ export default () => {
                   padding: "20px 0",
                   display: "flex",
                   justifyContent: "space-between",
-                  cursor: "pointer"
+                  cursor: "pointer",
                 }}
                 onClick={() =>
                   handleCollapsableLinkClick(
@@ -205,7 +211,7 @@ export default () => {
                       position: "absolute",
                       right: "2px",
                       bottom: "0px",
-                      transform: "rotate(90deg)"
+                      transform: "rotate(90deg)",
                     }}
                   >
                     |
@@ -217,7 +223,7 @@ export default () => {
                     style={{
                       transition: "0.7s",
                       position: "absolute",
-                      transform: "rotate(180deg)"
+                      transform: "rotate(180deg)",
                     }}
                   >
                     |
@@ -245,13 +251,13 @@ export default () => {
             <div
               style={{
                 borderBottom: "1px solid rgba(255,255,255,0.25)",
-                padding: "20px 0"
+                padding: "20px 0",
               }}
             >
               <NavLink
                 style={{
                   textDecoration: "none",
-                  color: "#fff"
+                  color: "#fff",
                 }}
                 to="/sale"
                 onClick={handleCloseMobileSideNav}
@@ -263,13 +269,13 @@ export default () => {
 
           <div
             style={{
-              marginTop: "20px"
+              marginTop: "20px",
             }}
           >
             <div
               style={{
                 color: "rgba(255,255,255,0.5)",
-                paddingBottom: "20px"
+                paddingBottom: "20px",
               }}
             >
               <div style={{ cursor: "pointer", display: "inline-block" }}>
@@ -280,7 +286,7 @@ export default () => {
             <div
               style={{
                 color: "rgba(255,255,255,0.5)",
-                paddingBottom: "20px"
+                paddingBottom: "20px",
               }}
             >
               <div style={{ cursor: "pointer", display: "inline-block" }}>
@@ -291,7 +297,7 @@ export default () => {
             <div
               style={{
                 color: "rgba(255,255,255,0.5)",
-                paddingBottom: "20px"
+                paddingBottom: "20px",
               }}
             >
               <div style={{ cursor: "pointer", display: "inline-block" }}>
@@ -302,7 +308,7 @@ export default () => {
             <div
               style={{
                 color: "rgba(255,255,255,0.5)",
-                paddingBottom: "20px"
+                paddingBottom: "20px",
               }}
             >
               <div style={{ cursor: "pointer", display: "inline-block" }}>
@@ -313,50 +319,63 @@ export default () => {
             <div
               style={{
                 color: "rgba(255,255,255,0.5)",
-                paddingBottom: "20px"
+                paddingBottom: "20px",
               }}
             >
               <div style={{ cursor: "pointer", display: "inline-block" }}>
                 Account
               </div>
             </div>
+
+            {auth.currentUser ? (
+              <div
+                style={{
+                  color: "rgba(255,255,255,0.5)",
+                  paddingBottom: "20px",
+                }}
+                onClick={handleSigningOut}
+              >
+                <div style={{ cursor: "pointer", display: "inline-block" }}>
+                  Logout
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
 
-          <div
-            id="mobile-side-nav-footer-wrapper"
-            className="mobile-side-nav-footer-wrapper"
-            style={{
-              height: "45px",
-              fontSize: "20px",
-              paddingBottom: "15px",
-              position: "absolute",
-              bottom: "0",
-              width: "100%",
-              boxShadow: "rgb(28, 27, 27) 0px -19px 16px 6px",
-              zIndex: 1,
-              transform: "translateY(145px)",
-              transition: "transform 0.7s",
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              overflow: "hidden"
-            }}
-          >
+        <div
+          id="mobile-side-nav-footer-wrapper"
+          className="mobile-side-nav-footer-wrapper"
+          style={{
+            height: "45px",
+            fontSize: "20px",
+            paddingBottom: "15px",
+            position: "absolute",
+            bottom: "0",
+            width: "100%",
+            boxShadow: "rgb(28, 27, 27) 0px -19px 16px 6px",
+            zIndex: 1,
+            transform: "translateY(145px)",
+            transition: "transform 0.7s",
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            overflow: "hidden",
+          }}
+        >
+          <div style={{ cursor: "pointer" }}>
+            <FontAwesomeIcon icon={["fab", "instagram"]} />
+          </div>
 
-            <div style={{ cursor: "pointer" }}>
-              <FontAwesomeIcon icon={["fab", "instagram"]} />
-            </div>
+          <div style={{ cursor: "pointer" }}>
+            <FontAwesomeIcon icon={["fab", "facebook-f"]} />
+          </div>
 
-            <div style={{ cursor: "pointer" }}>
-              <FontAwesomeIcon icon={["fab", "facebook-f"]} />
-            </div>
-
-            <div style={{ cursor: "pointer" }}>
-              <FontAwesomeIcon icon={["fab", "twitter"]} />
-            </div>
+          <div style={{ cursor: "pointer" }}>
+            <FontAwesomeIcon icon={["fab", "twitter"]} />
           </div>
         </div>
+      </div>
       {/* </div> */}
     </div>
   );

@@ -13,9 +13,13 @@ import ContactInfoForm from "./ContactInfoForm";
 import { auth, db } from "../../Config/firebase";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
+import CreateAccount from "./CreateAccount";
 // import axios from 'axios'
 
 export default () => {
+  const [whichFormActive, setWhichFormActive] = useState(
+    auth.currentUser ? "shipping" : "information"
+  );
   // TODO Add Free Shipping Logic On Orders Over $100
   // Todo Add Logic To Add Discount
   // TODO Remove Create Account Component and create an account simultaniously when creating an order
@@ -324,17 +328,11 @@ export default () => {
           <div
             id="checkout-order-summary-collapsable-container"
             className="checkout-order-summary-collapsable-container"
-            // id="checkout-shipping-methods-wrapper"
-            // className="checkout-shipping-methods-wrapper"
             style={{
               height: "100%",
               maxHeight: `${collapsableOrderSummaryMaxHeight}px`,
-              // marginTop: "40px",
               overflow: "hidden",
               padding: "40px 0px",
-              // paddingTop: "20px",
-              // paddingBottom: "20px",
-              // borderTop: "1px solid #CCC",
               borderBottom: "1px solid #CCC",
               width: "100%",
               transition: "max-height 0.7s",
@@ -395,7 +393,77 @@ export default () => {
           </div>
         ) : null}
 
+        {/* <div className="checkout-current-form-wrapper">
+          <div className="checkount-current-form-text">
+            Information
+          </div>
+
+          <div className="checkount-current-form-icon">
+            <FontAwesomeIcon icon={["fas", "arrow-right"]} />
+          </div>
+
+          <div className="checkount-current-form-text">
+            Shipping
+          </div>
+
+          <div className="checkount-current-form-icon">
+            <FontAwesomeIcon icon={["fas", "arrow-right"]} />
+          </div>
+
+          <div className="checkount-current-form-text">
+            Payment
+          </div>
+        </div> */}
+
         <div className="checkout-left-column">
+          <div className="checkout-current-form-wrapper">
+            <div className="checkount-current-form-text checkout-current-form-completed-or-active">
+              Information
+            </div>
+
+            <div
+              className={`checkount-current-form-icon ${
+                whichFormActive === "shipping"
+                  ? "checkout-current-form-completed-or-active"
+                  : null
+              }`}
+            >
+              <FontAwesomeIcon icon={["fas", "arrow-right"]} />
+            </div>
+
+            <div
+              className={`checkount-current-form-text ${
+                whichFormActive === "shipping"
+                  ? "checkout-current-form-completed-or-active"
+                  : whichFormActive === "payment"
+                  ? "checkout-current-form-completed-or-active"
+                  : null
+              }`}
+            >
+              Shipping
+            </div>
+
+            <div
+              className={`checkount-current-form-icon ${
+                whichFormActive === "payment"
+                  ? "checkout-current-form-completed-or-active"
+                  : null
+              }`}
+            >
+              <FontAwesomeIcon icon={["fas", "arrow-right"]} />
+            </div>
+
+            <div
+              className={`checkount-current-form-text ${
+                whichFormActive === "payment"
+                  ? "checkout-current-form-completed-or-active"
+                  : null
+              }`}
+            >
+              Payment
+            </div>
+          </div>
+          {auth.currentUser ? <CreateAccount /> : null}
           <ExpressCheckoutPaymentForms
             activeDiscount={activeDiscount}
             subtotal={subtotal}
@@ -503,7 +571,6 @@ export default () => {
                   cursor: "pointer",
                 }}
                 onClick={handleCheckoutPurchase}
-                // disabled={stripe}
               >
                 <div>Purchase</div>
               </button>
