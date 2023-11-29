@@ -193,6 +193,12 @@ export default () => {
             ) : null}
           </div>
 
+          {specialErr ? (
+            <div className="create-account-form-special-error">
+              {specialErr}
+            </div>
+          ) : null}
+
           <div className="create-account-form-buttons-wrapper">
             <button
               className="create-account-form-button"
