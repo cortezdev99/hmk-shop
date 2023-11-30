@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Navigate, Redirect, redirect } from "react-router-dom";
-import CartContext from "../../Contexts/CartContext";
+import CartContext from "../../../Contexts/CartContext";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../../Config/firebase";
-import InputLabel from "../Utilities/InputLabel";
+import { auth } from "../../../Config/firebase";
+import InputLabel from "../../Utilities/InputLabel";
 
 export default () => {
   const [email, setEmail] = useState("");
@@ -98,7 +98,6 @@ export default () => {
             "The provided value for the phone number is invalid"
           );
         } else {
-          // TODO Create user facing special error message below form and above submit button.
           return setSpecialErr(err.message);
         }
       });

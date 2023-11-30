@@ -4,16 +4,17 @@ import { Link, redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStripe } from "@stripe/react-stripe-js";
 import OrderSummary from "./OrderSummary";
-import AddShippingAddressForm from "./AddShippingAddressForm";
-import AddPaymentMethodForm from "./AddPaymentMethodForm";
-import ChoosePaymentMethod from "./ChoosePaymentMethod";
-import ChooseShippingAddress from "./ChooseShippingAddress";
-import ExpressCheckoutPaymentForms from "./ExpressCheckoutPaymentForms";
+import AddShippingAddressForm from "./Shipping/AddShippingAddressForm";
+import AddPaymentMethodForm from "./PaymentMethod/AddPaymentMethodForm";
+import ChoosePaymentMethod from "./PaymentMethod/ChoosePaymentMethod";
+import ChooseShippingAddress from "./Shipping/ChooseShippingAddress";
+import ExpressCheckoutPaymentForms from "./PaymentMethod/ExpressCheckoutPaymentForms";
 import ContactInfoForm from "./ContactInfoForm";
 import { auth, db } from "../../Config/firebase";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
-import CreateAccount from "./CreateAccount";
+import CreateAccount from "./Account/CreateAccount";
+import CheckoutFormGroup from "./CheckoutFormGroup/CheckoutFormGroup";
 // import axios from 'axios'
 
 export default () => {
@@ -393,77 +394,10 @@ export default () => {
           </div>
         ) : null}
 
-        {/* <div className="checkout-current-form-wrapper">
-          <div className="checkount-current-form-text">
-            Information
-          </div>
-
-          <div className="checkount-current-form-icon">
-            <FontAwesomeIcon icon={["fas", "arrow-right"]} />
-          </div>
-
-          <div className="checkount-current-form-text">
-            Shipping
-          </div>
-
-          <div className="checkount-current-form-icon">
-            <FontAwesomeIcon icon={["fas", "arrow-right"]} />
-          </div>
-
-          <div className="checkount-current-form-text">
-            Payment
-          </div>
-        </div> */}
-
         <div className="checkout-left-column">
-          <div className="checkout-current-form-wrapper">
-            <div className="checkount-current-form-text checkout-current-form-completed-or-active">
-              Information
-            </div>
-
-            <div
-              className={`checkount-current-form-icon ${
-                whichFormActive === "shipping"
-                  ? "checkout-current-form-completed-or-active"
-                  : null
-              }`}
-            >
-              <FontAwesomeIcon icon={["fas", "arrow-right"]} />
-            </div>
-
-            <div
-              className={`checkount-current-form-text ${
-                whichFormActive === "shipping"
-                  ? "checkout-current-form-completed-or-active"
-                  : whichFormActive === "payment"
-                  ? "checkout-current-form-completed-or-active"
-                  : null
-              }`}
-            >
-              Shipping
-            </div>
-
-            <div
-              className={`checkount-current-form-icon ${
-                whichFormActive === "payment"
-                  ? "checkout-current-form-completed-or-active"
-                  : null
-              }`}
-            >
-              <FontAwesomeIcon icon={["fas", "arrow-right"]} />
-            </div>
-
-            <div
-              className={`checkount-current-form-text ${
-                whichFormActive === "payment"
-                  ? "checkout-current-form-completed-or-active"
-                  : null
-              }`}
-            >
-              Payment
-            </div>
-          </div>
           {auth.currentUser ? <CreateAccount /> : null}
+          <CheckoutFormGroup />
+
           <ExpressCheckoutPaymentForms
             activeDiscount={activeDiscount}
             subtotal={subtotal}

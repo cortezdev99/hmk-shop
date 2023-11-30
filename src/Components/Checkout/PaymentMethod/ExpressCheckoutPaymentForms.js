@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import PaypalBtn from "../paypal/PaypalBtn";
-import CartContext from "../../Contexts/CartContext";
+import PaypalBtn from "../../paypal/PaypalBtn";
+import CartContext from "../../../Contexts/CartContext";
 import {
   useStripe,
   PaymentRequestButtonElement,
 } from "@stripe/react-stripe-js";
-import { auth, db } from "../../Config/firebase";
+import { auth, db } from "../../../Config/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 

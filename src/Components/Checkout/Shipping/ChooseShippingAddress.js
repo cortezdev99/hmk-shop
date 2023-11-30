@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { collection, getDocs } from "firebase/firestore";
-import { auth, db } from "../../Config/firebase";
+import { auth, db } from "../../../Config/firebase";
 
 export default (props) => {
   const [getBillingAddressesError, setGetBillingAddressesError] =

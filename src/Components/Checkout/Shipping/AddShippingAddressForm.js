@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CountryDropdown from "./CountryDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import InputLabel from "../Utilities/InputLabel";
-import { auth } from "../../Config/firebase";
+import InputLabel from "../../Utilities/InputLabel";
+import { auth } from "../../../Config/firebase";
 import { httpsCallable } from "firebase/functions";
 
 export default (props) => {
@@ -147,12 +147,14 @@ export default (props) => {
         };
 
         if (saveInfo) {
-          const handleSaveShippingInformation = httpsCallable("handleSaveShippingInformation");
+          const handleSaveShippingInformation = httpsCallable(
+            "handleSaveShippingInformation"
+          );
 
           handleSaveShippingInformation({
             ...data,
-            user: auth.currentUser.uid
-          })
+            user: auth.currentUser.uid,
+          });
 
           props.setBillingAddress(data);
           handleSuccessfulFormSubmittion();

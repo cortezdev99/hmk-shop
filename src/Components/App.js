@@ -13,7 +13,7 @@ import CartProvider from "../Providers/CartProvider";
 import Checkout from "./Checkout/Checkout";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import CreateAccount from "./Checkout/CreateAccount";
+import CreateAccount from "./Checkout/Account/CreateAccount";
 import TotalsLogicProvider from "../Providers/TotalsLogicProvider";
 import MobileSideNav from "./Nav/MobileSideNav";
 import MobileSideNavProvider from "../Providers/MobileSideNavProvider";

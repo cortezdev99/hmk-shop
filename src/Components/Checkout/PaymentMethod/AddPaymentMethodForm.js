@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import MoreInfoIcon from "../Utilities/MoreInfoIcon";
-import InputLabel from "../Utilities/InputLabel";
-import { auth, db } from "../../Config/firebase";
+import MoreInfoIcon from "../../Utilities/MoreInfoIcon";
+import InputLabel from "../../Utilities/InputLabel";
+import { auth, db } from "../../../Config/firebase";
 import { httpsCallable } from "firebase/functions";
 import { doc, getDoc } from "firebase/firestore";
 
