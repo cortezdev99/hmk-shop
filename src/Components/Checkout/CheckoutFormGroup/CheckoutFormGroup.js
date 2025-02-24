@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CheckoutFormGroupWhichFormActive from "./CheckoutFormGroupWhichFormActive";
 import { auth } from "../../../Config/firebase";
 import CreateAccount from "../Account/CreateAccount";
+import AddShippingAddress from "../Shipping/AddShippingAddress";
 
 const CheckoutFormGroup = () => {
   const [whichFormActive, setWhichFormActive] = useState(
@@ -18,7 +19,7 @@ const CheckoutFormGroup = () => {
       {whichFormActive !== "shipping" && whichFormActive !== "information" ? (
         <CreateAccount />
       ) : whichFormActive === "shipping" ? (
-        <div></div>
+        <AddShippingAddress />
       ) : (
         <div></div>
       )}

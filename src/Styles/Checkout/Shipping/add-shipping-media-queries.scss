@@ -1,0 +1,13 @@
+@media (max-width: 465px) {
+  .checkout-add-shipping-address-form-wrapper {
+    .checkout-add-shipping-address-name-group-wrapper {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+    }
+
+    .checkout-add-shipping-address-state-zip-group-wrapper {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+    }
+  }
+}

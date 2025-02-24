@@ -1,0 +1,125 @@
+// ************************
+// ***** ADD ADDRESS ******
+// ************************
+
+.add-shipping-address-container {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 20px
+  ;
+  .add-shipping-address-header {
+    font-size: 20px;
+    padding-bottom: 20px;
+    letter-spacing: 0.75px;
+  }
+}
+// ***************************
+// * ADD ADDRESS COLLAPSABLE *
+// ***************************
+
+// ************************
+// ***** ADDRESS FORM *****
+// ************************
+
+.checkout-add-shipping-address-form-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 20px;
+
+  .checkout-add-shipping-address-name-group-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+
+    // .checkout-add-shipping-address-name-wrapper {
+      
+      // }
+  }
+
+  // .checkout-add-shipping-address-address-one-wrapper {
+
+  // }
+
+  // .checkout-add-shipping-address-address-two-wrapper {
+
+  // }
+
+  // .checkout-add-shipping-address-city-wrapper {
+
+  // }
+
+  // .checkout-add-shipping-address-region-wrapper {
+
+  // }
+
+  .checkout-add-shipping-address-state-zip-group-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+
+    // .checkout-add-shipping-address-state-wrapper {
+      
+    // }
+
+    // .checkout-add-shipping-address-zip-wrapper {
+
+    // }
+  }
+
+  .checkout-add-shipping-address-save-shipping-wrapper {
+    font-size: 15px;
+    padding-top: 20px;
+    padding-bottom: 3px;
+    letter-spacing: 0.75px;
+    text-align: center;
+    height: 41px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    .checkout-add-shipping-address-save-shipping-icon-wrapper {
+      margin-right: 10px;
+      height: 15px;
+    }
+
+    // .checkout-add-shipping-address-save-shipping-text {
+
+    // }
+  }
+
+  .checkout-add-shipping-address-input-error {
+     padding-top: 10px;
+    color: #FF0000;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .add-shipping-address-form-button-wrapper {
+    margin-top: 20px;
+
+    .add-shipping-address-form-button {
+      width: 100%;
+      height: 45px;
+      border: none;
+      background-color: #1c1b1b;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .add-shipping-address-form-special-button {
+      width: 100%;
+      height: 45px;
+      border: none;
+      background-color: #1c1b1b;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

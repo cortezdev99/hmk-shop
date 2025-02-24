@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CountryDropdown from "./CountryDropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InputLabel from "../../Utilities/InputLabel";
 import { auth } from "../../../Config/firebase";
 import { httpsCallable } from "firebase/functions";
 
-export default (props) => {
-  const el2 = document.getElementById("add-shipping-address-chevron");
-  const [errors, setErrors] = useState([]);
-  const [collapsableContentShowing, setCollapsableContentShowing] =
-    useState(false);
+const ShippingForm = (props) => {
   const [noFirstNameErr, setNoFirstNameErr] = useState(false);
   const [noLastNameErr, setNoLastNameErr] = useState(false);
   const [noAddressErr, setNoAddressErr] = useState(false);
@@ -25,12 +21,17 @@ export default (props) => {
   const [region, setRegion] = useState([]);
   const [state, setState] = useState("");
   const [zip, setZip] = useState("");
-  const [addShippingMaxHeight, setAddShippingMaxHeight] = useState(
-    window.document.body.clientWidth > 450 ? 75 : 55
-  );
   const [submitting, setSubmitting] = useState(false);
-  const [successfulFormSubmission, setSuccessfulSubmission] = useState(false);
   const [saveInfo, setSaveInfo] = useState(false);
+
+  const {
+    errors,
+    setErrors,
+    successfulFormSubmission,
+    setSuccessfulSubmission,
+    addShippingMaxHeight,
+    setAddShippingMaxHeight,
+  } = props;
 
   const handleSuccessfulFormSubmittion = () => {
     setFirstName("");
@@ -42,46 +43,7 @@ export default (props) => {
     setState("");
     setZip("");
     setSuccessfulSubmission(true);
-    setCollapsableContentShowing(false);
   };
-
-  useEffect(() => {
-    if (
-      !collapsableContentShowing &&
-      props.resizeObsMaxHeightReAlignment !== addShippingMaxHeight
-    ) {
-      // console.log(props.resizeObsMaxHeightReAlignment)
-      setAddShippingMaxHeight(props.resizeObsMaxHeightReAlignment);
-    }
-  }, [props.resizeObsMaxHeightReAlignment]);
-
-  useEffect(() => {
-    if (!collapsableContentShowing) {
-      if (el2 !== null && el2.classList.contains("chevron-rotated")) {
-        el2.classList.toggle("chevron-rotated");
-      }
-
-      setAddShippingMaxHeight(window.document.body.clientWidth > 450 ? 75 : 55);
-    } else {
-      if (el2 !== null && !el2.classList.contains("chevron-rotated")) {
-        el2.classList.toggle("chevron-rotated");
-      }
-
-      const errorsHeight = errors.length * 26;
-      const baseHeight = window.document.body.clientWidth > 450 ? 594 : 704;
-      const el = document.getElementById(
-        "country-dropdown-collapsable-content-wrapper"
-      );
-      const collapsableCountryDropdownHeight = el.classList.contains(
-        "country-dropdown-collapsable-content-showing"
-      )
-        ? 180
-        : 0;
-      setAddShippingMaxHeight(
-        baseHeight + errorsHeight + collapsableCountryDropdownHeight
-      );
-    }
-  }, [errors, collapsableContentShowing, successfulFormSubmission]);
 
   useEffect(() => {
     if (submitting) {
@@ -169,73 +131,13 @@ export default (props) => {
   }, [submitting]);
 
   return (
-    <div
-      id="checkout-shipping-info-wrapper"
-      className="checkout-shipping-info-wrapper"
-      style={{
-        marginTop: "80px",
-        height: "100%",
-        maxHeight: `${addShippingMaxHeight}px`,
-        overflow: "hidden",
-        paddingBottom: "40px",
-        borderBottom: "1px solid #CCC",
-        width: "100%",
-        transition: "max-height 0.7s",
-      }}
+    <form
+      onSubmit={(e) => e.preventDefault(e)}
+      className="checkout-add-shipping-address-form-wrapper"
     >
-      <div
-        onClick={() => setCollapsableContentShowing(!collapsableContentShowing)}
-        className="add-shipping-form-wrapper"
-        style={{
-          cursor: "pointer",
-          fontSize: "18px",
-          padding: "0px 20px",
-          paddingBottom: "40px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            width: "calc(100% - 40px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            letterSpacing: "0.75px",
-            height: "35px",
-          }}
-          className="add-shipping-header"
-        >
-          Add a shipping address
-          {successfulFormSubmission ? (
-            <span
-              style={{
-                color: "#54b654",
-                marginLeft: "20px",
-              }}
-            >
-              <FontAwesomeIcon icon={["fas", "check"]} />
-            </span>
-          ) : null}
-        </div>
-
-        <div
-          id="add-shipping-address-chevron"
-          className="add-shipping-address-chevron"
-          style={{
-            transition: "transform 0.7s",
-          }}
-        >
-          <FontAwesomeIcon icon={["fas", "chevron-down"]} />
-        </div>
-      </div>
-
-      <div className="checkout-shipping-info-name-wrapper">
-        <div>
-          {firstName.length > 0 && collapsableContentShowing ? (
-            <InputLabel labelText="First Name" />
-          ) : null}
+      <div className="checkout-add-shipping-address-name-group-wrapper">
+        <div className="checkout-add-shipping-address-name-wrapper">
+          {firstName.length > 0 ? <InputLabel labelText="First Name" /> : null}
 
           <input
             className="checkout-input"
@@ -253,23 +155,14 @@ export default (props) => {
           />
 
           {noFirstNameErr && firstName.length === 0 ? (
-            <div
-              style={{
-                paddingTop: "10px",
-                color: "#FF0000",
-                textAlign: "center",
-                fontSize: "13px",
-              }}
-            >
+            <div className="checkout-add-shipping-address-input-error">
               The field above is required.
             </div>
           ) : null}
         </div>
 
-        <div>
-          {lastName.length > 0 && collapsableContentShowing ? (
-            <InputLabel labelText="Last Name" />
-          ) : null}
+        <div className="checkout-add-shipping-address-name-wrapper">
+          {lastName.length > 0 ? <InputLabel labelText="Last Name" /> : null}
 
           <input
             className="checkout-input"
@@ -287,24 +180,15 @@ export default (props) => {
           />
 
           {noLastNameErr && lastName.length === 0 ? (
-            <div
-              style={{
-                paddingTop: "10px",
-                color: "#FF0000",
-                textAlign: "center",
-                fontSize: "13px",
-              }}
-            >
+            <div className="checkout-add-shipping-address-input-error">
               The field above is required
             </div>
           ) : null}
         </div>
       </div>
 
-      <div className="checkout-shipping-info-address-one-wrapper  checkout-input-padding">
-        {address.length > 0 && collapsableContentShowing ? (
-          <InputLabel labelText="Address" />
-        ) : null}
+      <div className="checkout-add-shipping-address-address-one-wrapper">
+        {address.length > 0 ? <InputLabel labelText="Address" /> : null}
 
         <input
           className="checkout-input"
@@ -322,21 +206,14 @@ export default (props) => {
         />
 
         {noAddressErr && address.length === 0 ? (
-          <div
-            style={{
-              paddingTop: "10px",
-              color: "#FF0000",
-              textAlign: "center",
-              fontSize: "13px",
-            }}
-          >
+          <div className="checkout-add-shipping-address-input-error">
             The field above is required
           </div>
         ) : null}
       </div>
 
-      <div className="checkout-shipping-info-address-two-wrapper checkout-input-padding">
-        {address2.length > 0 && collapsableContentShowing ? (
+      <div className="checkout-add-shipping-address-address-two-wrapper">
+        {address2.length > 0 ? (
           <InputLabel labelText="Apartment, Suite, etc. (optional)" />
         ) : null}
 
@@ -349,10 +226,8 @@ export default (props) => {
         />
       </div>
 
-      <div className="checkout-shipping-info-city-wrapper checkout-input-padding">
-        {city.length > 0 && collapsableContentShowing ? (
-          <InputLabel labelText="City" />
-        ) : null}
+      <div className="checkout-add-shipping-address-city-wrapper">
+        {city.length > 0 ? <InputLabel labelText="City" /> : null}
 
         <input
           className="checkout-input"
@@ -370,21 +245,14 @@ export default (props) => {
         />
 
         {noCityErr && city.length === 0 ? (
-          <div
-            style={{
-              paddingTop: "10px",
-              color: "#FF0000",
-              textAlign: "center",
-              fontSize: "13px",
-            }}
-          >
+          <div className="checkout-add-shipping-address-input-error">
             The field above is required
           </div>
         ) : null}
       </div>
 
-      <div style={{ paddingTop: "20px" }}>
-        {region.length > 0 && collapsableContentShowing ? (
+      <div className="checkout-add-shipping-address-region-wrapper">
+        {region.length > 0 ? (
           <InputLabel labelText="Region or Country" />
         ) : null}
 
@@ -397,24 +265,15 @@ export default (props) => {
         />
 
         {noRegionErr && region.length === 0 ? (
-          <div
-            style={{
-              paddingTop: "10px",
-              color: "#FF0000",
-              textAlign: "center",
-              fontSize: "13px",
-            }}
-          >
+          <div className="checkout-add-shipping-address-input-error">
             The field above is required
           </div>
         ) : null}
       </div>
 
-      <div className="checkout-shipping-info-region-state-city-wrapper checkout-input-padding">
-        <div>
-          {state.length > 0 && collapsableContentShowing ? (
-            <InputLabel labelText="State" />
-          ) : null}
+      <div className="checkout-add-shipping-address-state-zip-group-wrapper">
+        <div className="checkout-add-shipping-address-state-wrapper">
+          {state.length > 0 ? <InputLabel labelText="State" /> : null}
 
           <input
             className="checkout-input"
@@ -432,23 +291,14 @@ export default (props) => {
           />
 
           {noStateErr && state.length === 0 ? (
-            <div
-              style={{
-                paddingTop: "10px",
-                color: "#FF0000",
-                textAlign: "center",
-                fontSize: "13px",
-              }}
-            >
+            <div className="checkout-add-shipping-address-input-error">
               The field above is required
             </div>
           ) : null}
         </div>
 
-        <div>
-          {zip.length > 0 && collapsableContentShowing ? (
-            <InputLabel labelText="Zip Code" />
-          ) : null}
+        <div className="checkout-add-shipping-address-zip-wrapper">
+          {zip.length > 0 ? <InputLabel labelText="Zip Code" /> : null}
 
           <input
             className="checkout-input"
@@ -466,14 +316,7 @@ export default (props) => {
           />
 
           {noZipErr && zip.length === 0 ? (
-            <div
-              style={{
-                paddingTop: "10px",
-                color: "#FF0000",
-                textAlign: "center",
-                fontSize: "13px",
-              }}
-            >
+            <div className="checkout-add-shipping-address-input-error">
               The field above is required
             </div>
           ) : null}
@@ -481,65 +324,39 @@ export default (props) => {
       </div>
 
       <div
-        style={{
-          fontSize: "15px",
-          paddingTop: "20px",
-          paddingBottom: "3px",
-          letterSpacing: "0.75px",
-          textAlign: "center",
-          height: "41px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-        }}
+        className="checkout-add-shipping-address-save-shipping-wrapper"
         onClick={() => setSaveInfo(!saveInfo)}
       >
-        <div style={{ marginRight: "10px", height: "15px" }}>
+        <div className="checkout-add-shipping-address-save-shipping-icon-wrapper">
           {saveInfo ? (
             <FontAwesomeIcon icon={["far", "check-square"]} />
           ) : (
             <FontAwesomeIcon icon={["far", "square"]} />
           )}
         </div>
-        save this for later?
+
+        <div className="checkout-add-shipping-address-save-shipping-text">
+          save this for later?
+        </div>
       </div>
 
-      <div style={{ marginTop: "20px" }}>
+      <div className="add-shipping-address-form-button-wrapper">
         {!submitting ? (
           <button
             onClick={() => setSubmitting(true)}
-            style={{
-              width: "100%",
-              height: "45px",
-              border: "none",
-              backgroundColor: "#1c1b1b",
-              color: "#fff",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
+            className="add-shipping-address-form-button"
+            d
           >
             Use this address
           </button>
         ) : (
-          <button
-            style={{
-              width: "100%",
-              height: "45px",
-              border: "none",
-              backgroundColor: "#1c1b1b",
-              color: "#fff",
-              borderRadius: "5px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <button className="add-shipping-address-form-special-button">
             <div className="circle"></div>
           </button>
         )}
       </div>
-    </div>
+    </form>
   );
 };
+
+export default ShippingForm;

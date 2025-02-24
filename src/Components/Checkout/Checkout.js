@@ -4,7 +4,7 @@ import { Link, redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStripe } from "@stripe/react-stripe-js";
 import OrderSummary from "./OrderSummary";
-import AddShippingAddressForm from "./Shipping/AddShippingAddressForm";
+import AddShippingAddressForm from "./Shipping/AddShippingAddressCollapsable";
 import AddPaymentMethodForm from "./PaymentMethod/AddPaymentMethodForm";
 import ChoosePaymentMethod from "./PaymentMethod/ChoosePaymentMethod";
 import ChooseShippingAddress from "./Shipping/ChooseShippingAddress";
